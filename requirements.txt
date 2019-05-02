@@ -1,0 +1,2 @@
+fortiosapi>=0.10.4
+netaddr

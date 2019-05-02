@@ -1,0 +1,77 @@
+---
+- name: E02a. Create a dynamic address object
+  fortios_firewall_address:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    firewall_address:
+      state: "present"
+      name: "{{ item.key }}"
+      comment: "{{ item.value.comment | default(omit) }}"
+      filter: "{{ item.value.dynamic | default(omit) }}"
+      sdn: "{% if item.value.dynamic is defined %}{{ item.value.sdn | default(sdn | default('azure')) }}{% else %}{{ omit }}{% endif %}"
+      type: dynamic
+  loop: "{{ used_address_objects | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when:
+  - item.value.dynamic is defined
+
+- name: E02b. Create an IP based address object
+  fortios_firewall_address:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    firewall_address:
+      state: "present"
+      name: "{{ item.key }}"
+      comment: "{{ item.value.comment | default(omit) }}"
+      subnet: "{% if item.value.ip is defined and item.value.ip | ipaddr('address') %}{{ item.value.ip | ipaddr('address') }} 255.255.255.255{% elif item.value.ip is defined and item.value.ip | ipaddr('network') %}{{ item.value.ip | ipaddr('network') }}/{{ item.value.ip | ipaddr('prefix') }}{% else %}{{ omit }}{% endif %}"
+      type: ipmask
+  loop: "{{ used_address_objects | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when:
+  - item.value.ip is defined
+
+- name: E02c. Create a FQDN address object
+  fortios_firewall_address:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    firewall_address:
+      state: "present"
+      name: "{{ item.key }}"
+      comment: "{{ item.value.comment | default(omit) }}"
+      fqdn: "{% if '*' not in item.value.fqdn | default('') %}{{ item.value.fqdn | default(omit) }}{% else %}{{ omit }}{% endif %}"
+      type: fqdn
+  loop: "{{ used_address_objects | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when:
+  - item.value.fqdn is defined and '*' not in item.value.fqdn
+
+- name: E02d. Create a GEO address object
+  fortios_firewall_address:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    firewall_address:
+      state: "present"
+      name: "{{ item.key }}"
+      comment: "{{ item.value.comment | default(omit) }}"
+      country: "{{ item.value.geo | default(omit) }}"
+      type: geography
+  loop: "{{ used_address_objects | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when:
+  - item.value.geo is defined

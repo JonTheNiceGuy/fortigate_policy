@@ -1,0 +1,34 @@
+---
+- name: D05a. Get Service Group Data from the firewall
+  fortiosconfig:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    action: "get"
+    config: "firewall.service group"
+  register: fw_service_group
+
+- name: D05b. Parse firewall config for locally defined objects
+  set_fact:
+    defined_service_groups: |
+      [
+        {% for object in fw_service_group.meta.results %}
+          {
+            'name': '{{ object.name }}',
+            {% for obj in used_service_groups | dict2items %}{% if obj.key == object.name %}'defined': 'custom',{% elif (built_in_service_groups | default({}))[object.name] is defined %}'defined': 'built in',{% endif %}{% endfor %}
+          },
+        {% endfor %}
+      ]
+
+- name: D05c. Parse firewall config for unused service objects
+  set_fact:
+    purge_service_groups: |
+      [
+        {% for service in defined_service_groups %}
+          {% if service.defined is not defined %}
+            '{{ service.name }}',
+          {% endif %}
+        {% endfor %}
+      ]

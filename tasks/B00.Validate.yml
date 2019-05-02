@@ -1,0 +1,16 @@
+---
+- name: B01 Validate Address Objects
+  include_tasks: B01_Validate_Address_Objects.yml
+  when: validate_addresses | default(validate_all | default(True))
+
+- name: B02 Validate Service Objects
+  include_tasks: B02_Validate_Service_Objects.yml
+  when: validate_services | default(validate_all | default(True))
+
+- name: B03 Validate Policy Rules
+  include_tasks: B03_Validate_Policy_Rules.yml
+  when: validate_policies | default(validate_all | default(True))
+
+- name: B04 Validate No Naming Conflicts
+  include_tasks: B04_Validate_No_Naming_Conflicts.yml
+  when: validate_names | default(validate_all | default(True))

@@ -1,0 +1,25 @@
+galaxy_info:
+  author: Jon Spriggs (jon.spriggs@uk.fujitsu.com)
+  company: Fujitsu EMEIA in the Enterprise & Cyber Security Business Unit.
+
+  description: This role takes a rulebase layout, lints the resulting objects, then validates that the objects are used correctly in the policy. Finally, it installs the policy on a FortiNet FortiGate Firewall, and removes all non-implemented objects.
+  issue_tracker_url: http://gitlab.wadatsumi.dat.css.fujitsu.com/EMEIA_ECS_Cloud_Offerings_Dev/fortigate.policy/issues
+  license: All rights reserved
+
+  min_ansible_version: 2.7
+
+  platforms:
+  - name: FortiNet-FortiGate
+    versions:
+    - 6.0.3
+
+  galaxy_tags:
+  - fortinet
+  - fortigate
+  - fortios
+  - firewall
+  - firewall_policy
+  - firewall_rules
+  - firewall_rulebase
+
+dependencies: []

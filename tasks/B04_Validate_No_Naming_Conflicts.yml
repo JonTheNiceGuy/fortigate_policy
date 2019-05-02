@@ -1,0 +1,32 @@
+---
+- name: "B04a. Ensure there are no naming conflicts between address objects and address groups"
+  assert:
+    that:
+    - address_groups[item.key] is not defined
+  loop: "{{ address_objects | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+
+- name: "B04b. Ensure there are no naming conflicts between address groups and address objects"
+  assert:
+    that:
+    - address_objects[item.key] is not defined
+  loop: "{{ address_groups | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+
+- name: "B04c. Ensure there are no naming conflicts between service objects and service groups"
+  assert:
+    that:
+    - service_groups[item.key] is not defined
+  loop: "{{ service_objects | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+
+- name: "B04d. Ensure there are no naming conflicts between service groups and service objects"
+  assert:
+    that:
+    - service_objects[item.key] is not defined
+  loop: "{{ service_groups | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"

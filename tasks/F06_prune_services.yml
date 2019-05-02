@@ -1,0 +1,39 @@
+---
+- name: F06a. Get Address Data from the firewall
+  fortiosconfig:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    action: "get"
+    config: "firewall.service custom"
+  register: fw_service_object
+
+- name: F06b. Parse firewall config for locally defined objects
+  set_fact:
+    defined_services: |
+      {
+        {% for object in fw_service_object.meta.results %}
+          '{{ object.name }}': {
+            {% if used_service_objects[object.name] is defined or built_in_services[object.name] is defined %}
+              'defined': True
+            {% endif %}
+          },
+        {% endfor %}
+      }
+
+- name: F06c. Remove Service Objects
+  fortios_firewall_service_custom:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    firewall_service_custom:
+      state: "absent"
+      name: "{{ item.key }}"
+  loop: "{{ defined_services | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: item.value.defined | default('') == ''

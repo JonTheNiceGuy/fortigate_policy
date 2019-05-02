@@ -1,0 +1,103 @@
+---
+- name: "C01a. Create list of used hosts from Rules Sources"
+  set_fact:
+    used_address_objects: |
+      {
+        {% for uo in used_address_objects | dict2items %}
+          '{{ uo.key }}': {{ uo.value }},
+        {% endfor %}
+        {% for layer1 in item.value.sources %}
+          {% if address_objects[layer1] is defined %}
+            {% if address_objects[layer1].type | default('') != 'built_in' %}
+              '{{ layer1 }}': {{ address_objects[layer1] }},
+            {% endif %}
+          {% elif address_groups[layer1] is defined %}
+            {% for layer2 in address_groups[layer1] %}
+              {% if address_objects[layer2] is defined %}
+                {% if address_objects[layer2].type | default('') != 'built_in' %}
+                  '{{ layer2 }}': {{ address_objects[layer2] }},
+                {% endif %}
+              {% elif address_groups[layer2] is defined %}
+                {% for layer3 in address_groups[layer2] %}
+                  {% if address_objects[layer3] is defined %}
+                    {% if address_objects[layer3].type | default('') != 'built_in' %}
+                      '{{ layer3 }}': {{ address_objects[layer3] }},
+                    {% endif %}
+                  {% elif address_groups[layer3] is defined %}
+                    {% for layer4 in address_groups[layer3] %}
+                      {% if address_objects[layer4] is defined %}
+                        {% if address_objects[layer4].type | default('') != 'built_in' %}
+                          '{{ layer4 }}': {{ address_objects[layer4] }},
+                        {% endif %}
+                      {% elif address_groups[layer4] is defined %}
+                        {% for layer5 in address_groups[layer4] %}
+                          {% if address_objects[layer5] is defined %}
+                            {% if address_objects[layer5].type | default('') != 'built_in' %}
+                              '{{ layer5 }}': {{ address_objects[layer5] }},
+                            {% endif %}
+                          {% elif address_groups[layer5] is defined %}
+                            {% for layer6 in address_groups[layer5] %}
+                              {% if address_objects[layer6] is defined %}
+                                {% if address_objects[layer6].type | default('') != 'built_in' %}
+                                  '{{ layer6 }}': {{ address_objects[layer6] }},
+                                {% endif %}
+                              {% endif %}
+                            {% endfor %}
+                          {% endif %}
+                        {% endfor %}
+                      {% endif %}
+                    {% endfor %}
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        {% endfor %}
+      }
+  loop: "{{ rulebase | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: item.value.sources is defined
+
+- name: "C01b. Create list of used groups from Rules Sources"
+  set_fact:
+    used_address_groups: |
+      {
+        {% for ug in used_address_groups | dict2items %}
+          '{{ ug.key }}': {{ ug.value }},
+        {% endfor %}
+        {% for layer1 in item.value.sources %}
+          {% if address_groups[layer1] is defined and used_address_groups[layer1] is not defined %}
+            '{{ layer1 }}': {{ address_groups[layer1] }},
+            {% for layer2 in address_groups[layer1] %}
+              {% if address_groups[layer2] is defined and used_address_groups[layer2] is not defined %}
+                '{{ layer2 }}': {{ address_groups[layer2] }},
+                {% for layer3 in address_groups[layer2] %}
+                  {% if address_groups[layer3] is defined and used_address_groups[layer3] is not defined %}
+                    '{{ layer3 }}': {{ address_groups[layer3] }},
+                    {% for layer4 in address_groups[layer3] %}
+                      {% if address_groups[layer4] is defined and used_address_groups[layer4] is not defined %}
+                        '{{ layer4 }}': {{ address_groups[layer4] }},
+                        {% for layer5 in address_groups[layer4] %}
+                          {% if address_groups[layer5] is defined and used_address_groups[layer5] is not defined %}
+                            '{{ layer5 }}': {{ address_groups[layer5] }},
+                            {% for layer6 in address_groups[layer5] %}
+                              {% if address_groups[layer6] is defined and used_address_groups[layer6] is not defined %}
+                                '{{ layer6 }}': {{ address_groups[layer6] }},
+                              {% endif %}
+                            {% endfor %}
+                          {% endif %}
+                        {% endfor %}
+                      {% endif %}
+                    {% endfor %}
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        {% endfor %}
+      }
+  loop: "{{ rulebase | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: item.value.sources is defined

@@ -1,0 +1,75 @@
+---
+rulebase: |
+  {
+    {% for var in vars | dict2items %}
+      {% if var.key | regex_search(regex_rulebase_match) | type_debug != "NoneType" %}
+        {% if var.value | type_debug == "dict" or var.value | type_debug == "AnsibleMapping" %}
+          {% for item in var.value | dict2items %}
+            "{{ var.key | regex_replace(regex_rulebase_match, '\2') }}{{ item.key | regex_replace(regex_rulebase_match, '\2') }}":
+            {{ item.value }},
+          {% endfor %}
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+  }
+
+used_address_groups: {}
+used_service_groups: {}
+
+used_address_objects: |
+  {
+    {% for ao in address_objects | dict2items %}
+      {% if ao.value.force | default(False) | bool %}
+        '{{ ao.key }}': {{ ao.value }},
+      {% endif %}
+    {% endfor %}
+  }
+
+used_service_objects: |
+  {
+    {% for so in service_objects | dict2items %}
+      {% if so.value.force | default(False) | bool %}
+        '{{ so.key }}': {{ so.value }},
+      {% endif %}
+    {% endfor %}
+  }
+
+address_objects: |
+  {
+    {% for item in built_in_hosts | default({}) | dict2items %}
+      '{{ item.key }}':
+      {% if manual_hosts is defined and manual_hosts | type_debug == 'dict' and manual_hosts[item.key] is defined %}
+        {{ manual_hosts[item.key] | combine({'type': 'manual', 'replaced-built-in': item.value}) }}
+      {% else %}
+        {{ item.value | combine({'type': 'built_in'}) }}
+      {% endif %},
+    {% endfor %}
+    {% for item in manual_hosts | default({}) | dict2items %}
+      {% if built_in_hosts[item.key] is not defined %}
+        '{{ item.key }}': {{ item.value | combine({'type': 'manual'}) }},
+      {% endif %}
+    {% endfor %}
+  }
+
+address_groups: "{{ built_in_address_groups | default({}) | combine( manual_address_groups | default({})) }}"
+
+service_objects: |
+  {
+    {% for item in built_in_services | default({}) | dict2items %}
+      '{{ item.key }}':
+      {% if manual_services is defined and manual_services | type_debug == 'dict' and manual_services[item.key] is defined %}
+        {{ manual_services[item.key] | combine({'type': 'manual', 'replaced-built-in': item.value}) }}
+      {% else %}
+        {{ item.value | combine({'type': 'built_in'}) }}
+      {% endif %},
+    {% endfor %}
+    {% for item in manual_services | default({}) | dict2items %}
+      {% if built_in_services[item.key] is not defined %}
+        '{{ item.key }}': {{ item.value | combine({'type': 'manual'}) }},
+      {% endif %}
+    {% endfor %}
+  }
+
+service_groups: "{{ built_in_service_groups | default({}) | combine( manual_service_groups | default({})) }}"
+
+regex_rulebase_match: '^([Rr][Uu][Ll][Ee][Ss]*\s*|[Rr][Uu][Ll][Ee][Ss]*[Gg][Rr][Oo][Uu][Pp][Ss]*\s*|\s*)(\d+)$'

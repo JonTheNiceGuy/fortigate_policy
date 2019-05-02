@@ -1,0 +1,16 @@
+---
+- name: A00a. Check Online Status - Connection Test
+  uri:
+    follow_redirects: none
+    validate_certs: False
+    timeout: 5
+    url: "http{% if ansible_https | default(True) %}s{% endif %}://{{ ansible_host }}/login"
+  register: uri_data
+  failed_when: False
+  changed_when: False
+
+- name: A00b. Report failures
+  fail:
+    msg: Server is offline
+  when:
+  - uri_data is defined and uri_data.status < 0

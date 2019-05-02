@@ -1,0 +1,39 @@
+---
+- name: F04a. Get Address Data from the firewall
+  fortiosconfig:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    action: "get"
+    config: "firewall address"
+  register: fw_address_object
+
+- name: F04b. Parse firewall config for locally defined objects
+  set_fact:
+    defined_addresses: |
+      {
+        {%- for object in fw_address_object.meta.results -%}
+          '{{ object.name }}': {
+            {% if used_address_objects[object.name] is defined or built_in_hosts[object.name] is defined -%}
+              'defined': True
+            {% endif %}
+          },
+        {%- endfor -%}
+      }
+
+- name: F04c. Remove Address Objects
+  fortios_firewall_address:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    firewall_address:
+      state: "absent"
+      name: "{{ item.key }}"
+  loop: "{{ defined_addresses | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: item.value.defined | default('') == ''

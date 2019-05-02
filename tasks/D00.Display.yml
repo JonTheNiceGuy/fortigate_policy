@@ -1,0 +1,18 @@
+---
+- name: D01. Check Policy
+  include_tasks: D01_Check_Policy.yml
+  when: online_checks | default(true)
+- name: D02. Check Addresses
+  include_tasks: D02_Check_Addresses.yml
+  when: online_checks | default(true)
+- name: D03. Check Address Groups
+  include_tasks: D03_Check_Address_Groups.yml
+  when: online_checks | default(true)
+- name: D04. Check Services
+  include_tasks: D04_Check_Services.yml
+  when: online_checks | default(true)
+- name: D05. Check Service Groups
+  include_tasks: D05_Check_Service_Groups.yml
+  when: online_checks | default(true)
+- name: D06. Output Results
+  include_tasks: D06_Output_Results.yml

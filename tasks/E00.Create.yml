@@ -1,0 +1,29 @@
+---
+- name: E01a-c. Ensure there are no naming collisions
+  include_tasks: E01a_to_c_naming_collisions_address_objects.yml
+  when: prevent_conflicts | default(create_all | default(true))
+- name: E01d-f. Ensure there are no naming collisions
+  include_tasks: E01d_to_f_naming_collisions_address_groups.yml
+  when: prevent_conflicts | default(create_all | default(true))
+- name: E01g-i. Ensure there are no naming collisions
+  include_tasks: E01g_to_i_naming_collisions_service_objects.yml
+  when: prevent_conflicts | default(create_all | default(true))
+- name: E01j-l. Ensure there are no naming collisions
+  include_tasks: E01j_to_l_naming_collisions_service_groups.yml
+  when: prevent_conflicts | default(create_all | default(true))
+
+- name: E02. Create address objects
+  include_tasks: E02_create_address_objects.yml
+  when: create_addresses | default(create_all | default(true))
+- name: E03. Create address groups
+  include_tasks: E03_create_address_groups.yml
+  when: create_addresses | default(create_all | default(true))
+- name: E04. Create Service Objects
+  include_tasks: E04_create_service_objects.yml
+  when: create_services | default(create_all | default(true))
+- name: E05. Create service groups
+  include_tasks: E05_create_service_groups.yml
+  when: create_services | default(create_all | default(true))
+- name: E06. Create policy
+  include_tasks: E06_create_policy.yml
+  when: create_policy | default(create_all | default(true))

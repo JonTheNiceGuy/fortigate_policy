@@ -1,0 +1,42 @@
+---
+- name: F01a. Get Policy Data from the firewall
+  fortiosconfig:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    action: "get"
+    config: "firewall policy"
+  register: fwpolicy
+
+- name: F01b. Parse policy for excess rules
+  set_fact:
+    purge_policy: |
+      [
+        {% for policy in fwpolicy.meta.results %}
+            {
+              'rule': '{{ policy.policyid }}',
+              {% for rule in rulebase | dict2items %}
+                {% if rule.key | int == policy.policyid | int %}
+                  'defined': true,
+                {% endif %}
+              {% endfor %}
+            },
+        {% endfor %}
+      ]
+
+- name: F01c. Prune excess rules from the firewall
+  fortios_firewall_policy:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    firewall_policy:
+      state: absent
+      policyid: "{{ item.rule }}"
+  loop: "{{ purge_policy }}"
+  loop_control:
+    label: "{{ item.rule }}"
+  when: not item.defined | default(false)

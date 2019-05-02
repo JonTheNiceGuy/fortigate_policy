@@ -1,0 +1,29 @@
+---
+- name: D06a. Output Results
+  debug:
+    msg: |
+      {
+        'policy': {{ rulebase | default([]) }},
+        'used_address_objects': {{ used_address_objects | default({}) }},
+        'used_address_groups': {{ used_address_groups | default({}) }},
+        'used_service_objects': {{ used_service_objects | default({}) }},
+        'used_service_groups': {{ used_service_groups | default({}) }},
+        'purge_policy': {{ purge_policy | default([]) }},
+        'purge_addresses': {{ purge_addresses | default([]) }},
+        'purge_address_groups': {{ purge_address_groups | default([]) }},
+        'purge_service_objects': {{ purge_services | default([]) }},
+        'purge_service_groups': {{ purge_service_groups | default([]) }},
+      }
+  when: online_checks | default(true)
+
+- name: D06b. Output Results
+  debug:
+    msg: |
+      {
+        'policy': {{ rulebase | default([]) }},
+        'used_address_objects': {{ used_address_objects | default({}) }},
+        'used_address_groups': {{ used_address_groups | default({}) }},
+        'used_service_objects': {{ used_service_objects | default({}) }},
+        'used_service_groups': {{ used_service_groups | default({}) }},
+      }
+  when: not online_checks | default(true)

@@ -1,0 +1,4 @@
+---
+- include_tasks: C01_Transform_Used_Sources.yml
+- include_tasks: C02_Transform_Used_Destinations.yml
+- include_tasks: C03_Transform_Used_Services.yml

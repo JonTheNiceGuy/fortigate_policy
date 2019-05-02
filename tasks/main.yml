@@ -1,0 +1,33 @@
+---
+- name: A00 Check Online Connections
+  include_tasks: A00.Connection_Test.yml
+  when:
+  - online_checks | default(True) or
+    not dry_run | default(False) and (
+      prevent_conflicts | default(create_all | default(True)) or
+      create_addresses | default(create_all | default(True)) or
+      create_services | default(create_all | default(True)) or
+      create_policy | default(create_all | default(True)) or
+      prune_policy | default(prune_all | default(True)) or
+      reorder_policy | default(False) or
+      prune_addresses | default(prune_all | default(True)) or
+      prune_services | default(prune_all | default(True))
+    )
+
+- name: B00 Validate Data
+  include_tasks: B00.Validate.yml
+
+- name: C00 Transform Data
+  include_tasks: C00.Transform.yml
+
+- name: D00 Display Data
+  include_tasks: D00.Display.yml
+  when: dry_run | default(False)
+
+- name: E00 Create Objects
+  include_tasks: E00.Create.yml
+  when: not dry_run | default(False)
+
+- name: F00 Perform Additional Actions
+  include_tasks: F00.Action.yml
+  when: not dry_run | default(False)

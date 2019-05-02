@@ -1,0 +1,46 @@
+---
+- name: E01j. Get Service Group Data from the firewall
+  fortiosconfig:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    action: "get"
+    config: "firewall service group"
+  register: fw_service_group
+
+- name: E01k. Parse firewall config for locally defined objects
+  set_fact:
+    defined_address_groups: |
+      [
+        {% for object in fw_service_group.meta.results %}
+          {
+            'name': '{{ object.name }}',
+            {% for obj in used_service_objects | dict2items %}
+              {% if obj.key == object.name %}
+                'defined': 'custom',
+              {% elif (built_in_services | default({}))[object.name] is defined %}
+                'defined': 'built in',
+              {% endif %}
+            {% endfor %}
+          },
+        {% endfor %}
+      ]
+
+# Note, this item is LIKELY TO FAIL as objects are likely to only be here if they form part of a policy.
+# Blocked on https://github.com/fortinet-solutions-cse/40ansible/issues/40
+- name: E01l. Ensure all service groups do not currently have service objects named the same
+  fortios_firewall_service_group:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    firewall_service_group:
+      state: "absent"
+      name: "{{ item.key }}"
+  loop: "{{ defined_address_groups }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: item.defined | default('') == ''

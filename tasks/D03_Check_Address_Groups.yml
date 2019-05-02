@@ -1,0 +1,34 @@
+---
+- name: D03a. Get Address Group Data from the firewall
+  fortiosconfig:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    action: "get"
+    config: "firewall addrgrp"
+  register: fw_address_group
+
+- name: D03b. Parse firewall config for locally defined objects
+  set_fact:
+    defined_address_groups: |
+      [
+        {% for object in fw_address_group.meta.results %}
+          {
+            'name': '{{ object.name }}',
+            {% for obj in used_address_groups | dict2items %}{% if obj.key == object.name %}'defined': 'custom',{% endif %}{% endfor %}
+          },
+        {% endfor %}
+      ]
+
+- name: D03c. Parse firewall config for unused address objects
+  set_fact:
+    purge_address_groups: |
+      [
+        {% for address in defined_address_groups %}
+          {% if address.defined is not defined %}
+            '{{ address.name }}',
+          {% endif %}
+        {% endfor %}
+      ]
