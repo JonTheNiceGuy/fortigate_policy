@@ -52,21 +52,21 @@ Multiple Plays Method
 
     ---
     - name: Test policy and dump output
-      hosts: all:!localhost
+      hosts: all
       vars:
         dry_run: True
       roles:
         - Firewall.Policy
 
     - name: Implement changes, without removing any configuration from the firewall
-      hosts: all:!localhost
+      hosts: all
       vars:
         validate_all: False
       roles:
         - Firewall.Policy
 
     - name: Just re-order and remove items from the firewall. Don't try and create anything new.
-      hosts: all:!localhost
+      hosts: all
       vars:
         validate_all: False
         create_all: False
@@ -76,7 +76,7 @@ Multiple Plays Method
 Extra-Vars method:
 
     ---
-    - hosts: all:!localhost
+    - hosts: all
       roles:
         - Firewall.Policy
 
