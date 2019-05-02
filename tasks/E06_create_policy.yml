@@ -1,5 +1,16 @@
 ---
-- name: E06. Create policy items
+- name: E06a. Set Default Logging
+  fortios_log_setting:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    log_setting:
+      fwpolicy-implicit-log: "{{ implicit4_log | default(implicit_log | default('enable')) }}"
+      fwpolicy6-implicit-log: "{{ implicit6_log | default(implicit_log | default('enable')) }}"
+
+- name: E06b. Create policy items
   fortios_firewall_policy:
     host: "{{ ansible_host }}"
     username: "{{ admin_username | default(ansible_username | default('admin')) }}"
