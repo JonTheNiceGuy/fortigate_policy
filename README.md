@@ -7,8 +7,8 @@ policy. Finally, it installs the policy on a FortiNet FortiGate Firewall, and re
 Requirements
 ------------
 
-fortiosapi>=0.10.4
-netaddr>=0.7.19
+    fortiosapi>=0.10.4
+    netaddr>=0.7.19
 
 Role Variables
 --------------
