@@ -111,12 +111,11 @@
 
 - name: "B03k. Assert that rules have a valid log type"
   assert:
-    msg: "Assertion failed: item.value.log ('{{ item.value.log | default('') | string }}') is a boolean."
+    msg: "Assertion failed: item.value.log ('{{ item.value.log | default('') | string }}') has the value 'all', 'utm' or 'disable'"
     that:
-    - item.value.log | default(true) | string | lower == 'true' or
-      item.value.log | default(true) | string | lower == 'false' or
-      item.value.log | default(true) | string | lower == 'yes' or
-      item.value.log | default(true) | string | lower == 'no'
+    - item.value.log | default('all') == 'all' or
+      item.value.log | default('all')  == 'utm' or
+      item.value.log | default('all')  == 'disable'
   loop: "{{ rulebase | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
@@ -165,3 +164,13 @@
   loop: "{{ query('subelements', rulebase | dict2items, 'value.services', {'skip_missing': True}) }}"
   loop_control:
     label: "{{ item.0.key }} -> {{ item.1 }}"
+
+- name: "B03q. Assert that rules have a valid logstart value"
+  assert:
+    msg: "Assertion failed: item.value.log ('{{ item.value.log | default('') | string }}') has the value 'all', 'utm' or 'disable'"
+    that:
+    - item.value.logstart | default('disable')  == 'enable' or
+      item.value.logstart | default('disable')  == 'disable'
+  loop: "{{ rulebase | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
