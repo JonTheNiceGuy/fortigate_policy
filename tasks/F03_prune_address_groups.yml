@@ -16,7 +16,7 @@
       {
         {% for object in fw_address_group.meta.results %}
           '{{ object.name }}': {
-            {% if (used_address_groups | default({}))[object.name] is defined or (built_in_address_groups | default({}))[object.name] is defined %}
+            {% if (address_groups_USED_INTERNAL | default({}))[object.name] is defined or (built_in_address_groups | default({}))[object.name] is defined %}
               'defined': True
             {% endif %}
           },

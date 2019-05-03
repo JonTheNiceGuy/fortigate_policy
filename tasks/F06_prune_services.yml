@@ -16,7 +16,7 @@
       {
         {% for object in fw_service_object.meta.results %}
           '{{ object.name }}': {
-            {% if used_service_objects[object.name] is defined or built_in_services[object.name] is defined %}
+            {% if service_objects_USED_INTERNAL[object.name] is defined or built_in_services[object.name] is defined %}
               'defined': True
             {% endif %}
           },

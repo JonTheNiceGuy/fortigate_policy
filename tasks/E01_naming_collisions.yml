@@ -17,7 +17,7 @@
         {% for object in fw_address_object.meta.results %}
           {
             'name': '{{ object.name }}',
-            {% for obj in used_address_groups | dict2items %}
+            {% for obj in address_groups_USED_INTERNAL | dict2items %}
               {% if obj.key == object.name %}
                 'defined': 'custom',
               {% elif built_in_address_groups[object.name] is defined %}
@@ -63,7 +63,7 @@
         {% for object in fw_address_group.meta.results %}
           {
             'name': '{{ object.name }}',
-            {% for obj in used_address_objects | dict2items %}
+            {% for obj in address_objects_USED_INTERNAL | dict2items %}
               {% if obj.key == object.name %}
                 'defined': 'custom',
               {% elif (built_in_hosts | default({}))[object.name] is defined %}
@@ -109,7 +109,7 @@
           {% for object in fw_service_object.meta.results %}
             {
               'name': '{{ object.name }}',
-              {% for obj in used_service_groups | dict2items %}
+              {% for obj in service_groups_USED_INTERNAL | dict2items %}
                 {% if obj.key == object.name %}
                   'defined': 'custom',
                 {% elif built_in_service_groups | default({}) )[object.name] is defined %}
@@ -155,7 +155,7 @@
         {% for object in fw_service_group.meta.results %}
           {
             'name': '{{ object.name }}',
-            {% for obj in used_service_objects | dict2items %}
+            {% for obj in service_objects_USED_INTERNAL | dict2items %}
               {% if obj.key == object.name %}
                 'defined': 'custom',
               {% elif (built_in_services[object.name] is defined %}

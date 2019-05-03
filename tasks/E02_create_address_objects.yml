@@ -13,7 +13,7 @@
       filter: "{{ item.value.dynamic | default(omit) }}"
       sdn: "{% if item.value.dynamic is defined %}{{ item.value.sdn | default(sdn | default('azure')) }}{% else %}{{ omit }}{% endif %}"
       type: dynamic
-  loop: "{{ used_address_objects | dict2items }}"
+  loop: "{{ address_objects_USED_INTERNAL | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
   when:
@@ -32,7 +32,7 @@
       comment: "{{ item.value.comment | default(omit) }}"
       subnet: "{% if item.value.ip is defined and item.value.ip | ipaddr('address') %}{{ item.value.ip | ipaddr('address') }} 255.255.255.255{% elif item.value.ip is defined and item.value.ip | ipaddr('network') %}{{ item.value.ip | ipaddr('network') }}/{{ item.value.ip | ipaddr('prefix') }}{% else %}{{ omit }}{% endif %}"
       type: ipmask
-  loop: "{{ used_address_objects | dict2items }}"
+  loop: "{{ address_objects_USED_INTERNAL | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
   when:
@@ -51,7 +51,7 @@
       comment: "{{ item.value.comment | default(omit) }}"
       fqdn: "{% if '*' not in item.value.fqdn | default('') %}{{ item.value.fqdn | default(omit) }}{% else %}{{ omit }}{% endif %}"
       type: fqdn
-  loop: "{{ used_address_objects | dict2items }}"
+  loop: "{{ address_objects_USED_INTERNAL | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
   when:
@@ -70,7 +70,7 @@
       comment: "{{ item.value.comment | default(omit) }}"
       country: "{{ item.value.geo | default(omit) }}"
       type: geography
-  loop: "{{ used_address_objects | dict2items }}"
+  loop: "{{ address_objects_USED_INTERNAL | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
   when:

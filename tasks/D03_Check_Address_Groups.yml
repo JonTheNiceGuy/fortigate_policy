@@ -17,7 +17,12 @@
         {% for object in fw_address_group.meta.results %}
           {
             'name': '{{ object.name }}',
-            {% for obj in used_address_groups | dict2items %}{% if obj.key == object.name %}'defined': 'custom',{% endif %}{% endfor %}
+            {% for obj in address_groups_USED_INTERNAL | dict2items %}
+              {% if obj.key == object.name %}'defined': 'custom',{% endif %}
+            {% endfor %}
+            {% for obj in built_in_address_groups | dict2items %}
+              {% if obj.key == object.name %}'defined': 'built-in',{% endif %}
+            {% endfor %}
           },
         {% endfor %}
       ]

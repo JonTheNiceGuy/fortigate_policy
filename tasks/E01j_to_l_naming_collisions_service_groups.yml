@@ -15,7 +15,7 @@
     defined_address_groups: |
       [
         {%- for object in fw_service_group.meta.results -%}
-          {%- for obj in used_service_objects | dict2items -%}
+          {%- for obj in service_objects_USED_INTERNAL | dict2items -%}
             {%- if obj.key == object.name or (built_in_services | default({}))[object.name] is defined -%}
               '{{ object.name }}',
             {%- endif -%}

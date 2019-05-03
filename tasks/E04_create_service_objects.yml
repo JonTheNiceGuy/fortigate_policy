@@ -22,6 +22,6 @@
       icmpcode: "{{ item.value.icmpcode | default(omit) }}"
       icmptype: "{{ item.value.icmptype | default(omit) }}"
       protocol-number: "{{ item.value.ip | default(omit) }}"
-  loop: "{{ used_service_objects | dict2items }}"
+  loop: "{{ service_objects_USED_INTERNAL | dict2items }}"
   loop_control:
     label: "{{ item.key }}"

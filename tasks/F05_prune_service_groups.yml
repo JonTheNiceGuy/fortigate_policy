@@ -16,7 +16,7 @@
       {
         {% for object in fw_service_group.meta.results %}
           '{{ object.name }}': {
-            {% if (used_service_groups | default({}) )[object.name] is defined or (built_in_service_groups | default({}) )[object.name] is defined %}
+            {% if (service_groups_USED_INTERNAL | default({}) )[object.name] is defined or (built_in_service_groups | default({}) )[object.name] is defined %}
               'defined': True
             {% endif %}
           },

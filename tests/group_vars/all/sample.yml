@@ -1,10 +1,5 @@
 ---
-manual_hosts: "{{ all_hosts | default({}) | combine(group_hosts | default({}) ) }}"
-manual_address_groups: "{{ all_address_groups | default({}) | combine(group_address_groups | default({}) ) }}"
-manual_services: "{{ all_services | default({}) | combine(group_services | default({}) ) }}"
-manual_service_groups: "{{ all_service_groups | default({}) | combine(group_service_groups | default({}) ) }}"
-
-all_hosts:
+shared_address_objects:
   example_com:
     fqdn: example.com
   example_org:
@@ -20,7 +15,7 @@ all_hosts:
   dyn_webservers:
     dynamic: "tag.webserver=true"
 
-all_address_groups:
+shared_address_groups:
   example_fqdns:
   - example_com
   - example_org
@@ -29,7 +24,7 @@ all_address_groups:
   - test_net_2_host_a
   - test_net_2_host_b
 
-rulegroup00:
+rulegroup01:
   rule00:
     sources:
     - geo_fr
@@ -38,7 +33,7 @@ rulegroup00:
     services:
     - ALL
     action: deny
-    log: false
+    log: disable
   rule01:
     sources:
     - test_net_hosts

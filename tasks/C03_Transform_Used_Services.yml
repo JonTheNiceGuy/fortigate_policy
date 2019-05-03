@@ -1,9 +1,9 @@
 ---
 - name: "C03a. Create list of used services from Rules Services"
   set_fact:
-    used_service_objects: |
+    service_objects_USED_INTERNAL: |
       {
-        {% for uo in used_service_objects | dict2items %}
+        {% for uo in service_objects_USED_INTERNAL | dict2items %}
           '{{ uo.key }}': {{ uo.value }},
         {% endfor %}
         {% for layer1 in item.value.services %}
@@ -61,28 +61,28 @@
 
 - name: "C03b. Create list of used services from Rules Services"
   set_fact:
-    used_service_groups: |
+    service_groups_USED_INTERNAL: |
       {
-        {% for ug in used_service_groups | dict2items %}
+        {% for ug in service_groups_USED_INTERNAL | dict2items %}
           '{{ ug.key }}': {{ ug.value }},
         {% endfor %}
         {% for layer1 in item.value.services %}
-          {% if service_groups[layer1] is defined and used_service_groups[layer1] is not defined %}
+          {% if service_groups[layer1] is defined and service_groups_USED_INTERNAL[layer1] is not defined %}
             '{{ layer1 }}': {{ service_groups[layer1] }},
             {% for layer2 in service_groups[layer1] %}
-              {% if service_groups[layer2] is defined and used_service_groups[layer2] is not defined %}
+              {% if service_groups[layer2] is defined and service_groups_USED_INTERNAL[layer2] is not defined %}
                 '{{ layer2 }}': {{ service_groups[layer2] }},
                 {% for layer3 in service_groups[layer2] %}
-                  {% if service_groups[layer3] is defined and used_address_groups[layer3] is not defined %}
+                  {% if service_groups[layer3] is defined and address_groups_USED_INTERNAL[layer3] is not defined %}
                     '{{ layer3 }}': {{ service_groups[layer3] }},
                     {% for layer4 in service_groups[layer3] %}
-                      {% if service_groups[layer4] is defined and used_address_groups[layer4] is not defined %}
+                      {% if service_groups[layer4] is defined and address_groups_USED_INTERNAL[layer4] is not defined %}
                         '{{ layer4 }}': {{ service_groups[layer4] }},
                         {% for layer5 in service_groups[layer4] %}
-                          {% if service_groups[layer5] is defined and used_address_groups[layer5] is not defined %}
+                          {% if service_groups[layer5] is defined and address_groups_USED_INTERNAL[layer5] is not defined %}
                             '{{ layer5 }}': {{ service_groups[layer5] }},
                             {% for layer6 in service_groups[layer5] %}
-                              {% if service_groups[layer6] is defined and used_address_groups[layer6] is not defined %}
+                              {% if service_groups[layer6] is defined and address_groups_USED_INTERNAL[layer6] is not defined %}
                                 '{{ layer6 }}': {{ service_groups[layer6] }},
                               {% endif %}
                             {% endfor %}

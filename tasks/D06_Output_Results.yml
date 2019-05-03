@@ -3,16 +3,16 @@
   debug:
     msg: |
       {
-        'policy': {{ rulebase | default([]) }},
-        'used_address_objects': {{ used_address_objects | default({}) }},
-        'used_address_groups': {{ used_address_groups | default({}) }},
-        'used_service_objects': {{ used_service_objects | default({}) }},
-        'used_service_groups': {{ used_service_groups | default({}) }},
-        'purge_policy': {{ purge_policy | default([]) }},
-        'purge_addresses': {{ purge_addresses | default([]) }},
-        'purge_address_groups': {{ purge_address_groups | default([]) }},
-        'purge_service_objects': {{ purge_services | default([]) }},
-        'purge_service_groups': {{ purge_service_groups | default([]) }},
+        'rulebase items': {{ rulebase | default([]) }},
+        'used address objects': {{ address_objects_USED_INTERNAL | default({}) }},
+        'used address groups': {{ address_groups_USED_INTERNAL | default({}) }},
+        'used service objects': {{ service_objects_USED_INTERNAL | default({}) }},
+        'used service groups': {{ service_groups_USED_INTERNAL | default({}) }},
+        'purge rulebase items': {{ purge_policy | default([]) }},
+        'purge address objects': {{ purge_addresses | default([]) }},
+        'purge address groups': {{ purge_address_groups | default([]) }},
+        'purge service objects': {{ purge_services | default([]) }},
+        'purge service groups': {{ purge_service_groups | default([]) }},
       }
   when: online_checks | default(true)
 
@@ -20,10 +20,10 @@
   debug:
     msg: |
       {
-        'policy': {{ rulebase | default([]) }},
-        'used_address_objects': {{ used_address_objects | default({}) }},
-        'used_address_groups': {{ used_address_groups | default({}) }},
-        'used_service_objects': {{ used_service_objects | default({}) }},
-        'used_service_groups': {{ used_service_groups | default({}) }},
+        'rulebase items': {{ rulebase | default([]) }},
+        'used address objects': {{ address_objects_USED_INTERNAL | default({}) }},
+        'used address groups': {{ address_groups_USED_INTERNAL | default({}) }},
+        'used service objects': {{ service_objects_USED_INTERNAL | default({}) }},
+        'used service groups': {{ service_groups_USED_INTERNAL | default({}) }}
       }
   when: not online_checks | default(true)

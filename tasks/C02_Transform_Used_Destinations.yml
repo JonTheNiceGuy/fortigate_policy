@@ -1,9 +1,9 @@
 ---
 - name: "C02a. Create list of used hosts from Rules Destinations"
   set_fact:
-    used_address_objects: |
+    address_objects_USED_INTERNAL: |
       {
-        {% for uo in used_address_objects | dict2items %}
+        {% for uo in address_objects_USED_INTERNAL | dict2items %}
           '{{ uo.key }}': {{ uo.value }},
         {% endfor %}
         {% for layer1 in item.value.destinations %}
@@ -61,28 +61,28 @@
 
 - name: "C02b. Create list of used hosts from Rules Destinations"
   set_fact:
-    used_address_groups: |
+    address_groups_USED_INTERNAL: |
       {
-        {% for ug in used_address_groups | dict2items %}
+        {% for ug in address_groups_USED_INTERNAL | dict2items %}
           '{{ ug.key }}': {{ ug.value }},
         {% endfor %}
         {% for layer1 in item.value.destinations %}
-          {% if address_groups[layer1] is defined and used_address_groups[layer1] is not defined %}
+          {% if address_groups[layer1] is defined and address_groups_USED_INTERNAL[layer1] is not defined %}
             '{{ layer1 }}': {{ address_groups[layer1] }},
             {% for layer2 in address_groups[layer1] %}
-              {% if address_groups[layer2] is defined and used_address_groups[layer2] is not defined %}
+              {% if address_groups[layer2] is defined and address_groups_USED_INTERNAL[layer2] is not defined %}
                 '{{ layer2 }}': {{ address_groups[layer2] }},
                 {% for layer3 in address_groups[layer2] %}
-                  {% if address_groups[layer3] is defined and used_address_groups[layer3] is not defined %}
+                  {% if address_groups[layer3] is defined and address_groups_USED_INTERNAL[layer3] is not defined %}
                     '{{ layer3 }}': {{ address_groups[layer3] }},
                     {% for layer4 in address_groups[layer3] %}
-                      {% if address_groups[layer4] is defined and used_address_groups[layer4] is not defined %}
+                      {% if address_groups[layer4] is defined and address_groups_USED_INTERNAL[layer4] is not defined %}
                         '{{ layer4 }}': {{ address_groups[layer4] }},
                         {% for layer5 in address_groups[layer4] %}
-                          {% if address_groups[layer5] is defined and used_address_groups[layer5] is not defined %}
+                          {% if address_groups[layer5] is defined and address_groups_USED_INTERNAL[layer5] is not defined %}
                             '{{ layer5 }}': {{ address_groups[layer5] }},
                             {% for layer6 in address_groups[layer5] %}
-                              {% if address_groups[layer6] is defined and used_address_groups[layer6] is not defined %}
+                              {% if address_groups[layer6] is defined and address_groups_USED_INTERNAL[layer6] is not defined %}
                                 '{{ layer6 }}': {{ address_groups[layer6] }},
                               {% endif %}
                             {% endfor %}

@@ -17,7 +17,7 @@
         {% for object in fw_address_group.meta.results %}
           {
             'name': '{{ object.name }}',
-            {% for obj in used_address_objects | dict2items %}
+            {% for obj in address_objects_USED_INTERNAL | dict2items %}
               {% if obj.key == object.name %}
                 'defined': 'custom',
               {% elif (built_in_hosts | default({}))[object.name] is defined %}

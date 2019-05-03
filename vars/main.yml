@@ -1,5 +1,15 @@
 ---
-# These built in values taken from a vanilla build of FortiOS v6.0.3 for Azure (Build 0200 GA)
+###############################################################################
+###############################################################################
+
+####################################################################
+# These built in values taken from a vanilla build of 
+# FortiOS v6.0.3 for Azure (Build 0200 GA).
+# With a FortiCare Subscription that provided updates on 2019-05-03
+####################################################################
+
+###############################################################################
+###############################################################################
 
 ##########################
 # Geographies
@@ -766,6 +776,8 @@ built_in_services:
   WINS: {tcp: "1512", udp: "1512"}
   X-WINDOWS: {tcp: "6000-6063"}
 
+built_in_address_groups: {}
+
 built_in_service_groups: {
   "Email Access": [
     "DNS",
@@ -909,31 +921,164 @@ timezones:
   "US/Samoa": "86"
   "UTC": "24"
 
+###############################################################################
+###############################################################################
+
 ##########################
-# Wildcard FQDN
+# Data Manipulation Below
 ##########################
-built_in_wildcard_fqdn:
-- "Adobe Login"
-- "Gotomeeting"
-- "Windows update 2"
-- adobe
-- android
-- apple
-- appstore
-- "auth.gfx.ms"
-- citrix
-- "dropbox.com"
-- eease
-- "firefox update server"
-- fortinet
-- "google-drive"
-- "google-play2"
-- "google-play3"
-- "googleapis.com"
-- icloud
-- itunes
-- "live.com"
-- microsoft
-- skype
-- "softwareupdate.vmware.com"
-- verisign
+
+###############################################################################
+###############################################################################
+
+regex_rulebase_match: '^([Rr][Uu][Ll][Ee][Ss]*\s*|[Rr][Uu][Ll][Ee][Ss]*[Gg][Rr][Oo][Uu][Pp][Ss]*\s*|\s*)(\d+)$'
+regex_address_objects_match: '(_[Aa][Dd][Dd][Rr][Ee][Ss][Ss]_[Oo][Bb][Jj][Ee][Cc][Tt][Ss]*)$'
+regex_address_groups_match: '(_[Aa][Dd][Dd][Rr][Ee][Ss][Ss]_[Gg][Rr][Oo][Uu][Pp][Ss]*)$'
+regex_service_objects_match: '(_[Ss][Ee][Rr][Vv][Ii][Cc][Ee]_[Oo][Bb][Jj][Ee][Cc][Tt][Ss]*)$'
+regex_service_groups_match: '(_[Ss][Ee][Rr][Vv][Ii][Cc][Ee]_[Gg][Rr][Oo][Uu][Pp][Ss]*)$'
+
+rulebase: |
+  {
+    {% for var in vars | dict2items %}
+      {% if var.key | regex_search(regex_rulebase_match) | type_debug != "NoneType"
+        and (
+          var.value | type_debug == "dict" 
+          or var.value | type_debug == "AnsibleMapping"
+        ) %}
+        {% for item in var.value | dict2items %}
+          "{{ var.key | regex_replace(regex_rulebase_match, '\2') }}{{ item.key | regex_replace(regex_rulebase_match, '\2') }}":
+          {{ item.value }},
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+  }
+
+address_objects_COMBINED_INTERNAL: |
+  {
+    {% for item in manual_hosts | default({}) | dict2items %}{# For historical purposes #}
+      '{{ item.key }}': {{ item.value }},
+    {% endfor %}
+    {% for var in vars | dict2items %}
+      {% if var.key | regex_search(regex_address_objects_match) | type_debug != "NoneType"
+        and (
+          var.value | type_debug == "dict"
+          or var.value | type_debug == "AnsibleMapping"
+        ) %}
+        {% for item in var.value | dict2items %}
+          "{{ item.key }}": {{ item.value }},
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+  }
+address_groups_COMBINED_INTERNAL: |
+  {
+    {% for item in manual_address_groups | default({}) | dict2items %}{# For historical purposes #}
+      "{{ item.key }}": {{ item.value }},
+    {% endfor %}
+    {% for var in vars | dict2items %}
+      {% if var.key | regex_search(regex_address_groups_match) | type_debug != "NoneType"
+        and (
+          var.value | type_debug == "dict"
+          or var.value | type_debug == "AnsibleMapping"
+        ) %}
+        {% for item in var.value | dict2items %}
+          "{{ item.key }}": {{ item.value }},
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+  }
+service_objects_COMBINED_INTERNAL: |
+  {
+    {% for item in manual_services | default({}) | dict2items %}{# For historical purposes #}
+      "{{ item.key }}": {{ item.value }},
+    {% endfor %}
+    {% for var in vars | dict2items %}
+      {% if var.key | regex_search(regex_service_objects_match) | type_debug != "NoneType"
+        and (
+          var.value | type_debug == "dict"
+          or var.value | type_debug == "AnsibleMapping"
+        ) %}
+        {% for item in var.value | dict2items %}
+          "{{ item.key }}": {{ item.value }},
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+  }
+service_groups_COMBINED_INTERNAL: |
+  {
+    {% for item in manual_service_groups | default({}) | dict2items %}{# For historical purposes #}
+      "{{ item.key }}": {{ item.value }},
+    {% endfor %}
+    {% for var in vars | dict2items %}
+      {% if var.key | regex_search(regex_service_groups_match) | type_debug != "NoneType"
+        and (
+          var.value | type_debug == "dict"
+          or var.value | type_debug == "AnsibleMapping"
+        ) %}
+        {% for item in var.value | dict2items %}
+          "{{ item.key }}": {{ item.value }},
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+  }
+service_groups: "{{ built_in_service_groups | default({}) | combine(service_groups_COMBINED_INTERNAL) }}"
+address_groups: "{{ built_in_address_groups | default({}) | combine(address_groups_COMBINED_INTERNAL) }}"
+
+address_objects: |
+  {
+    {% for item in built_in_hosts | default({}) | dict2items %}
+      '{{ item.key }}':
+      {% if address_objects_COMBINED_INTERNAL is defined 
+        and address_objects_COMBINED_INTERNAL | type_debug == 'dict' 
+        and address_objects_COMBINED_INTERNAL[item.key] is defined %}
+        {{ address_objects_COMBINED_INTERNAL[item.key] | 
+          combine({'type': 'manual', 'replaced-built-in': item.value}) }}
+      {% else %}
+        {{ item.value | combine({'type': 'built_in'}) }}
+      {% endif %},
+    {% endfor %}
+    {% for item in address_objects_COMBINED_INTERNAL | default({}) | dict2items %}
+      {% if built_in_hosts[item.key] is not defined %}
+        '{{ item.key }}': {{ item.value | combine({'type': 'manual'}) }},
+      {% endif %}
+    {% endfor %}
+  }
+
+service_objects: |
+  {
+    {% for item in built_in_services | default({}) | dict2items %}
+      '{{ item.key }}':
+      {% if service_objects_COMBINED_INTERNAL is defined
+        and service_objects_COMBINED_INTERNAL | type_debug == 'dict'
+        and service_objects_COMBINED_INTERNAL[item.key] is defined %}
+        {{ service_objects_COMBINED_INTERNAL[item.key] | 
+          combine({'type': 'manual', 'replaced-built-in': item.value}) }}
+      {% else %}
+        {{ item.value | combine({'type': 'built_in'}) }}
+      {% endif %},
+    {% endfor %}
+    {% for item in service_objects_COMBINED_INTERNAL | default({}) | dict2items %}
+      {% if built_in_services[item.key] is not defined %}
+        '{{ item.key }}': {{ item.value | combine({'type': 'manual'}) }},
+      {% endif %}
+    {% endfor %}
+  }
+
+address_objects_USED_INTERNAL: |
+  {
+    {% for ao in address_objects | dict2items %}
+      {% if ao.value.force | default(False) | bool %}
+        '{{ ao.key }}': {{ ao.value }},
+      {% endif %}
+    {% endfor %}
+  }
+service_objects_USED_INTERNAL: |
+  {
+    {% for so in service_objects | dict2items %}
+      {% if so.value.force | default(False) | bool %}
+        '{{ so.key }}': {{ so.value }},
+      {% endif %}
+    {% endfor %}
+  }
+address_groups_USED_INTERNAL: {}
+service_groups_USED_INTERNAL: {}

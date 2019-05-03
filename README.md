@@ -21,7 +21,9 @@ form as possible. Typically, it's easier to use the built-in objects.
 Here's a sample of host/address objects that can be created:
 
     ---
-    manual_hosts:
+    # Note that the prefix here ('mygroup') can be anything unique to the groups
+    # assigned to this firewall.
+    mypolicy_address_objects:
       test_net_1:
       # comment: "Optional comment can be added with just `comment:` in the object"
         ip: "192.0.2.0/24"
@@ -40,7 +42,7 @@ Here's a sample of host/address objects that can be created:
 Here's how you would specify a host group. Note that due to how the playbook is delivered, you can only have 5 levels of recursion between groups, as follows:
 
     ---
-    manual_address_groups:
+    mypolicy_address_groups:
       example_sites:
       - example_com
       - example_net
@@ -65,7 +67,7 @@ Here's how you would specify a host group. Note that due to how the playbook is 
 Services can, in normal FortiGate structure, be bundled into three separate groups; TCP/UDP, ICMP and IP. Here are five examples:
 
     ---
-    manual_services:
+    mypolicy_service_objects:
       irc:
         tcp: "6660-6669" "7000" "194" "994"
       mosh:
@@ -82,7 +84,7 @@ Services can, in normal FortiGate structure, be bundled into three separate grou
 Like with host groups, there's a services group structure. Again, this is limited to 5 levels of recursion.
 
     ---
-    manual_service_groups:
+    mypolicy_service_groups:
       ssh_and_mosh:
       - SSH
       - mosh
@@ -96,12 +98,12 @@ Policies can cross multiple files, and are gathered into 100's of rules, followi
       rule00:
         # This next line is optional. Without it, it will set the value to "Policy_XXYY" where XX is the policyid prefix, and YY is the suffix
         name: Drop broadcast traffic
-        # These sources and destinations need to be specified, either in manual_hosts, manual_address_groups or in built_in_hosts
+        # These sources and destinations need to be specified, either in *_address_objects, *_address_groups or in built_in_hosts
         sources:
         - broadcast_addresses
         destinations:
         - all
-        # These services need to be specified in manual_services, manual_service_groups, built_in_services or built_in_service_groups
+        # These services need to be specified in *_service_objects, *_service_groups, built_in_services or built_in_service_groups
         services:
         - ALL
         # actions are "allow" (default) and "deny"

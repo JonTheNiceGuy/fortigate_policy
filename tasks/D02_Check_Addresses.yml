@@ -17,8 +17,12 @@
         {% for object in fw_address.meta.results %}
           {
             'name': '{{ object.name }}',
-            {% for obj in used_address_objects | dict2items %}{% if obj.key == object.name %}'defined': 'custom',{% endif %}{% endfor %}
-            {% for obj in built_in_hosts | dict2items %}{% if obj.key == object.name %}'defined': 'built-in',{% endif %}{% endfor %}
+            {% for obj in address_objects_USED_INTERNAL | dict2items %}
+              {% if obj.key == object.name %}'defined': 'custom',{% endif %}
+            {% endfor %}
+            {% for obj in built_in_hosts | dict2items %}
+              {% if obj.key == object.name %}'defined': 'built-in',{% endif %}
+            {% endfor %}
           },
         {% endfor %}
       ]

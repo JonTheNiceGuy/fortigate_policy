@@ -11,7 +11,7 @@
       name: "{{ item.key }}"
       member: "[{% for member in item.value %}{ 'name': '{{ member }}' }, {% endfor %}]"
   failed_when: false
-  loop: "{{ used_service_groups | dict2items }}"
+  loop: "{{ service_groups_USED_INTERNAL | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
   register: addsvc

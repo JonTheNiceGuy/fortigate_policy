@@ -17,7 +17,7 @@
           {% for object in fw_service_object.meta.results %}
             {
               'name': '{{ object.name }}',
-              {% for obj in used_service_groups | dict2items %}
+              {% for obj in service_groups_USED_INTERNAL | dict2items %}
                 {% if obj.key == object.name %}
                   'defined': 'custom',
                 {% elif (built_in_service_groups | default({}))[object.name] is defined %}

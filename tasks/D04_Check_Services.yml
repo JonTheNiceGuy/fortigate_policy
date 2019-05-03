@@ -14,12 +14,17 @@
   set_fact:
     defined_services: |
       [
-          {% for object in fw_service_object.meta.results %}
-            {
-              'name': '{{ object.name }}',
-              {% for obj in used_service_objects | dict2items %}{% if obj.key == object.name %}'defined': 'custom',{% elif built_in_services[object.name] is defined %}'defined': 'built in',{% endif %}{% endfor %}
-            },
-          {% endfor %}
+        {% for object in fw_service_object.meta.results %}
+          {
+            'name': '{{ object.name }}',
+            {% for obj in service_objects_USED_INTERNAL | dict2items %}
+              {% if obj.key == object.name %}'defined': 'custom',{% endif %}
+            {% endfor %}
+            {% for obj in built_in_services | dict2items %}
+              {% if obj.key == object.name %}'defined': 'built in',{% endif %}
+            {% endfor %}
+          },
+        {% endfor %}
       ]
 
 - name: D04c. Parse firewall config for unused service objects
