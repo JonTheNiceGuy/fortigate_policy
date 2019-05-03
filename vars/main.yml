@@ -946,8 +946,14 @@ rulebase: |
           or var.value | type_debug == "AnsibleMapping"
         ) %}
         {% for item in var.value | dict2items %}
-          "{{ var.key | regex_replace(regex_rulebase_match, '\2') }}{{ item.key | regex_replace(regex_rulebase_match, '\2') }}":
-          {{ item.value }},
+          {% if item.key | regex_search(regex_rulebase_match) | type_debug != "NoneType"
+            and (
+              item.value | type_debug == "dict" 
+              or item.value | type_debug == "AnsibleMapping"
+            ) %}
+            "{{ var.key | regex_replace(regex_rulebase_match, '\2') }}{{ item.key | regex_replace(regex_rulebase_match, '\2') }}":
+            {{ item.value }},
+          {% endif %}
         {% endfor %}
       {% endif %}
     {% endfor %}
