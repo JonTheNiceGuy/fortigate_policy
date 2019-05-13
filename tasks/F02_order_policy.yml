@@ -23,7 +23,7 @@
         {% endfor %}
       ]
 
-- name: F02c. Fix Policy Order (performing "after" actions)
+- name: F02c. Fix Policy Order
   fortiosconfig:
     host: "{{ ansible_host }}"
     username: "{{ admin_username | default(ansible_username | default('admin')) }}"
@@ -39,22 +39,4 @@
   loop: "{{ desired_policy }}"
   loop_control:
     label: "{{ item.rule }}"
-  when: item.after != '0' and item.before != '0' # This would only happen if there was a single line of policy!
-
-- name: F02d. Fix Policy Order (performing "before" actions)
-  fortiosconfig:
-    host: "{{ ansible_host }}"
-    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
-    password: "{{ admin_password | default(ansible_password | default('')) }}"
-    vdom: "{{ ansible_vdom | default('root') }}"
-    https: "{{ ansible_https | default(true) }}"
-    action: "move"
-    config: "firewall policy"
-    config_parameters:
-      key: "{{ item.rule }}"
-      where: "{% if item.before != '0' %}before{% else %}after{% endif %}"
-      reference-key: "{% if item.before != '0' %}{{ item.before }}{% else %}{{ item.after }}{% endif %}"
-  loop: "{{ desired_policy }}"
-  loop_control:
-    label: "{{ item.rule }}"
-  when: item.after != '0' and item.before != '0' # This would only happen if there was a single line of policy!
+  when: not (item.after == '0' item.before == '0') # This would only happen if there was a single line of policy!
