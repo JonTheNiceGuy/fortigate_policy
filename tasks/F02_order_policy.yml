@@ -10,6 +10,10 @@
     config: "firewall policy"
   register: fwpolicy
 
+- name: F02a DEBUG
+  debug:
+    var: fwpolicy.meta.results | sort(attribute='policyid')
+
 - name: F02b. Parse firewall policy to confirm ordering
   set_fact:
     desired_policy: |
@@ -39,4 +43,4 @@
   loop: "{{ desired_policy }}"
   loop_control:
     label: "{{ item.rule }}"
-  when: item.after >= '0' or item.before >= '0'
+  when: item.after | int >= '0' or item.before | int >= '0'
