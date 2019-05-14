@@ -1,4 +1,29 @@
 ---
+- name: Read no_proxy environment variable
+  set_fact:
+    no_proxy: "{{ lookup('env', 'no_proxy') }}"
+
+#- name: Assume no_proxy is set
+#  set_fact:
+#    no_proxy: "10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16"
+
+- name: Split no_proxy
+  set_fact:
+    no_proxy_array: "{{ (no_proxy | replace(',', '') ).split() }}"
+
+- name: Check if there's a match
+  set_fact:
+    no_proxy_match: |
+      {
+        {% for np in no_proxy_array %}
+          {% if np | ipaddr | type_debug != 'NoneType' %}
+            {% if ansible_host | ipaddr(np) | type_debug != 'NoneType' %}
+              "match": "True"
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+      }
+
 - name: A00a. Check Online Status - Connection Test
   uri:
     follow_redirects: none
@@ -8,6 +33,7 @@
   register: uri_data
   failed_when: False
   changed_when: False
+  environment: "{ {% if no_proxy_match.match | default(False) %}'no_proxy': '{{ ansible_host }}'{% endif %} }"
 
 - name: A00b. Report failures
   fail:
