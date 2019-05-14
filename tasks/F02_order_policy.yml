@@ -39,4 +39,4 @@
   loop: "{{ desired_policy }}"
   loop_control:
     label: "{{ item.rule }}"
-  when: not (item.after == '0' and item.before == '0') # This would only happen if there was a single line of policy!
+  when: item.after >= '0' or item.before >= '0'
