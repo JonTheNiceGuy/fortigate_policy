@@ -11,6 +11,8 @@
 
 - name: A00b. Report failures
   fail:
-    msg: Server is offline
+    msg: |
+     Server is offline. Details to follow:
+     {{ uri_data }}
   when:
   - uri_data is defined and uri_data.status < 0
