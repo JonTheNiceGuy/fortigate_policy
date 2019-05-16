@@ -26,6 +26,7 @@
 - name: A00c. Debug
   debug:
     msg: "{ {% if no_proxy_match.match | default(False) %}'no_proxy': '{{ ansible_host }}'{% endif %} }"
+  when: no_proxy_match.match | default(False)
 
 - name: A00c. Report failures
   fail:
