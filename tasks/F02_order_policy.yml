@@ -29,6 +29,14 @@
         {% endfor %}
       ]
 
+- name: Debug F02
+  debug:
+    var: item
+  loop:
+  - "{{ fwpolicy.meta.results }}"
+  - "{{ current_policy }}"
+  when: debug_policy_order | default(false)
+
 - name: F02c. Fix Policy Order
   fortiosconfig:
     host: "{{ ansible_host }}"
