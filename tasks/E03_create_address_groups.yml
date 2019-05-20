@@ -30,7 +30,7 @@
   failed_when: false
   loop: "{{ addgrp.results }}"
   loop_control:
-    label: "{{ item._ansible_item_label }}"
+    label: "{{ item._ansible_item_label|default('None') }}"
   when: item.changed | default(False) == False and item.skipped | default(False) == False
   register: addgrp2
 
@@ -48,7 +48,7 @@
   failed_when: false
   loop: "{{ addgrp2.results }}"
   loop_control:
-    label: "{{ item._ansible_item_label }}"
+    label: "{{ item._ansible_item_label|default('None') }}"
   when: item.changed | default(False) == False and item.skipped | default(False) == False
   register: addgrp3
 
@@ -66,7 +66,7 @@
   failed_when: false
   loop: "{{ addgrp3.results }}"
   loop_control:
-    label: "{{ item._ansible_item_label }}"
+    label: "{{ item._ansible_item_label|default('None') }}"
   when: item.changed | default(False) == False and item.skipped | default(False) == False
   register: addgrp4
 
@@ -84,7 +84,7 @@
   failed_when: false
   loop: "{{ addgrp4.results }}"
   loop_control:
-    label: "{{ item._ansible_item_label }}"
+    label: "{{ item._ansible_item_label|default('None') }}"
   when: item.changed | default(False) == False and item.skipped | default(False) == False
   register: addgrp5
 
@@ -101,5 +101,5 @@
       member: "[{% for member in item.item.item.item.item.item.value %}{ 'name': '{{ member }}' }, {% endfor %}]"
   loop: "{{ addgrp5.results }}"
   loop_control:
-    label: "{{ item._ansible_item_label }}"
+    label: "{{ item._ansible_item_label|default('None') }}"
   when: item.changed | default(False) == False and item.skipped | default(False) == False

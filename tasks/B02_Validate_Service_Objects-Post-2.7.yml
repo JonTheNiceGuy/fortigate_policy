@@ -1,0 +1,85 @@
+---
+- name: "B02a. Check service objects have a valid type"
+  assert:
+    quiet: yes
+    msg: "Assertion failed: item.value.type ('{{ item.value.type | default('') | string }}') does not have a valid type of 'built_in' or 'manual'"
+    that:
+    - item.value.type is defined
+    - item.value.type | type_debug in ['str', 'unicode']
+    - item.value.type == 'manual' or item.value.type == 'built_in'
+  loop: "{{ service_objects | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+
+- name: "B02b. Service Objects have at least a valid one of the types"
+  assert:
+    quiet: yes
+    msg: "Assertion failed: item.value has at least one of tcp, udp, ip and icmptype"
+    that:
+    - item.value.tcp | default('') | string | length > 0 or
+      item.value.udp | default('') | string | length > 0 or
+      item.value.ip | default('') | string | length > 0 or
+      item.value.icmptype | default('') | string | length > 0
+  when: item.value.type == 'manual'
+  loop: "{{ service_objects | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+
+- name: "B02c. Check TCP/UDP service objects are valid"
+  assert:
+    quiet: yes
+    msg: "Assertion failed: item.value.tcp ('{{ item.value.tcp | default('') | string }}') and item.value.udp ('{{ item.value.udp | default('') | string }}) are valid strings and there aren't also IP and ICMP numbers too."
+    that:
+    - item.value.tcp | default('') | string + item.value.udp | default('') | string != ''
+    - item.value.ip | default('') | string == ''
+    - item.value.icmpcode | default('') | string == '' and item.value.icmptype | default('') | string == ''
+  when:
+  - item.value.type == 'manual'
+  - (item.value.tcp is defined and item.value.tcp | string != '') or (item.value.udp is defined and item.value.udp | string != '')
+  loop: "{{ service_objects | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+
+- name: "B02d. Check ICMP service objects are valid"
+  assert:
+    quiet: yes
+    msg: "Assertion failed: item.value.icmptype ('{{ item.value.icmptype | default(0) | string }}') and [optional item] item.value.icmpcode ('{{ item.value.icmpcode | default(0) | string }}') are integers and there aren't also IP and TCP/UDP numbers too."
+    that:
+    - item.value.icmptype | type_debug == 'int'
+    - item.value.icmptype | default(0) | int >= 0 and item.value.icmpcode | default(0) | int <= 255
+    - item.value.icmpcode is not defined or item.value.icmpcode | type_debug == 'int'
+    - item.value.icmpcode is not defined or (item.value.icmpcode | default(0) | int >= 0 and item.value.icmpcode | default(0) | int <= 255)
+    - item.value.ip | default('') | string == ''
+    - item.value.tcp | default('') | string == '' and item.value.udp | default('') | string == ''
+  when:
+  - item.value.type == 'manual'
+  - item.value.icmptype is defined and item.value.icmptype | string != ''
+  loop: "{{ service_objects | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+
+- name: "B02e. Check IP Protocol service objects are valid"
+  assert:
+    quiet: yes
+    msg: "Assertion failed: item.value.ip ('{{ item.value.ip | default(0) | string }}') is an integer and there aren't also IP and TCP/UDP numbers too."
+    that:
+    - item.value.ip | type_debug == 'int'
+    - item.value.ip | default(0) | int >= 0 and item.value.ip | default(0) | int <= 255
+    - item.value.tcp | default('') | string == '' and item.value.udp | default('') | string == ''
+    - item.value.icmpcode | default('') | string == '' and item.value.icmptype | default('') | string == ''
+  when:
+  - item.value.type == 'manual'
+  - item.value.ip is defined and item.value.ip | string != ''
+  loop: "{{ service_objects | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+
+- name: "B02f. Check service groups have members"
+  assert:
+    quiet: yes
+    msg: "Assertion failed: item ('{{ item.1 }}') is not a group nor an object"
+    that:
+    - service_groups[item.1] is defined or service_objects[item.1] is defined
+  loop: "{{ query('subelements', service_groups | dict2items, 'value') }}"
+  loop_control:
+    label: "{{ item.0.key }} -> {{ item.1 }}"

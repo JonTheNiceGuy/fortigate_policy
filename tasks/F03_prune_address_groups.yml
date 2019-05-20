@@ -53,7 +53,7 @@
   failed_when: false
   loop: "{{ delgrp2.results }}"
   loop_control:
-    label: "{{ item._ansible_item_label }}"
+    label: "{{ item._ansible_item_label|default('None') }}"
   when: item.changed | default(False) == False and item.skipped | default(False) == False
   register: delgrp3
 
@@ -70,7 +70,7 @@
   failed_when: false
   loop: "{{ delgrp3.results }}"
   loop_control:
-    label: "{{ item._ansible_item_label }}"
+    label: "{{ item._ansible_item_label|default('None') }}"
   when: item.changed | default(False) == False and item.skipped | default(False) == False
   register: delgrp4
 
@@ -87,7 +87,7 @@
   failed_when: false
   loop: "{{ delgrp4.results }}"
   loop_control:
-    label: "{{ item._ansible_item_label }}"
+    label: "{{ item._ansible_item_label|default('None') }}"
   when: item.changed | default(False) == False and item.skipped | default(False) == False
   register: delgrp5
 
@@ -104,7 +104,7 @@
   failed_when: false
   loop: "{{ delgrp5.results }}"
   loop_control:
-    label: "{{ item._ansible_item_label }}"
+    label: "{{ item._ansible_item_label|default('None') }}"
   when: item.changed | default(False) == False and item.skipped | default(False) == False
   register: delgrp6
 
@@ -120,5 +120,5 @@
       name: "{{ item.item.item.item.item.item.key }}"
   loop: "{{ delgrp6.results }}"
   loop_control:
-    label: "{{ item._ansible_item_label }}"
+    label: "{{ item._ansible_item_label|default('None') }}"
   when: item.changed | default(False) == False and item.skipped | default(False) == False

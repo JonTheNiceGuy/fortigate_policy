@@ -1,16 +1,48 @@
 ---
-- name: B01 Validate Address Objects
-  include_tasks: B01_Validate_Address_Objects.yml
-  when: validate_addresses | default(validate_all | default(True))
+- name: B01 Validate Address Objects <=2.7
+  include_tasks: B01_Validate_Address_Objects-Pre-2.8.yml
+  when:
+  - validate_addresses | default(validate_all | default(True))
+  - ansible_version is not defined or ansible_version.major < 2 or (ansible_version.major == 2 and ansible_version.minor <= 7)
 
-- name: B02 Validate Service Objects
-  include_tasks: B02_Validate_Service_Objects.yml
-  when: validate_services | default(validate_all | default(True))
+- name: B01 Validate Address Objects >2.7
+  include_tasks: B01_Validate_Address_Objects-Post-2.7.yml
+  when:
+  - validate_addresses | default(validate_all | default(True))
+  - (ansible_version.major == 2 and ansible_version.minor > 7) or ansible_version.major >= 3
 
-- name: B03 Validate Policy Rules
-  include_tasks: B03_Validate_Policy_Rules.yml
-  when: validate_policies | default(validate_all | default(True))
+- name: B02 Validate Service Objects <=2.7
+  include_tasks: B02_Validate_Service_Objects-Pre-2.8.yml
+  when:
+  - validate_services | default(validate_all | default(True))  
+  - ansible_version is not defined or ansible_version.major < 2 or (ansible_version.major == 2 and ansible_version.minor <= 7)
 
-- name: B04 Validate No Naming Conflicts
-  include_tasks: B04_Validate_No_Naming_Conflicts.yml
-  when: validate_names | default(validate_all | default(True))
+- name: B02 Validate Service Objects >2.7
+  include_tasks: B02_Validate_Service_Objects-Post-2.7.yml
+  when:
+  - validate_services | default(validate_all | default(True))  
+  - (ansible_version.major == 2 and ansible_version.minor > 7) or ansible_version.major >= 3
+
+- name: B03 Validate Policy Rules <=2.7
+  include_tasks: B03_Validate_Policy_Rules-Pre-2.8.yml
+  when:
+  - validate_policies | default(validate_all | default(True))
+  - ansible_version is not defined or ansible_version.major < 2 or (ansible_version.major == 2 and ansible_version.minor <= 7)
+
+- name: B03 Validate Policy Rules >2.7
+  include_tasks: B03_Validate_Policy_Rules-Post-2.7.yml
+  when:
+  - validate_policies | default(validate_all | default(True))
+  - (ansible_version.major == 2 and ansible_version.minor > 7) or ansible_version.major >= 3
+
+- name: B04 Validate No Naming Conflicts <=2.7
+  include_tasks: B04_Validate_No_Naming_Conflicts-Pre-2.8.yml
+  when:
+  - validate_names | default(validate_all | default(True))
+  - ansible_version is not defined or ansible_version.major < 2 or (ansible_version.major == 2 and ansible_version.minor <= 7)
+
+- name: B04 Validate No Naming Conflicts >2.7
+  include_tasks: B04_Validate_No_Naming_Conflicts-Post-2.7.yml
+  when:
+  - validate_names | default(validate_all | default(True))
+  - (ansible_version.major == 2 and ansible_version.minor > 7) or ansible_version.major >= 3
