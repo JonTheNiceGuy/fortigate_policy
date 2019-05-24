@@ -1,0 +1,9 @@
+---
+vip_address_objects:
+  vip_host:
+    real_ip: 192.0.2.1
+
+mixed_address_groups:
+  mixed_vip_and_non:
+  - vip_host
+  - example_com

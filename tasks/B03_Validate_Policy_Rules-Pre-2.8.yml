@@ -125,6 +125,10 @@
     msg: "Assertion failed: {{ item.1 }} is not in address_objects nor address_groups"
     that:
     - address_objects[item.1] is defined or address_groups[item.1] is defined
+    - address_groups[item.1] is defined or (
+        address_objects[item.1] is defined and
+        address_objects[item.1].real_ip is not defined
+      )
   loop: "{{ query('subelements', rulebase | dict2items, 'value.sources', {'skip_missing': True}) }}"
   loop_control:
     label: "{{ item.0.key }} -> {{ item.1 }}"

@@ -1,15 +1,8 @@
 ---
-- name: B01 Validate Address Objects <=2.7
-  include_tasks: B01_Validate_Address_Objects-Pre-2.8.yml
+- name: B01 Validate Address Objects
+  include_tasks: B01_Validate_Address_Objects.yml
   when:
   - validate_addresses | default(validate_all | default(True))
-  - ansible_version is not defined or ansible_version.major < 2 or (ansible_version.major == 2 and ansible_version.minor <= 7)
-
-- name: B01 Validate Address Objects >2.7
-  include_tasks: B01_Validate_Address_Objects-Post-2.7.yml
-  when:
-  - validate_addresses | default(validate_all | default(True))
-  - (ansible_version.major == 2 and ansible_version.minor > 7) or ansible_version.major >= 3
 
 - name: B02 Validate Service Objects <=2.7
   include_tasks: B02_Validate_Service_Objects-Pre-2.8.yml

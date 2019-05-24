@@ -75,3 +75,28 @@
     label: "{{ item.key }}"
   when:
   - item.value.geo is defined
+
+- name: E02e. Create a VIP object
+  fortios_firewall_vip:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    firewall_vip:
+      state: "present"
+      name: "{{ item.key }}"
+      comment: "{{ item.value.comment | default(omit) }}"
+      mappedip:
+      - range: "{{ item.value.real_ip }}"
+      extintf: "{{ item.value.device | default('any') }}"
+      extip: "{{ item.value.vip_ip | default(omit) }}"
+      portforward: "{% if item.value.real_port is defined %}enable{% else %}disable{% endif %}"
+      protocol: "{% if item.value.real_port is defined %}{{ item.value.protocol | default('tcp') }}{% else %}{{ omit }}{% endif %}"
+      mappedport: "{{ item.value.real_port | default(omit) }}"
+      extport: "{% if item.value.real_port is defined %}{{ item.value.vip_port | default(item.value.real_port | default(omit)) }}{% else %}{{ omit }}{% endif %}"
+  loop: "{{ address_objects_USED_INTERNAL | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when:
+  - item.value.real_ip is defined

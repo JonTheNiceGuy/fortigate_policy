@@ -17,3 +17,6 @@
 - name: F06. Prune service objects
   include_tasks: F06_prune_services.yml
   when: prune_services | default(prune_all | default(false))
+- name: F07. Prune VIP addresses
+  include_tasks: F07_prune_vip_addresses.yml
+  when: prune_addresses | default(prune_all | default(false))

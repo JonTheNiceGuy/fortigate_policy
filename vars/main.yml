@@ -993,6 +993,18 @@ address_groups_COMBINED_INTERNAL: |
       {% endif %}
     {% endfor %}
   }
+address_groups_member_types: |
+  {
+    {%- for item in address_groups_COMBINED_INTERNAL | dict2items -%}
+      '{{ item.key }}':'
+        {%- for member in item.value -%}
+          {%- if address_objects[member] is not defined -%}X
+          {%- elif address_objects[member].real_ip is defined -%}v
+          {%- elif address_objects[member].real_ip is not defined -%}n
+          {%- endif -%}
+        {%- endfor -%}',
+    {%- endfor -%}
+  }
 service_objects_COMBINED_INTERNAL: |
   {
     {% for item in manual_services | default({}) | dict2items %}{# For historical purposes #}
