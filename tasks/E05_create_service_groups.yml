@@ -30,7 +30,7 @@
   failed_when: false
   loop: "{{ addsvc.results }}"
   loop_control:
-    label: "{{ item._ansible_item_label|default('None') }}"
+    label: "{{ item._ansible_item_label | default(item.item.key | default('Key is missing')) }}"
   when: item.changed | default(False) == False and item.skipped | default(False) == False
   register: addsvc2
 
@@ -48,7 +48,7 @@
   failed_when: false
   loop: "{{ addsvc2.results }}"
   loop_control:
-    label: "{{ item._ansible_item_label|default('None') }}"
+    label: "{{ item._ansible_item_label | default(item.item.key | default(item.item.item.key | default('Key is missing'))) }}"
   when: item.changed | default(False) == False and item.skipped | default(False) == False
   register: addsvc3
 
@@ -66,7 +66,7 @@
   failed_when: false
   loop: "{{ addsvc3.results }}"
   loop_control:
-    label: "{{ item._ansible_item_label|default('None') }}"
+    label: "{{ item._ansible_item_label | default(item.item.key | default(item.item.item.key | default(item.item.item.item.key | default('Key is missing')))) }}"
   when: item.changed | default(False) == False and item.skipped | default(False) == False
   register: addsvc4
 
@@ -84,7 +84,7 @@
   failed_when: false
   loop: "{{ addsvc4.results }}"
   loop_control:
-    label: "{{ item._ansible_item_label|default('None') }}"
+    label: "{{ item._ansible_item_label | default(item.item.key | default(item.item.item.key | default(item.item.item.item.key | default(item.item.item.item.item.key | default('Key is missing'))))) }}"
   when: item.changed | default(False) == False and item.skipped | default(False) == False
   register: addsvc5
 
@@ -101,5 +101,5 @@
       member: "[{% for member in item.item.item.item.item.item.value %}{ 'name': '{{ member }}' }, {% endfor %}]"
   loop: "{{ addsvc5.results }}"
   loop_control:
-    label: "{{ item._ansible_item_label|default('None') }}"
+    label: "{{ item._ansible_item_label | default(item.item.key | default(item.item.item.key | default(item.item.item.item.key | default(item.item.item.item.item.key | default(item.item.item.item.item.item.key | default('Key is missing')))))) }}"
   when: item.changed | default(False) == False and item.skipped | default(False) == False
