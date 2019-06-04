@@ -1000,7 +1000,6 @@ address_groups_member_types: |
         {%- for member in item.value -%}
           {%- if address_objects[member] is not defined -%}X
           {%- elif address_objects[member].real_ip is defined -%}v
-          {%- elif address_objects[member].real_ip is not defined -%}n
           {%- endif -%}
         {%- endfor -%}',
     {%- endfor -%}
