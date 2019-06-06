@@ -110,6 +110,8 @@ Policies can cross multiple files, and are gathered into 100's of rules, followi
         action: deny
         # Log is "all" (default) or "utm" or "none". To also enable logging from the start, set logstart: enable
         log: "none"
+        # If you want the rule to be created, but marked as "disabled" set the following to true (options are true/yes/false/no)
+        disabled: false
     
     ---
     # This next line sets the policyid prefix to "20"
