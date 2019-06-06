@@ -54,7 +54,7 @@
         'schedule': "{{ item.value.schedule | default('always') }}",
         'nat': "{% if item.value.nat | default(false) | bool %}enable{% else %}disable{% endif %}",
         'logtraffic': "{{ item.value.log | default('all') }}",
-        'logtraffic-start': "{{ item.value.logstart | default('enable') }}",
+        'logtraffic-start': "{{ item.value.logstart | default('disable') }}",
         'status': "{% if item.value.disabled | default(false) %}disable{% else %}enable{% endif %}",
         'uuid': "{{ item.value.uuid | default(omit) }}"
       }
