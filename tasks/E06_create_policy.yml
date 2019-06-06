@@ -16,15 +16,12 @@
 
 - name: E06a. Set Default Logging (Finish)
   async_status:
-    jid: "{{ item.ansible_job_id }}"
+    jid: "{{ sleeper.ansible_job_id }}"
   register: sleeper_status
   until: sleeper_status.finished
   retries: 500
   delay: 4
-  loop: "{{ sleeper.results|flatten(levels=1) }}"
-  when: item.ansible_job_id is defined
-  loop_control:
-    label: "{{ item._ansible_item_label | default(item.item.key | default('Key is missing')) }}"
+  when: sleeper.ansible_job_id is defined
 
 - name: E06b. Create policy items (Start)
   fortios_firewall_policy:
