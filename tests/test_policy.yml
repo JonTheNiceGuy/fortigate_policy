@@ -3,7 +3,7 @@
   hosts: all
   tasks:
   - include_role:
-      name: fortigate.policy
+      name: e-and-cs.fortigate_policy
     vars:
       dry_run: True
       online_checks: False
@@ -11,7 +11,7 @@
   hosts: test04
   tasks:
   - include_role:
-      name: fortigate.policy
+      name: e-and-cs.fortigate_policy
     vars:
       dry_run: True
       online_checks: True

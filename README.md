@@ -179,14 +179,14 @@ Multiple Plays Method
       vars:
         dry_run: True
       roles:
-        - Firewall.Policy
+        - e-and-cs.fortigate_policy
 
     - name: Implement changes, without removing any configuration from the firewall
       hosts: all
       vars:
         validate_all: False
       roles:
-        - Firewall.Policy
+        - e-and-cs.fortigate_policy
 
     - name: Just re-order and remove items from the firewall. Don't try and create anything new.
       hosts: all
@@ -194,14 +194,14 @@ Multiple Plays Method
         validate_all: False
         create_all: False
       roles:
-        - Firewall.Policy
+        - e-and-cs.fortigate_policy
 
 Extra-Vars method:
 
     ---
     - hosts: all
       roles:
-        - Firewall.Policy
+        - e-and-cs.fortigate_policy
 
 `ansible-playbook site.yml -e "{'validate_all': False, 'prune_all': True}"`
 
