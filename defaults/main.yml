@@ -1,0 +1,27 @@
+---
+###### This next line defaults all the following 'validate' lines to this value
+# validate_all: true
+
+# validate_addresses: true
+# validate_services: true
+# validate_policies: true
+# validate_names: true
+
+# dry_run: false
+
+###### This next line defaults all the following 'create' and 'prevent' lines to this value
+# create_all: true
+
+# prevent_conflicts: true
+# create_addresses: true
+# create_services: true
+# create_policy: true
+
+# reorder_policy: false
+
+###### This next line defaults all the following 'prune' lines to this value
+# prune_all: false
+
+# prune_policy: false
+# prune_addresses: false
+# prune_services: false

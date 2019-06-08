@@ -1,0 +1,22 @@
+---
+- name: F01. Prune policy
+  include_tasks: F01_prune_policy.yml
+  when: prune_policy | default(prune_all | default(false))
+- name: F02. Reorder policy
+  include_tasks: F02_order_policy.yml
+  when: reorder_policy | default(false)
+- name: F03. Prune address groups
+  include_tasks: F03_prune_address_groups.yml
+  when: prune_addresses | default(prune_all | default(false))
+- name: F04. Prune address objects
+  include_tasks: F04_prune_addresses.yml
+  when: prune_addresses | default(prune_all | default(false))
+- name: F05. Prune service groups
+  include_tasks: F05_prune_service_groups.yml
+  when: prune_services | default(prune_all | default(false))
+- name: F06. Prune service objects
+  include_tasks: F06_prune_services.yml
+  when: prune_services | default(prune_all | default(false))
+- name: F07. Prune VIP addresses
+  include_tasks: F07_prune_vip_addresses.yml
+  when: prune_addresses | default(prune_all | default(false))

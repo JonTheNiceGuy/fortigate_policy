@@ -1,0 +1,9 @@
+---
+rulegroup02:
+  rule01:
+    sources:
+    - all
+    destinations:
+    - all
+    services:
+    - missing_service

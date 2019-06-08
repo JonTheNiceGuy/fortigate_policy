@@ -1,0 +1,43 @@
+---
+- name: E04. Create service objects (Start)
+  fortios_firewall_service_custom:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    firewall_service_custom:
+      state: "present"
+      name: "{{ item.key }}"
+      comment: "{{ item.value.comment | default(omit) }}"
+      protocol: "{% if item.value.tcp | default('') != '' or item.value.udp | default('') != '' -%}
+                   TCP/UDP/SCTP
+                 {%- elif item.value.icmpcode | default('') != '' and item.value.icmptype | default('') != '' -%}
+                   ICMP
+                 {%- else -%}
+                   IP
+                 {%- endif %}"
+      tcp-portrange: "{{ item.value.tcp | default(omit) }}"
+      udp-portrange: "{{ item.value.udp | default(omit) }}"
+      icmpcode: "{{ item.value.icmpcode | default(omit) }}"
+      icmptype: "{{ item.value.icmptype | default(omit) }}"
+      protocol-number: "{{ item.value.ip | default(omit) }}"
+  loop: "{{ service_objects_USED_INTERNAL | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  async: 1000
+  poll: 0
+  changed_when: False
+  register: sleeper
+
+- name: E04. Create service objects (Finish)
+  async_status:
+    jid: "{{ item.ansible_job_id }}"
+  register: sleeper_status
+  until: sleeper_status.finished
+  retries: 500
+  delay: 4
+  loop: "{{ sleeper.results|flatten(levels=1) }}"
+  when: item.ansible_job_id is defined
+  loop_control:
+    label: "{{ item._ansible_item_label | default(item.item.key | default('Key is missing')) }}"

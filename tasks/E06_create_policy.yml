@@ -1,0 +1,80 @@
+---
+- name: E06a. Set Default Logging (Start)
+  fortios_log_setting:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    log_setting:
+      fwpolicy-implicit-log: "{{ implicit4_log | default(implicit_log | default('enable')) }}"
+      fwpolicy6-implicit-log: "{{ implicit6_log | default(implicit_log | default('enable')) }}"
+  async: 1000
+  poll: 0
+  changed_when: False
+  register: sleeper
+
+- name: E06a. Set Default Logging (Finish)
+  async_status:
+    jid: "{{ sleeper.ansible_job_id }}"
+  register: sleeper_status
+  until: sleeper_status.finished
+  retries: 500
+  delay: 4
+  when: sleeper.ansible_job_id is defined
+
+- name: E06b. Create policy items (Start)
+  fortios_firewall_policy:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    firewall_policy: |
+      {
+        'state': 'present',
+        'policyid': "{{ item.key }}",
+        'name': "{{ item.value.name | default('Policy_' + item.key | string) }}",
+        'action': "{{ item.value.action | default('accept') }}",
+        'srcintf': [{ 'name': '{{ item.value.source_interface | default('any') }}' }],
+        'dstintf': [{ 'name': '{{ item.value.destination_interface | default('any') }}' }],
+        {% if item.value.sources is defined %}
+          'srcaddr': [{% for source in item.value.sources | default(['all']) %}{'name': '{{ source }}'},{% endfor %}],
+        {% else %}
+          'internet-service-src': "enable",
+          'internet-service-src-id': [{% for source in item.value.src_internet_service %}{'id': '{{ internet_svc.src[source].id }}'},{% endfor %}],
+        {% endif %}
+        {% if item.value.destinations is defined %}
+          'dstaddr': [{% for destination in item.value.destinations | default(['all']) %}{'name': '{{ destination }}'},{% endfor %}],
+        {% else %}
+          'internet-service': "enable",
+          'internet-service-id': [{% for destination in item.value.dst_internet_service %}{'id': '{{ internet_svc.dst[destination].id }}'},{% endfor %}],
+        {% endif %}
+        'service': [{% for service in item.value.services | default(['ALL']) %}{'name': '{{ service }}'},{% endfor %}],
+        'schedule': "{{ item.value.schedule | default('always') }}",
+        'nat': "{% if item.value.nat | default(false) | bool %}enable{% else %}disable{% endif %}",
+        'logtraffic': "{{ item.value.log | default('all') }}",
+        'logtraffic-start': "{{ item.value.logstart | default('disable') }}",
+        'status': "{% if item.value.disabled | default(false) | bool %}disable{% else %}enable{% endif %}",
+        'uuid': "{{ item.value.uuid | default(omit) }}"
+      }
+  loop: "{{ rulebase | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}{% if item.value.name is defined and item.value.name != '' %} ({{ item.value.name }}){% endif %}"
+  async: 1000
+  poll: 0
+  changed_when: False
+  register: sleeper
+
+- name: E06b. Create policy items (Finish)
+  async_status:
+    jid: "{{ item.ansible_job_id }}"
+  register: sleeper_status
+  until: sleeper_status.finished
+  retries: 500
+  delay: 4
+  loop: "{{ sleeper.results|flatten(levels=1) }}"
+  when: item.ansible_job_id is defined
+  loop_control:
+    label: "{{ item._ansible_item_label | default(item.item.key | default('Key is missing')) }}"
+

@@ -1,0 +1,48 @@
+---
+- name: F02a. Check Policy Data on the firewall
+  fortiosconfig:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    action: "get"
+    config: "firewall policy"
+  register: fwpolicy
+
+- name: F02b. Pre-parse Firewall Policy to confirm ordering
+  set_fact:
+    current_policy: |
+      [
+        {% for policy in fwpolicy.meta.results | sort(attribute='policyid') %}
+          {
+            'rule': '{{ policy.policyid }}',
+            {% for sort in fwpolicy.meta.results %}
+              {% if sort.policyid == policy.policyid %}
+                'current_after': '{{ loop.previtem | default("'policyid': 0,") | regex_replace("^.*'policyid': (\d+),.*$", '\1') }}',
+                'current_before': '{{ loop.nextitem | default("'policyid': 0,") | regex_replace("^.*'policyid': (\d+),.*$", '\1') }}',
+              {% endif %}
+            {% endfor %}
+            'after': '{{ (loop.previtem | default({})).policyid | default(0) }}',
+            'before': '{{ (loop.nextitem | default({})).policyid | default(0) }}'
+          },
+        {% endfor %}
+      ]
+
+- name: F02c. Fix Policy Order
+  fortiosconfig:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    action: "move"
+    config: "firewall policy"
+    config_parameters:
+      key: "{{ item.rule }}"
+      where: "{% if item.after != '0' %}after{% else %}before{% endif %}"
+      reference-key: "{% if item.after != '0' %}{{ item.after }}{% else %}{{ item.before }}{% endif %}"
+  loop: "{{ current_policy }}"
+  loop_control:
+    label: "{{ item.rule }} (Moving from between {{ item.current_before }} and {{ item.current_after }} to {% if item.after != '0' %}after{% else %}before{% endif %} {% if item.after != '0' %}{{ item.after }}{% else %}{{ item.before }}{% endif %})"
+  when: not (item.after | int == 0 and item.before | int == 0)

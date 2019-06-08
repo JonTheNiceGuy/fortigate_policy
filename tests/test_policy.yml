@@ -1,0 +1,17 @@
+---
+- name: Dry-run offline tests (test00_fw01 and test04_fw01 should be the only passes. All else will fail.)
+  hosts: all
+  tasks:
+  - include_role:
+      name: fortigate.policy
+    vars:
+      dry_run: True
+      online_checks: False
+- name: Dry-run online test (test04_fw01 is the only one being tested and should fail.)
+  hosts: test04
+  tasks:
+  - include_role:
+      name: fortigate.policy
+    vars:
+      dry_run: True
+      online_checks: True

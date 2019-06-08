@@ -1,0 +1,11 @@
+test00_fw01  ansible_connection=local comment=Should_All_Work
+[test01]
+test01_fw01  ansible_connection=local comment=Missing_host_objects
+[test02]
+test02_fw01  ansible_connection=local comment=Missing_service_objects
+[test03]
+test03_fw01  ansible_connection=local comment=Group_contains_missing_objects
+[test04]
+test04_fw01  ansible_connection=local ansible_host=127.255.255.254 ansible_username=admin ansible_password=admin comment=Host_non_responsive
+[test05]
+test05_fw01  ansible_connection=local comment=Group_mixes_vip_and_non_vip_items

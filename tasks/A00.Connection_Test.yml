@@ -1,0 +1,37 @@
+---
+- name: A00a. Check if there's a match
+  set_fact:
+    no_proxy_match: |
+      {
+        {% for np in (lookup('env', 'no_proxy') | replace(',', '') ).split() %}
+          {% if np | ipaddr | type_debug != 'NoneType' %}
+            {% if ansible_host | ipaddr(np) | type_debug != 'NoneType' %}
+              "match": "True"
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+      }
+
+- name: A00b. Check Online Status - Connection Test
+  uri:
+    follow_redirects: none
+    validate_certs: False
+    timeout: 5
+    url: "http{% if ansible_https | default(True) %}s{% endif %}://{{ ansible_host }}/login"
+  register: uri_data
+  failed_when: False
+  changed_when: False
+  environment: "{ {% if no_proxy_match.match | default(False) %}'no_proxy': '{{ ansible_host }}'{% endif %} }"
+
+- name: A00c. Debug
+  debug:
+    msg: "{ {% if no_proxy_match.match | default(False) %}'no_proxy': '{{ ansible_host }}'{% endif %} }"
+  when: no_proxy_match.match | default(False)
+
+- name: A00c. Report failures
+  fail:
+    msg: |
+     Server is offline. Details to follow:
+     {{ uri_data }}
+  when:
+  - uri_data is defined and uri_data.status < 0

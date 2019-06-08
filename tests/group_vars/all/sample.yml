@@ -1,0 +1,52 @@
+---
+shared_address_objects:
+  example_com:
+    fqdn: example.com
+  example_org:
+    fqdn: example.org
+  test_net_1:
+    ip: "192.0.2.0/24"
+  test_net_2_host_a:
+    ip: "198.51.100.10"
+  test_net_2_host_b:
+    ip: "198.51.100.11"
+  geo_fr:
+    geo: FR
+  dyn_webservers:
+    dynamic: "tag.webserver=true"
+
+shared_address_groups:
+  example_fqdns:
+  - example_com
+  - example_org
+  test_net_hosts:
+  - test_net_1
+  - test_net_2_host_a
+  - test_net_2_host_b
+
+rulegroup01:
+  rule00:
+    sources:
+    - geo_fr
+    destinations:
+    - all
+    services:
+    - ALL
+    action: deny
+    log: disable
+  rule01:
+    sources:
+    - test_net_hosts
+    destinations:
+    - example_fqdns
+    services:
+    - HTTP
+    - HTTPS
+  rule02:
+    sources:
+    - all
+    destinations:
+    - dyn_webservers
+    services:
+    - HTTP
+    - HTTPS

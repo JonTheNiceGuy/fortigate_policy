@@ -1,0 +1,14 @@
+---
+group_address_groups:
+  sample_group:
+  - #
+  - all
+
+rulegroup03:
+  rule01:
+    sources:
+    - sample_group
+    destinations:
+    - sample_group
+    services:
+    - ALL

@@ -1,0 +1,23 @@
+galaxy_info:
+  author: Jon Spriggs
+  description: This role takes a rulebase layout, lints the resulting objects, then validates that the objects are used correctly in the policy. Finally, it installs the policy on a FortiNet FortiGate Firewall, and removes all non-implemented objects.
+
+  license: MIT
+
+  min_ansible_version: 2.7
+
+  platforms:
+  - name: FortiNet-FortiGate
+    versions:
+    - 6.0 # Later versions are not tested
+
+  galaxy_tags:
+  - fortinet
+  - fortigate
+  - fortios
+  - firewall
+  - firewall_policy
+  - firewall_rules
+  - firewall_rulebase
+
+dependencies: []

@@ -1,0 +1,1101 @@
+---
+###############################################################################
+###############################################################################
+
+####################################################################
+# These built in values taken from a vanilla build of 
+# FortiOS v6.0.3 for Azure (Build 0200 GA).
+# With a FortiCare Subscription that provided updates on 2019-05-03
+####################################################################
+
+###############################################################################
+###############################################################################
+
+##########################
+# Geographies
+##########################
+built_in_geographies:
+  AD: "Andorra"
+  AE: "United Arab Emirates"
+  AF: "Afghanistan"
+  AG: "Antigua and Barbuda"
+  AI: "Anguilla"
+  AL: "Albania"
+  AM: "Armenia"
+  AN: "Netherlands Antilles"
+  AO: "Angola"
+  AQ: "Antarctica"
+  AR: "Argentina"
+  AS: "American Samoa"
+  AT: "Austria"
+  AU: "Australia"
+  AW: "Aruba"
+  AX: "Aland Islands"
+  AZ: "Azerbaijan"
+  BA: "Bosnia and Herzegovina"
+  BB: "Barbados"
+  BD: "Bangladesh"
+  BE: "Belgium"
+  BF: "Burkina Faso"
+  BG: "Bulgaria"
+  BH: "Bahrain"
+  BI: "Burundi"
+  BJ: "Benin"
+  BL: "Saint Bartelemey"
+  BM: "Bermuda"
+  BN: "Brunei Darussalam"
+  BO: "Bolivia"
+  BQ: "Bonaire, Saint Eustatius and Saba"
+  BR: "Brazil"
+  BS: "Bahamas"
+  BT: "Bhutan"
+  BV: "Bouvet Island"
+  BW: "Botswana"
+  BY: "Belarus"
+  BZ: "Belize"
+  CA: "Canada"
+  CC: "Cocos (Keeling) Islands"
+  CD: "Congo, The Democratic Republic of the"
+  CF: "Central African Republic"
+  CG: "Congo"
+  CH: "Switzerland"
+  CI: "Cote d'Ivoire"
+  CK: "Cook Islands"
+  CL: "Chile"
+  CM: "Cameroon"
+  CN: "China"
+  CO: "Colombia"
+  CR: "Costa Rica"
+  CU: "Cuba"
+  CV: "Cape Verde"
+  CW: "Curacao"
+  CX: "Christmas Island"
+  CY: "Cyprus"
+  CZ: "Czech Republic"
+  DE: "Germany"
+  DJ: "Djibouti"
+  DK: "Denmark"
+  DM: "Dominica"
+  DO: "Dominican Republic"
+  DZ: "Algeria"
+  EC: "Ecuador"
+  EE: "Estonia"
+  EG: "Egypt"
+  EH: "Western Sahara"
+  ER: "Eritrea"
+  ES: "Spain"
+  ET: "Ethiopia"
+  FI: "Finland"
+  FJ: "Fiji"
+  FK: "Falkland Islands (Malvinas)"
+  FM: "Micronesia, Federated States of"
+  FO: "Faroe Islands"
+  FR: "France"
+  GA: "Gabon"
+  GB: "United Kingdom"
+  GD: "Grenada"
+  GE: "Georgia"
+  GF: "French Guiana"
+  GG: "Guernsey"
+  GH: "Ghana"
+  GI: "Gibraltar"
+  GL: "Greenland"
+  GM: "Gambia"
+  GN: "Guinea"
+  GP: "Guadeloupe"
+  GQ: "Equatorial Guinea"
+  GR: "Greece"
+  GS: "South Georgia and the South Sandwich Islands"
+  GT: "Guatemala"
+  GU: "Guam"
+  GW: "Guinea-Bissau"
+  GY: "Guyana"
+  HK: "Hong Kong"
+  HM: "Heard Island and McDonald Islands"
+  HN: "Honduras"
+  HR: "Croatia"
+  HT: "Haiti"
+  HU: "Hungary"
+  ID: "Indonesia"
+  IE: "Ireland"
+  IL: "Israel"
+  IM: "Isle of Man"
+  IN: "India"
+  IO: "British Indian Ocean Territory"
+  IQ: "Iraq"
+  IR: "Iran, Islamic Republic of"
+  IS: "Iceland"
+  IT: "Italy"
+  JE: "Jersey"
+  JM: "Jamaica"
+  JO: "Jordan"
+  JP: "Japan"
+  KE: "Kenya"
+  KG: "Kyrgyzstan"
+  KH: "Cambodia"
+  KI: "Kiribati"
+  KM: "Comoros"
+  KN: "Saint Kitts and Nevis"
+  KP: "Korea, Democratic People's Republic of"
+  KR: "Korea, Republic of"
+  KW: "Kuwait"
+  KY: "Cayman Islands"
+  KZ: "Kazakhstan"
+  LA: "Lao People's Democratic Republic"
+  LB: "Lebanon"
+  LC: "Saint Lucia"
+  LI: "Liechtenstein"
+  LK: "Sri Lanka"
+  LR: "Liberia"
+  LS: "Lesotho"
+  LT: "Lithuania"
+  LU: "Luxembourg"
+  LV: "Latvia"
+  LY: "Libyan Arab Jamahiriya"
+  MA: "Morocco"
+  MC: "Monaco"
+  MD: "Moldova, Republic of"
+  ME: "Montenegro"
+  MF: "Saint Martin"
+  MG: "Madagascar"
+  MH: "Marshall Islands"
+  MK: "Macedonia"
+  ML: "Mali"
+  MM: "Myanmar"
+  MN: "Mongolia"
+  MO: "Macao"
+  MP: "Northern Mariana Islands"
+  MQ: "Martinique"
+  MR: "Mauritania"
+  MS: "Montserrat"
+  MT: "Malta"
+  MU: "Mauritius"
+  MV: "Maldives"
+  MW: "Malawi"
+  MX: "Mexico"
+  MY: "Malaysia"
+  MZ: "Mozambique"
+  NA: "Namibia"
+  NC: "New Caledonia"
+  NE: "Niger"
+  NF: "Norfolk Island"
+  NG: "Nigeria"
+  NI: "Nicaragua"
+  NL: "Netherlands"
+  NO: "Norway"
+  NP: "Nepal"
+  NR: "Nauru"
+  NU: "Niue"
+  NZ: "New Zealand"
+  O1: "Other Country"
+  OM: "Oman"
+  PA: "Panama"
+  PE: "Peru"
+  PF: "French Polynesia"
+  PG: "Papua New Guinea"
+  PH: "Philippines"
+  PK: "Pakistan"
+  PL: "Poland"
+  PM: "Saint Pierre and Miquelon"
+  PN: "Pitcairn"
+  PR: "Puerto Rico"
+  PS: "Palestinian Territory"
+  PT: "Portugal"
+  PW: "Palau"
+  PY: "Paraguay"
+  QA: "Qatar"
+  RE: "Reunion"
+  RO: "Romania"
+  RS: "Serbia"
+  RU: "Russian Federation"
+  RW: "Rwanda"
+  SA: "Saudi Arabia"
+  SB: "Solomon Islands"
+  SC: "Seychelles"
+  SD: "Sudan"
+  SE: "Sweden"
+  SG: "Singapore"
+  SH: "Saint Helena"
+  SI: "Slovenia"
+  SJ: "Svalbard and Jan Mayen"
+  SK: "Slovakia"
+  SL: "Sierra Leone"
+  SM: "San Marino"
+  SN: "Senegal"
+  SO: "Somalia"
+  SR: "Suriname"
+  SS: "South Sudan"
+  ST: "Sao Tome and Principe"
+  SV: "El Salvador"
+  SX: "Sint Maarten"
+  SY: "Syrian Arab Republic"
+  SZ: "Swaziland"
+  TC: "Turks and Caicos Islands"
+  TD: "Chad"
+  TF: "French Southern Territories"
+  TG: "Togo"
+  TH: "Thailand"
+  TJ: "Tajikistan"
+  TK: "Tokelau"
+  TL: "Timor-Leste"
+  TM: "Turkmenistan"
+  TN: "Tunisia"
+  TO: "Tonga"
+  TR: "Turkey"
+  TT: "Trinidad and Tobago"
+  TV: "Tuvalu"
+  TW: "Taiwan"
+  TZ: "Tanzania, United Republic of"
+  UA: "Ukraine"
+  UG: "Uganda"
+  UM: "United States Minor Outlying Islands"
+  US: "United States"
+  UY: "Uruguay"
+  UZ: "Uzbekistan"
+  VA: "Holy See (Vatican City State)"
+  VC: "Saint Vincent and the Grenadines"
+  VE: "Venezuela"
+  VG: "Virgin Islands, British"
+  VI: "Virgin Islands, U.S."
+  VN: "Vietnam"
+  VU: "Vanuatu"
+  WF: "Wallis and Futuna"
+  WS: "Samoa"
+  XK: "Kosovo"
+  YE: "Yemen"
+  YT: "Mayotte"
+  ZA: "South Africa"
+  ZM: "Zambia"
+  ZW: "Zimbabwe"
+  ZZ: "Reserved"
+
+##########################
+# Built-in Hosts
+##########################
+built_in_hosts:
+  all:
+    ip: "0.0.0.0/0"
+  FIREWALL_AUTH_PORTAL_ADDRESS: 
+    ip: "0.0.0.0/0"
+  SSLVPN_TUNNEL_ADDR1:
+    range: "10.212.134.200-10.212.134.210"
+  autoupdate.opera.com:
+    fqdn: "autoupdate.opera.com"
+  "google-play":
+    fqdn: "play.google.com"
+  none: 
+    ip: "0.0.0.0/32"
+  swscan.apple.com:
+    fqdn: "swscan.apple.com"
+  update.microsoft.com:
+    fqdn: "update.microsoft.com"
+
+##########################
+# Internet Services
+##########################
+internet_svc_both:
+  AOL_Others: {id: 1572864, direction: both }
+  AOL_POP3_S_: {id: 1572875, direction: both }
+  AOL_SNMP: {id: 1572877, direction: both }
+  Alibaba_Alibaba_Cloud: {id: 6881402, direction: both }
+  Amazon_AWS: {id: 393320, direction: both }
+  Amazon_POP3_S_: {id: 393227, direction: both }
+  Amazon_SNMP: {id: 393229, direction: both }
+  Apple_NetBIOS_Session_Service: {id: 196623, direction: both }
+  Apple_Others: {id: 196608, direction: both }
+  Apple_SSH: {id: 196614, direction: both }
+  Ask_DNS: {id: 2621443, direction: both }
+  Atlassian_Web: {id: 3932161, direction: both }
+  Botnet_C&C_Server: {id: 3080383, direction: both }
+  CNN_FTP_S_: {id: 2686983, direction: both }
+  Cisco_SSH: {id: 1966086, direction: both }
+  Citrix_NetBIOS_Name_Service: {id: 2097176, direction: both }
+  Fortinet_FTP_S_: {id: 1245191, direction: both }
+  Fortinet_Others: {id: 1245184, direction: both }
+  Fortinet_POP3_S_: {id: 1245195, direction: both }
+  Google_Google_Cloud: {id: 65641, direction: both }
+  Google_IMAP_S_: {id: 65545, direction: both }
+  Google_POP3_S_: {id: 65547, direction: both }
+  Google_SMTP_S_: {id: 65540, direction: both }
+  Google_SNMP: {id: 65549, direction: both }
+  IBM_NetBIOS_Name_Service: {id: 2031640, direction: both }
+  IBM_POP3_S_: {id: 2031627, direction: both }
+  LinkedIn_Others: {id: 851968, direction: both }
+  MaliciousIP_Botnet: {id: 3276991, direction: both }
+  McAfee_NTP: {id: 1376264, direction: both }
+  McAfee_Others: {id: 1376256, direction: both }
+  Microsoft_Azure: {id: 327786, direction: both }
+  Microsoft_IMAP_S_: {id: 327689, direction: both }
+  Microsoft_Outlook: {id: 327791, direction: both }
+  Microsoft_POP3_S_: {id: 327691, direction: both }
+  Microsoft_SMTP_S_: {id: 327684, direction: both }
+  Microsoft_SNMP: {id: 327693, direction: both }
+  Microsoft_Skype: {id: 327781, direction: both }
+  Myspace_DNS: {id: 2752515, direction: both }
+  Phishing_Phishing_Server: {id: 3211457, direction: both }
+  Pinterest_SMTP_S_: {id: 1114116, direction: both }
+  Proxy_Proxy_Server: {id: 3014850, direction: both }
+  Salesforce_NetBIOS_Session_Service: {id: 655375, direction: both }
+  Salesforce_Others: {id: 655360, direction: both }
+  Spam_Spamming_Server: {id: 3145920, direction: both }
+  Symantec_NTP: {id: 1441800, direction: both }
+  Symantec_Others: {id: 1441792, direction: both }
+  Symantec_SSH: {id: 1441798, direction: both }
+  Twitter_Others: {id: 2162688, direction: both }
+  VK_Others: {id: 2424832, direction: both }
+  VK_SMTP_S_: {id: 2424836, direction: both }
+  Yahoo_LDAP_S_: {id: 262158, direction: both }
+  Yahoo_NTP: {id: 262152, direction: both }
+  Yahoo_Others: {id: 262144, direction: both }
+  Yahoo_POP3_S_: {id: 262155, direction: both }
+  Yahoo_SNMP: {id: 262157, direction: both }
+  Zoho_POP3_S_: {id: 1703947, direction: both }
+  Zscaler_Zscaler_Cloud: {id: 6684793, direction: both }
+
+internet_svc_src:
+  Google_Google_Bot: {id: 65643, direction: src }
+  Microsoft_Bing_Bot: {id: 327788, direction: src }
+  Tor_Exit_Node: {id: 2818243, direction: src }
+
+internet_svc_dst:
+  Act_on_Web: {id: 5242881, direction: dst }
+  Adobe_DNS: {id: 917507, direction: dst }
+  Adobe_FTP_S_: {id: 917511, direction: dst }
+  Adobe_Inbound_Email: {id: 917513, direction: dst }
+  Adobe_NetBIOS_Name_Service: {id: 917528, direction: dst }
+  Adobe_NetBIOS_Session_Service: {id: 917519, direction: dst }
+  Adobe_Outbound_Email: {id: 917508, direction: dst }
+  Adobe_RTMP: {id: 917520, direction: dst }
+  Adobe_Web: {id: 917505, direction: dst }
+  ADP_Web: {id: 6160385, direction: dst }
+  AdRoll_Web: {id: 4128769, direction: dst }
+  Alibaba_Web: {id: 6881281, direction: dst }
+  Amazon_DNS: {id: 393219, direction: dst }
+  Amazon_FTP_S_: {id: 393223, direction: dst }
+  Amazon_Inbound_Email: {id: 393225, direction: dst }
+  Amazon_LDAP_S_: {id: 393230, direction: dst }
+  Amazon_NetBIOS_Name_Service: {id: 393240, direction: dst }
+  Amazon_NetBIOS_Session_Service: {id: 393231, direction: dst }
+  Amazon_NTP: {id: 393224, direction: dst }
+  Amazon_Others: {id: 393216, direction: dst }
+  Amazon_Outbound_Email: {id: 393220, direction: dst }
+  Amazon_RTMP: {id: 393232, direction: dst }
+  Amazon_SSH: {id: 393222, direction: dst }
+  Amazon_Web: {id: 393217, direction: dst }
+  Anaplan_Web: {id: 5832705, direction: dst }
+  Anydesk_Web: {id: 5963777, direction: dst }
+  AOL_DNS: {id: 1572867, direction: dst }
+  AOL_FTP_S_: {id: 1572871, direction: dst }
+  AOL_Inbound_Email: {id: 1572873, direction: dst }
+  AOL_LDAP_S_: {id: 1572878, direction: dst }
+  AOL_NetBIOS_Name_Service: {id: 1572888, direction: dst }
+  AOL_NetBIOS_Session_Service: {id: 1572879, direction: dst }
+  AOL_NTP: {id: 1572872, direction: dst }
+  AOL_Outbound_Email: {id: 1572868, direction: dst }
+  AOL_RTMP: {id: 1572880, direction: dst }
+  AOL_SSH: {id: 1572870, direction: dst }
+  AOL_Web: {id: 1572865, direction: dst }
+  Apple_App_Store: {id: 196723, direction: dst }
+  Apple_DNS: {id: 196611, direction: dst }
+  Apple_FTP_S_: {id: 196615, direction: dst }
+  Apple_Inbound_Email: {id: 196617, direction: dst }
+  Apple_NetBIOS_Name_Service: {id: 196632, direction: dst }
+  Apple_NTP: {id: 196616, direction: dst }
+  Apple_Outbound_Email: {id: 196612, direction: dst }
+  Apple_Web: {id: 196609, direction: dst }
+  Apptio_Web: {id: 5701633, direction: dst }
+  Aruba_Web: {id: 7798785, direction: dst }
+  Ask_Web: {id: 2621441, direction: dst }
+  Atlassian_NetBIOS_Session_Service: {id: 3932175, direction: dst }
+  Avast_Avast_Security: {id: 7143550, direction: dst }
+  Avast_DNS: {id: 7143427, direction: dst }
+  Avast_Inbound_Email: {id: 7143433, direction: dst }
+  Avast_Outbound_Email: {id: 7143428, direction: dst }
+  Avast_Web: {id: 7143425, direction: dst }
+  Baidu_DNS: {id: 2883587, direction: dst }
+  Baidu_Web: {id: 2883585, direction: dst }
+  Bill_Web: {id: 4456449, direction: dst }
+  Blackbaud_Web: {id: 5505025, direction: dst }
+  Blackboard_Web: {id: 6225921, direction: dst }
+  Bluejeans_Bluejeans_Meeting: {id: 7012476, direction: dst }
+  Bluejeans_Web: {id: 7012353, direction: dst }
+  Box_Inbound_Email: {id: 589833, direction: dst }
+  Box_NetBIOS_Name_Service: {id: 589848, direction: dst }
+  Box_Outbound_Email: {id: 589828, direction: dst }
+  Box_Web: {id: 589825, direction: dst }
+  Cisco_DNS: {id: 1966083, direction: dst }
+  Cisco_FTP_S_: {id: 1966087, direction: dst }
+  Cisco_Inbound_Email: {id: 1966089, direction: dst }
+  Cisco_NetBIOS_Session_Service: {id: 1966095, direction: dst }
+  Cisco_NTP: {id: 1966088, direction: dst }
+  Cisco_Outbound_Email: {id: 1966084, direction: dst }
+  Cisco_Web: {id: 1966081, direction: dst }
+  Cisco_Webex: {id: 1966183, direction: dst }
+  Citrix_DNS: {id: 2097155, direction: dst }
+  Citrix_Inbound_Email: {id: 2097161, direction: dst }
+  Citrix_Outbound_Email: {id: 2097156, direction: dst }
+  Citrix_Web: {id: 2097153, direction: dst }
+  Cloudflare_DNS: {id: 6553603, direction: dst }
+  Cloudflare_Web: {id: 6553601, direction: dst }
+  CNN_DNS: {id: 2686979, direction: dst }
+  CNN_Inbound_Email: {id: 2686985, direction: dst }
+  CNN_NetBIOS_Name_Service: {id: 2687000, direction: dst }
+  CNN_Outbound_Email: {id: 2686980, direction: dst }
+  CNN_Web: {id: 2686977, direction: dst }
+  Cornerstone_Web: {id: 4653057, direction: dst }
+  Coupa_Web: {id: 3866625, direction: dst }
+  CrowdStrike_CrowdStrike_Cloud: {id: 7733383, direction: dst }
+  Cvent_Web: {id: 5439489, direction: dst }
+  Cybozu_Web: {id: 7536641, direction: dst }
+  Dell_Web: {id: 2228225, direction: dst }
+  DocuSign_Web: {id: 3473409, direction: dst }
+  Domo_Web: {id: 4980737, direction: dst }
+  Dropbox_DNS: {id: 720899, direction: dst }
+  Dropbox_NetBIOS_Name_Service: {id: 720920, direction: dst }
+  Dropbox_Web: {id: 720897, direction: dst }
+  Druva_Web: {id: 5177345, direction: dst }
+  eBay_DNS: {id: 458755, direction: dst }
+  eBay_FTP_S_: {id: 458759, direction: dst }
+  eBay_Inbound_Email: {id: 458761, direction: dst }
+  eBay_NetBIOS_Name_Service: {id: 458776, direction: dst }
+  eBay_Outbound_Email: {id: 458756, direction: dst }
+  eBay_RTMP: {id: 458768, direction: dst }
+  eBay_Web: {id: 458753, direction: dst }
+  Egnyte_Egnyte: {id: 7667846, direction: dst }
+  ESET_DNS: {id: 6029315, direction: dst }
+  ESET_Eset_Service: {id: 6029426, direction: dst }
+  Eventbrite_Web: {id: 4718593, direction: dst }
+  Facebook_DNS: {id: 131075, direction: dst }
+  Facebook_FTP_S_: {id: 131079, direction: dst }
+  Facebook_Inbound_Email: {id: 131081, direction: dst }
+  Facebook_Instagram: {id: 131189, direction: dst }
+  Facebook_NetBIOS_Name_Service: {id: 131096, direction: dst }
+  Facebook_NetBIOS_Session_Service: {id: 131087, direction: dst }
+  Facebook_Others: {id: 131072, direction: dst }
+  Facebook_Outbound_Email: {id: 131076, direction: dst }
+  Facebook_Web: {id: 131073, direction: dst }
+  Facebook_Whatsapp: {id: 131184, direction: dst }
+  Fortinet_DNS: {id: 1245187, direction: dst }
+  Fortinet_FortiCloud: {id: 1245326, direction: dst }
+  Fortinet_FortiGuard: {id: 1245324, direction: dst }
+  Fortinet_FortiMail_Cloud: {id: 1245325, direction: dst }
+  Fortinet_Inbound_Email: {id: 1245193, direction: dst }
+  Fortinet_LDAP_S_: {id: 1245198, direction: dst }
+  Fortinet_NetBIOS_Name_Service: {id: 1245208, direction: dst }
+  Fortinet_NTP: {id: 1245192, direction: dst }
+  Fortinet_Outbound_Email: {id: 1245188, direction: dst }
+  Fortinet_SSH: {id: 1245190, direction: dst }
+  Fortinet_Web: {id: 1245185, direction: dst }
+  FreshBooks_Web: {id: 5046273, direction: dst }
+  Github_Web: {id: 3604481, direction: dst }
+  GoDaddy_GoDaddy_Email: {id: 6946939, direction: dst }
+  GoDaddy_Web: {id: 6946817, direction: dst }
+  GoodData_Web: {id: 5308417, direction: dst }
+  Google_DNS: {id: 65539, direction: dst }
+  Google_FTP_S_: {id: 65543, direction: dst }
+  Google_Gmail: {id: 65646, direction: dst }
+  Google_LDAP_S_: {id: 65550, direction: dst }
+  Google_NetBIOS_Name_Service: {id: 65560, direction: dst }
+  Google_NetBIOS_Session_Service: {id: 65551, direction: dst }
+  Google_NTP: {id: 65544, direction: dst }
+  Google_Others: {id: 65536, direction: dst }
+  Google_RTMP: {id: 65552, direction: dst }
+  Google_SSH: {id: 65542, direction: dst }
+  Google_Web: {id: 65537, direction: dst }
+  HP_DNS: {id: 1900547, direction: dst }
+  HP_FTP_S_: {id: 1900551, direction: dst }
+  HP_Inbound_Email: {id: 1900553, direction: dst }
+  HP_LDAP_S_: {id: 1900558, direction: dst }
+  HP_NetBIOS_Name_Service: {id: 1900568, direction: dst }
+  HP_NetBIOS_Session_Service: {id: 1900559, direction: dst }
+  HP_Outbound_Email: {id: 1900548, direction: dst }
+  HP_Web: {id: 1900545, direction: dst }
+  HubSpot_Web: {id: 3735553, direction: dst }
+  Hulu_RTMP: {id: 1048592, direction: dst }
+  Hulu_Web: {id: 1048577, direction: dst }
+  IBM_DNS: {id: 2031619, direction: dst }
+  IBM_FTP_S_: {id: 2031623, direction: dst }
+  IBM_IBM_Cloud: {id: 2031748, direction: dst }
+  IBM_Inbound_Email: {id: 2031625, direction: dst }
+  IBM_Outbound_Email: {id: 2031620, direction: dst }
+  IBM_SSH: {id: 2031622, direction: dst }
+  IBM_Web: {id: 2031617, direction: dst }
+  InsideSales_Web: {id: 5570561, direction: dst }
+  Intuit_Web: {id: 4259841, direction: dst }
+  Kaspersky_DNS: {id: 1310723, direction: dst }
+  Kaspersky_FTP_S_: {id: 1310727, direction: dst }
+  Kaspersky_Inbound_Email: {id: 1310729, direction: dst }
+  Kaspersky_NetBIOS_Name_Service: {id: 1310744, direction: dst }
+  Kaspersky_Outbound_Email: {id: 1310724, direction: dst }
+  Kaspersky_Web: {id: 1310721, direction: dst }
+  Lifesize_Lifesize_Cloud: {id: 7405697, direction: dst }
+  Lifesize_Web: {id: 7405569, direction: dst }
+  LinkedIn_DNS: {id: 851971, direction: dst }
+  LinkedIn_Inbound_Email: {id: 851977, direction: dst }
+  LinkedIn_NetBIOS_Name_Service: {id: 851992, direction: dst }
+  LinkedIn_Outbound_Email: {id: 851972, direction: dst }
+  LinkedIn_Web: {id: 851969, direction: dst }
+  LogMeIn_DNS: {id: 1179651, direction: dst }
+  LogMeIn_GoTo_Suite: {id: 1179767, direction: dst }
+  LogMeIn_Inbound_Email: {id: 1179657, direction: dst }
+  LogMeIn_NetBIOS_Name_Service: {id: 1179672, direction: dst }
+  LogMeIn_NetBIOS_Session_Service: {id: 1179663, direction: dst }
+  LogMeIn_Outbound_Email: {id: 1179652, direction: dst }
+  LogMeIn_Web: {id: 1179649, direction: dst }
+  mail_ru_Web: {id: 6815745, direction: dst }
+  Marketo_Web: {id: 4325377, direction: dst }
+  McAfee_DNS: {id: 1376259, direction: dst }
+  McAfee_FTP_S_: {id: 1376263, direction: dst }
+  McAfee_Inbound_Email: {id: 1376265, direction: dst }
+  McAfee_NetBIOS_Name_Service: {id: 1376280, direction: dst }
+  McAfee_Outbound_Email: {id: 1376260, direction: dst }
+  McAfee_Web: {id: 1376257, direction: dst }
+  Microsoft_DNS: {id: 327683, direction: dst }
+  Microsoft_FTP_S_: {id: 327687, direction: dst }
+  Microsoft_LDAP_S_: {id: 327694, direction: dst }
+  Microsoft_Microsoft_Update: {id: 327793, direction: dst }
+  Microsoft_NetBIOS_Name_Service: {id: 327704, direction: dst }
+  Microsoft_NetBIOS_Session_Service: {id: 327695, direction: dst }
+  Microsoft_NTP: {id: 327688, direction: dst }
+  Microsoft_Office365: {id: 327782, direction: dst }
+  Microsoft_Others: {id: 327680, direction: dst }
+  Microsoft_RTMP: {id: 327696, direction: dst }
+  Microsoft_Skype_Outbound: {id: 327780, direction: dst }
+  Microsoft_SSH: {id: 327686, direction: dst }
+  Microsoft_Web: {id: 327681, direction: dst }
+  Mozilla_Web: {id: 1769473, direction: dst }
+  MuleSoft_Web: {id: 4587521, direction: dst }
+  Myspace_NetBIOS_Name_Service: {id: 2752536, direction: dst }
+  Myspace_Web: {id: 2752513, direction: dst }
+  Netflix_DNS: {id: 786435, direction: dst }
+  Netflix_Inbound_Email: {id: 786441, direction: dst }
+  Netflix_Outbound_Email: {id: 786436, direction: dst }
+  Netflix_Web: {id: 786433, direction: dst }
+  NewRelic_Web: {id: 4849665, direction: dst }
+  ntp_org_NTP: {id: 2949128, direction: dst }
+  ntp_org_Web: {id: 2949121, direction: dst }
+  Okta_Web: {id: 7471105, direction: dst }
+  Oracle_DNS: {id: 983043, direction: dst }
+  Oracle_Inbound_Email: {id: 983049, direction: dst }
+  Oracle_Oracle_Cloud: {id: 983171, direction: dst }
+  Oracle_Outbound_Email: {id: 983044, direction: dst }
+  Oracle_Web: {id: 983041, direction: dst }
+  Paychex_Web: {id: 4784129, direction: dst }
+  PayPal_Web: {id: 524289, direction: dst }
+  Pinterest_DNS: {id: 1114115, direction: dst }
+  Pinterest_NetBIOS_Session_Service: {id: 1114127, direction: dst }
+  Pinterest_Web: {id: 1114113, direction: dst }
+  Rapid7_Web: {id: 5898241, direction: dst }
+  RealNetworks_DNS: {id: 1638403, direction: dst }
+  RealNetworks_Inbound_Email: {id: 1638409, direction: dst }
+  RealNetworks_NetBIOS_Session_Service: {id: 1638415, direction: dst }
+  RealNetworks_Outbound_Email: {id: 1638404, direction: dst }
+  RealNetworks_Web: {id: 1638401, direction: dst }
+  Redhat_Web: {id: 2359297, direction: dst }
+  Salesforce_DNS: {id: 655363, direction: dst }
+  Salesforce_Inbound_Email: {id: 655369, direction: dst }
+  Salesforce_Outbound_Email: {id: 655364, direction: dst }
+  Salesforce_Web: {id: 655361, direction: dst }
+  SAP_Web: {id: 6291457, direction: dst }
+  Sendgrid_Sendgrid_Email: {id: 7274623, direction: dst }
+  ServiceMax_Web: {id: 5636097, direction: dst }
+  ServiceNow_Web: {id: 3538945, direction: dst }
+  Shopify_Web: {id: 4521985, direction: dst }
+  Slack_Web: {id: 6094849, direction: dst }
+  Snap_Snapchat: {id: 6357108, direction: dst }
+  Sophos_Web: {id: 6488065, direction: dst }
+  Splunk_Web: {id: 4915201, direction: dst }
+  SurveyMonkey_Web: {id: 5373953, direction: dst }
+  Symantec_DNS: {id: 1441795, direction: dst }
+  Symantec_FTP_S_: {id: 1441799, direction: dst }
+  Symantec_Inbound_Email: {id: 1441801, direction: dst }
+  Symantec_LDAP_S_: {id: 1441806, direction: dst }
+  Symantec_NetBIOS_Name_Service: {id: 1441816, direction: dst }
+  Symantec_Outbound_Email: {id: 1441796, direction: dst }
+  Symantec_Symantec_Cloud: {id: 1441922, direction: dst }
+  Symantec_Web: {id: 1441793, direction: dst }
+  Tableau_Web: {id: 5111809, direction: dst }
+  Teamviewer_DNS: {id: 1835011, direction: dst }
+  Teamviewer_NetBIOS_Name_Service: {id: 1835032, direction: dst }
+  Teamviewer_Teamviewer: {id: 1835117, direction: dst }
+  Teamviewer_Web: {id: 1835009, direction: dst }
+  Tencent_DNS: {id: 2555907, direction: dst }
+  Tencent_Inbound_Email: {id: 2555913, direction: dst }
+  Tencent_Outbound_Email: {id: 2555908, direction: dst }
+  Tencent_SSH: {id: 2555910, direction: dst }
+  Tencent_Web: {id: 2555905, direction: dst }
+  Tor_Relay_Node: {id: 2818238, direction: dst }
+  TrendMicro_DNS: {id: 2490371, direction: dst }
+  TrendMicro_Inbound_Email: {id: 2490377, direction: dst }
+  TrendMicro_Outbound_Email: {id: 2490372, direction: dst }
+  TrendMicro_Web: {id: 2490369, direction: dst }
+  Twilio_Web: {id: 3801089, direction: dst }
+  Twitter_Inbound_Email: {id: 2162697, direction: dst }
+  Twitter_NetBIOS_Name_Service: {id: 2162712, direction: dst }
+  Twitter_Outbound_Email: {id: 2162692, direction: dst }
+  Twitter_Web: {id: 2162689, direction: dst }
+  Ubiquiti_UniFi: {id: 7340160, direction: dst }
+  Veracode_Web: {id: 5767169, direction: dst }
+  Videxio_Videxio_Meeting: {id: 6619256, direction: dst }
+  Videxio_Web: {id: 6619137, direction: dst }
+  Vimeo_Web: {id: 2293761, direction: dst }
+  VK_DNS: {id: 2424835, direction: dst }
+  VK_NetBIOS_Name_Service: {id: 2424856, direction: dst }
+  VK_Web: {id: 2424833, direction: dst }
+  Vmware_Airwatch: {id: 1507461, direction: dst }
+  Vmware_DNS: {id: 1507331, direction: dst }
+  Vmware_Inbound_Email: {id: 1507337, direction: dst }
+  Vmware_Outbound_Email: {id: 1507332, direction: dst }
+  Vmware_Web: {id: 1507329, direction: dst }
+  VNC_Web: {id: 7602177, direction: dst }
+  Webroot_Webroot_SecureAnywhere: {id: 7078013, direction: dst }
+  Wetransfer_Web: {id: 7208961, direction: dst }
+  Workday_Web: {id: 3670017, direction: dst }
+  Xactly_Web: {id: 4194305, direction: dst }
+  Xero_Web: {id: 3997697, direction: dst }
+  Yahoo_DNS: {id: 262147, direction: dst }
+  Yahoo_FTP_S_: {id: 262151, direction: dst }
+  Yahoo_Inbound_Email: {id: 262153, direction: dst }
+  Yahoo_NetBIOS_Name_Service: {id: 262168, direction: dst }
+  Yahoo_NetBIOS_Session_Service: {id: 262159, direction: dst }
+  Yahoo_Outbound_Email: {id: 262148, direction: dst }
+  Yahoo_RTMP: {id: 262160, direction: dst }
+  Yahoo_SSH: {id: 262150, direction: dst }
+  Yahoo_Web: {id: 262145, direction: dst }
+  Yandex_NetBIOS_Session_Service: {id: 6750223, direction: dst }
+  Yandex_Web: {id: 6750209, direction: dst }
+  Zendesk_Web: {id: 3407873, direction: dst }
+  Zoho_Inbound_Email: {id: 1703945, direction: dst }
+  Zoho_Outbound_Email: {id: 1703940, direction: dst }
+  Zoho_Web: {id: 1703937, direction: dst }
+  Zoom_us_Web: {id: 6422529, direction: dst }
+  Zoom_us_Zoom_Meeting: {id: 6422646, direction: dst }
+  Zscaler_Web: {id: 6684673, direction: dst }
+  Zuora_Web: {id: 4063233, direction: dst }
+
+internet_svc:
+  src: "{{ internet_svc_src|combine(internet_svc_both) }}"
+  dst: "{{ internet_svc_dst|combine(internet_svc_both) }}"
+
+##########################
+# Built-in Schedules
+##########################
+built_in_schedules:
+- always
+- none
+
+##########################
+# Built-in Services
+##########################
+built_in_services:
+  AFS3: {tcp: "7000-7009", udp: "7000-7009"}
+  AH: {ip: 51}
+  ALL: {ip: 0}
+  ALL_ICMP: {special: "ICMP"}
+  ALL_ICMP6: {special: "ICMP"}
+  ALL_TCP: {tcp: "1-65535"}
+  ALL_UDP: {udp: "1-65535"}
+  AOL: {tcp: "5190-5194"}
+  BGP: {tcp: "179"}
+  CVSPSERVER: {tcp: "2401", udp: "2401"}
+  DCE-RPC: {tcp: "135", udp: "135"}
+  DHCP: {udp: "67-68"}
+  DHCP6: {udp: "546 547"}
+  DNS: {tcp: "53", udp: "53"}
+  ESP: {ip: 50}
+  FINGER: {tcp: "79"}
+  FTP: {tcp: "21"}
+  FTP_GET: {tcp: "21"}
+  FTP_PUT: {tcp: "21"}
+  GOPHER: {tcp: "70"}
+  GRE: {ip: 47}
+  H323: {tcp: "1720 1503", udp: "1719"}
+  HTTP: {tcp: "80"}
+  HTTPS: {tcp: "443"}
+  IKE: {udp: "500 4500"}
+  IMAP: {tcp: "143"}
+  IMAPS: {tcp: "993"}
+  INFO_ADDRESS: {icmptype: "17"}
+  INFO_REQUEST: {icmptype: "15"}
+  Internet-Locator-Service: {tcp: "389"}
+  IRC: {tcp: "6660-6669"}
+  KERBEROS: {tcp: "88 464", udp: "88 464"}
+  L2TP: {tcp: "1701", udp: "1701"}
+  LDAP: {tcp: "389"}
+  LDAP_UDP: {udp: "389"}
+  MGCP: {udp: "2427 2727"}
+  MMS: {tcp: "1755", udp: "1024-5000"}
+  MS-SQL: {tcp: "1433 1434"}
+  MYSQL: {tcp: "3306"}
+  NetMeeting: {tcp: "1720"}
+  NFS: {tcp: "111 2049", udp: "111 2049"}
+  NNTP: {tcp: "119"}
+  NONE: {tcp: "0"}
+  NTP: {tcp: "123", udp: "123"}
+  ONC-RPC: {tcp: "111", udp: "111"}
+  OSPF: {ip: 89}
+  PC-Anywhere: {tcp: "5631", udp: "5632"}
+  PING: {icmptype: "8"}
+  PING6: {special: "ICMP6", icmptype: "128"}
+  POP3: {tcp: "110"}
+  POP3S: {tcp: "995"}
+  PPTP: {tcp: "1723"}
+  QUAKE: {udp: "26000 27000 27910 27960"}
+  RADIUS: {udp: "1812 1813"}
+  RADIUS-OLD: {udp: "1645 1646"}
+  RAUDIO: {udp: "7070"}
+  RDP: {tcp: "3389"}
+  REXEC: {tcp: "512"}
+  RIP: {udp: "520"}
+  RLOGIN: {tcp: "513:512-1023"}
+  RSH: {tcp: "514:512-1023"}
+  RTSP: {tcp: "554 7070 8554", udp: "554"}
+  SAMBA: {tcp: "139"}
+  SCCP: {tcp: "2000"}
+  SIP: {tcp: "5060", udp: "5060"}
+  SIP-MSNmessenger: {tcp: "1863"}
+  SMB: {tcp: "445"}
+  SMTP: {tcp: "25"}
+  SMTPS: {tcp: "465"}
+  SNMP: {tcp: "161-162", udp: "161-162"}
+  SOCKS: {tcp: "1080", udp: "1080"}
+  SQUID: {tcp: "3128"}
+  SSH: {tcp: "22"}
+  SYSLOG: {udp: "514"}
+  TALK: {udp: "517-518"}
+  TELNET: {tcp: "23"}
+  TFTP: {udp: "69"}
+  TIMESTAMP: {icmptype: "13"}
+  TRACEROUTE: {udp: "33434-33535"}
+  UUCP: {tcp: "540"}
+  VDOLIVE: {tcp: "7000-7010"}
+  VNC: {tcp: "5900"}
+  WAIS: {tcp: "210"}
+  webproxy: {special: "proxy"}
+  WINFRAME: {tcp: "1494 2598"}
+  WINS: {tcp: "1512", udp: "1512"}
+  X-WINDOWS: {tcp: "6000-6063"}
+
+built_in_address_groups: {}
+
+built_in_service_groups: {
+  "Email Access": [
+    "DNS",
+    "IMAP",
+    "IMAPS",
+    "POP3",
+    "POP3S",
+    "SMTP",
+    "SMTPS"
+  ],
+  "Exchange Server": [
+    "DCE-RPC",
+    "DNS",
+    "HTTPS"
+  ],
+  "Web Access": [
+    "DNS",
+    "HTTP",
+    "HTTPS"
+  ],
+  "Windows AD": [
+    "DCE-RPC",
+    "DNS",
+    "KERBEROS",
+    "LDAP",
+    "LDAP_UDP",
+    "SAMBA",
+    "SMB"
+  ]
+}
+
+##########################
+# Timezones
+##########################
+timezones:
+  "Africa/Cairo": "33"
+  "Africa/Casablanca": "79"
+  "Africa/Harare": "34"
+  "Africa/Monrovia": "24"
+  "Africa/Nairobi": "40"
+  "America/Argentina/Buenos_Aires": "19"
+  "America/Bogota": "11"
+  "America/Buenos_Aires": "19"
+  "America/Caracas": "74"
+  "America/Chihuahua": "81"
+  "America/La_Paz": "15"
+  "America/Lima": "11"
+  "America/Mexico_City": "9"
+  "America/Santiago": "16"
+  "Asia/Almaty": "49"
+  "Asia/Baghdad": "37"
+  "Asia/Baku": "43"
+  "Asia/Bangkok": "53"
+  "Asia/Chongqing": "55"
+  "Asia/Dhaka": "50"
+  "Asia/Irkutsk": "55"
+  "Asia/Istanbul": "85"
+  "Asia/Jakarta": "53"
+  "Asia/Jerusalem": "36"
+  "Asia/Kabul": "44"
+  "Asia/Kamchatka": "72"
+  "Asia/Karachi": "46"
+  "Asia/Kathmandu": "48"
+  "Asia/Kolkata": "47"
+  "Asia/Krasnoyarsk": "54"
+  "Asia/Kuala_Lumpur": "57"
+  "Asia/Kuwait": "38"
+  "Asia/Magadan": "69"
+  "Asia/Muscat": "42"
+  "Asia/Novosibirsk": "49"
+  "Asia/Rangoon": "52"
+  "Asia/Riyadh": "38"
+  "Asia/Seoul": "60"
+  "Asia/Singapore": "57"
+  "Asia/Taipei": "59"
+  "Asia/Tashkent": "46"
+  "Asia/Tehran": "41"
+  "Asia/Tokyo": "60"
+  "Asia/Vladivostok": "68"
+  "Asia/Yakutsk": "61"
+  "Atlantic/Azores": "22"
+  "Australia/Adelaide": "62"
+  "Australia/Brisbane": "64"
+  "Australia/Canberra": "65"
+  "Australia/Darwin": "63"
+  "Australia/Hobart": "67"
+  "Australia/Melbourne": "65"
+  "Australia/Perth": "58"
+  "Australia/Sydney": "65"
+  "Brazil/East": "13"
+  "Canada/Newfoundland": "17"
+  "Canada/Saskatchewan": "10"
+  "Etc/GMT": "24"
+  "Etc/UTC": "24"
+  "Europe/Amsterdam": "26"
+  "Europe/Athens": "31"
+  "Europe/Belgrade": "27"
+  "Europe/Berlin": "26"
+  "Europe/Bratislava": "27"
+  "Europe/Brussels": "28"
+  "Europe/Bucharest": "32"
+  "Europe/Budapest": "27"
+  "Europe/Copenhagen": "28"
+  "Europe/Dublin": "25"
+  "Europe/Helsinki": "35"
+  "Europe/Istanbul": "85"
+  "Europe/Lisbon": "25"
+  "Europe/Ljubljana": "27"
+  "Europe/London": "25"
+  "Europe/Madrid": "28"
+  "Europe/Minsk": "84"
+  "Europe/Moscow": "83"
+  "Europe/Paris": "28"
+  "Europe/Prague": "27"
+  "Europe/Riga": "35"
+  "Europe/Rome": "26"
+  "Europe/Sarajevo": "29"
+  "Europe/Skopje": "29"
+  "Europe/Sofia": "31"
+  "Europe/Stockholm": "26"
+  "Europe/Tallinn": "35"
+  "Europe/Vienna": "26"
+  "Europe/Vilnius": "31"
+  "Europe/Volgograd": "39"
+  "Europe/Warsaw": "29"
+  "Europe/Zagreb": "29"
+  "GMT": "24"
+  "Hongkong": "55"
+  "Kwajalein": "0"
+  "Pacific/Auckland": "71"
+  "Pacific/Fiji": "72"
+  "Pacific/Guam": "66"
+  "Pacific/Kiritimati": "76"
+  "Pacific/Kwajalein": "0"
+  "Pacific/Port_Moresby": "66"
+  "Pacific/Samoa": "86"
+  "Singapore": "57"
+  "US/Alaska": "3"
+  "US/Arizona": "5"
+  "US/Hawaii": "2"
+  "US/Samoa": "86"
+  "UTC": "24"
+
+###############################################################################
+###############################################################################
+
+##########################
+# Data Manipulation Below
+##########################
+
+###############################################################################
+###############################################################################
+
+regex_rulebase_match: '^([Rr][Uu][Ll][Ee][Ss]*\s*|[Rr][Uu][Ll][Ee][Ss]*[Gg][Rr][Oo][Uu][Pp][Ss]*\s*|\s*)(\d+)$'
+regex_address_objects_match: '(_[Aa][Dd][Dd][Rr][Ee][Ss][Ss]_[Oo][Bb][Jj][Ee][Cc][Tt][Ss]*)$'
+regex_address_groups_match: '(_[Aa][Dd][Dd][Rr][Ee][Ss][Ss]_[Gg][Rr][Oo][Uu][Pp][Ss]*)$'
+regex_service_objects_match: '(_[Ss][Ee][Rr][Vv][Ii][Cc][Ee]_[Oo][Bb][Jj][Ee][Cc][Tt][Ss]*)$'
+regex_service_groups_match: '(_[Ss][Ee][Rr][Vv][Ii][Cc][Ee]_[Gg][Rr][Oo][Uu][Pp][Ss]*)$'
+
+rulebase: |
+  {
+    {% for var in vars | dict2items %}
+      {% if var.key | regex_search(regex_rulebase_match) | type_debug != "NoneType"
+        and (
+          var.value | type_debug == "dict" 
+          or var.value | type_debug == "AnsibleMapping"
+        ) %}
+        {% for item in var.value | dict2items %}
+          {% if item.key | regex_search(regex_rulebase_match) | type_debug != "NoneType"
+            and (
+              item.value | type_debug == "dict" 
+              or item.value | type_debug == "AnsibleMapping"
+            ) %}
+            "{{ var.key | regex_replace(regex_rulebase_match, '\2') }}{{ item.key | regex_replace(regex_rulebase_match, '\2') }}":
+            {{ item.value }},
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+  }
+
+address_objects_COMBINED_INTERNAL: |
+  {
+    {% for item in manual_hosts | default({}) | dict2items %}{# For historical purposes #}
+      '{{ item.key }}': {{ item.value }},
+    {% endfor %}
+    {% for var in vars | dict2items %}
+      {% if var.key | regex_search(regex_address_objects_match) | type_debug != "NoneType"
+        and (
+          var.value | type_debug == "dict"
+          or var.value | type_debug == "AnsibleMapping"
+        ) %}
+        {% for item in var.value | dict2items %}
+          "{{ item.key }}": {{ item.value }},
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+  }
+address_groups_COMBINED_INTERNAL: |
+  {
+    {% for item in manual_address_groups | default({}) | dict2items %}{# For historical purposes #}
+      "{{ item.key }}": {{ item.value }},
+    {% endfor %}
+    {% for var in vars | dict2items %}
+      {% if var.key | regex_search(regex_address_groups_match) | type_debug != "NoneType"
+        and (
+          var.value | type_debug == "dict"
+          or var.value | type_debug == "AnsibleMapping"
+        ) %}
+        {% for item in var.value | dict2items %}
+          "{{ item.key }}": {{ item.value }},
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+  }
+address_groups_member_types: |
+  {
+    {%- for item in address_groups_COMBINED_INTERNAL | dict2items -%}
+      '{{ item.key }}':'
+        {%- for member in item.value -%}
+          {%- if address_objects[member] is not defined -%}X
+          {%- elif address_objects[member].real_ip is defined -%}v
+          {%- endif -%}
+        {%- endfor -%}',
+    {%- endfor -%}
+  }
+service_objects_COMBINED_INTERNAL: |
+  {
+    {% for item in manual_services | default({}) | dict2items %}{# For historical purposes #}
+      "{{ item.key }}": {{ item.value }},
+    {% endfor %}
+    {% for var in vars | dict2items %}
+      {% if var.key | regex_search(regex_service_objects_match) | type_debug != "NoneType"
+        and (
+          var.value | type_debug == "dict"
+          or var.value | type_debug == "AnsibleMapping"
+        ) %}
+        {% for item in var.value | dict2items %}
+          "{{ item.key }}": {{ item.value }},
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+  }
+service_groups_COMBINED_INTERNAL: |
+  {
+    {% for item in manual_service_groups | default({}) | dict2items %}{# For historical purposes #}
+      "{{ item.key }}": {{ item.value }},
+    {% endfor %}
+    {% for var in vars | dict2items %}
+      {% if var.key | regex_search(regex_service_groups_match) | type_debug != "NoneType"
+        and (
+          var.value | type_debug == "dict"
+          or var.value | type_debug == "AnsibleMapping"
+        ) %}
+        {% for item in var.value | dict2items %}
+          "{{ item.key }}": {{ item.value }},
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+  }
+service_groups: "{{ built_in_service_groups | default({}) | combine(service_groups_COMBINED_INTERNAL) }}"
+address_groups: "{{ built_in_address_groups | default({}) | combine(address_groups_COMBINED_INTERNAL) }}"
+
+address_objects: |
+  {
+    {% for item in built_in_hosts | default({}) | dict2items %}
+      '{{ item.key }}':
+      {% if address_objects_COMBINED_INTERNAL is defined 
+        and address_objects_COMBINED_INTERNAL | type_debug == 'dict' 
+        and address_objects_COMBINED_INTERNAL[item.key] is defined %}
+        {{ address_objects_COMBINED_INTERNAL[item.key] | 
+          combine({'type': 'manual', 'replaced-built-in': item.value}) }}
+      {% else %}
+        {{ item.value | combine({'type': 'built_in'}) }}
+      {% endif %},
+    {% endfor %}
+    {% for item in address_objects_COMBINED_INTERNAL | default({}) | dict2items %}
+      {% if built_in_hosts[item.key] is not defined %}
+        '{{ item.key }}': {{ item.value | combine({'type': 'manual'}) }},
+      {% endif %}
+    {% endfor %}
+  }
+
+service_objects: |
+  {
+    {% for item in built_in_services | default({}) | dict2items %}
+      '{{ item.key }}':
+      {% if service_objects_COMBINED_INTERNAL is defined
+        and service_objects_COMBINED_INTERNAL | type_debug == 'dict'
+        and service_objects_COMBINED_INTERNAL[item.key] is defined %}
+        {{ service_objects_COMBINED_INTERNAL[item.key] | 
+          combine({'type': 'manual', 'replaced-built-in': item.value}) }}
+      {% else %}
+        {{ item.value | combine({'type': 'built_in'}) }}
+      {% endif %},
+    {% endfor %}
+    {% for item in service_objects_COMBINED_INTERNAL | default({}) | dict2items %}
+      {% if built_in_services[item.key] is not defined %}
+        '{{ item.key }}': {{ item.value | combine({'type': 'manual'}) }},
+      {% endif %}
+    {% endfor %}
+  }
+
+address_objects_USED_INTERNAL: |
+  {
+    {% for ao in address_objects | dict2items %}
+      {% if ao.value.force | default(False) | bool %}
+        '{{ ao.key }}': {{ ao.value }},
+      {% endif %}
+    {% endfor %}
+  }
+service_objects_USED_INTERNAL: |
+  {
+    {% for so in service_objects | dict2items %}
+      {% if so.value.force | default(False) | bool %}
+        '{{ so.key }}': {{ so.value }},
+      {% endif %}
+    {% endfor %}
+  }
+address_groups_USED_INTERNAL: {}
+service_groups_USED_INTERNAL: {}

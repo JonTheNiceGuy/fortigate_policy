@@ -1,0 +1,105 @@
+---
+- name: E05a. Create service groups (Layer 1)
+  fortios_firewall_service_group:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    firewall_service_group:
+      state: "present"
+      name: "{{ item.key }}"
+      member: "[{% for member in item.value %}{ 'name': '{{ member }}' }, {% endfor %}]"
+  failed_when: false
+  loop: "{{ service_groups_USED_INTERNAL | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  register: addsvc
+
+- name: E05b. Create service groups (Layer 2)
+  fortios_firewall_service_group:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    firewall_service_group:
+      state: "present"
+      name: "{{ item.item.key }}"
+      member: "[{% for member in item.item.value %}{ 'name': '{{ member }}' }, {% endfor %}]"
+  failed_when: false
+  loop: "{{ addsvc.results }}"
+  loop_control:
+    label: "{{ item._ansible_item_label | default(item.item.key | default('Key is missing')) }}"
+  when: item.changed | default(False) == False and item.skipped | default(False) == False
+  register: addsvc2
+
+- name: E05c. Create service groups (Layer 3)
+  fortios_firewall_service_group:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    firewall_service_group:
+      state: "present"
+      name: "{{ item.item.item.key }}"
+      member: "[{% for member in item.item.item.value %}{ 'name': '{{ member }}' }, {% endfor %}]"
+  failed_when: false
+  loop: "{{ addsvc2.results }}"
+  loop_control:
+    label: "{{ item._ansible_item_label | default(item.item.key | default(item.item.item.key | default('Key is missing'))) }}"
+  when: item.changed | default(False) == False and item.skipped | default(False) == False
+  register: addsvc3
+
+- name: E05d. Create service groups (Layer 4)
+  fortios_firewall_service_group:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    firewall_service_group:
+      state: "present"
+      name: "{{ item.item.item.item.key }}"
+      member: "[{% for member in item.item.item.item.value %}{ 'name': '{{ member }}' }, {% endfor %}]"
+  failed_when: false
+  loop: "{{ addsvc3.results }}"
+  loop_control:
+    label: "{{ item._ansible_item_label | default(item.item.key | default(item.item.item.key | default(item.item.item.item.key | default('Key is missing')))) }}"
+  when: item.changed | default(False) == False and item.skipped | default(False) == False
+  register: addsvc4
+
+- name: E05e. Create service groups (Layer 5)
+  fortios_firewall_service_group:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    firewall_service_group:
+      state: "present"
+      name: "{{ item.item.item.item.item.key }}"
+      member: "[{% for member in item.item.item.item.item.value %}{ 'name': '{{ member }}' }, {% endfor %}]"
+  failed_when: false
+  loop: "{{ addsvc4.results }}"
+  loop_control:
+    label: "{{ item._ansible_item_label | default(item.item.key | default(item.item.item.key | default(item.item.item.item.key | default(item.item.item.item.item.key | default('Key is missing'))))) }}"
+  when: item.changed | default(False) == False and item.skipped | default(False) == False
+  register: addsvc5
+
+- name: E05f. Create service groups (Final)
+  fortios_firewall_service_group:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    firewall_service_group:
+      state: "present"
+      name: "{{ item.item.item.item.item.item.key }}"
+      member: "[{% for member in item.item.item.item.item.item.value %}{ 'name': '{{ member }}' }, {% endfor %}]"
+  loop: "{{ addsvc5.results }}"
+  loop_control:
+    label: "{{ item._ansible_item_label | default(item.item.key | default(item.item.item.key | default(item.item.item.item.key | default(item.item.item.item.item.key | default(item.item.item.item.item.item.key | default('Key is missing')))))) }}"
+  when: item.changed | default(False) == False and item.skipped | default(False) == False

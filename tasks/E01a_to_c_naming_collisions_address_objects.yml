@@ -1,0 +1,56 @@
+---
+- name: E01a. Read list of address objects
+  fortiosconfig:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    action: "get"
+    config: "firewall address"
+  register: fw_address_object
+
+- name: E01b. Verify there are no naming conflicts in address objects
+  set_fact:
+    defined_addresses: |
+      [
+        {%- for object in fw_address_object.meta.results -%}
+            {%- for obj in address_groups_USED_INTERNAL | dict2items -%}
+              {% if obj.key == object.name or (built_in_address_groups | default({}))[object.name] is defined -%}
+                '{{ object.name }}',
+              {%- endif -%}
+            {%- endfor -%}
+        {%- endfor -%}
+      ]
+
+# Note, this item is LIKELY TO FAIL as objects are likely to only be here if they form part of a policy.
+# Blocked on https://github.com/fortinet-solutions-cse/40ansible/issues/40
+- name: E01c. Purge naming conflicts in address objects (Start)
+  fortios_firewall_address:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    firewall_address:
+      state: "absent"
+      name: "{{ item }}"
+  loop: "{{ defined_addresses }}"
+  loop_control:
+    label: "{{ item }}"
+  async: 1000
+  poll: 0
+  changed_when: False
+  register: sleeper
+
+- name: E01c. Purge naming conflicts in address objects (Finish)
+  async_status:
+    jid: "{{ item.ansible_job_id }}"
+  register: sleeper_status
+  until: sleeper_status.finished
+  retries: 500
+  delay: 4
+  loop: "{{ sleeper.results|flatten(levels=1) }}"
+  when: item.ansible_job_id is defined
+  loop_control:
+    label: "{{ item._ansible_item_label | default(item.item.key | default('Key is missing')) }}"

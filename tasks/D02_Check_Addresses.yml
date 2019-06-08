@@ -1,0 +1,39 @@
+---
+- name: D02a. Get Address Data from the firewall
+  fortiosconfig:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    action: "get"
+    config: "firewall address"
+  register: fw_address
+
+- name: D02b. Parse firewall config for locally defined objects
+  set_fact:
+    defined_addresses: |
+      [
+        {% for object in fw_address.meta.results %}
+          {
+            'name': '{{ object.name }}',
+            {% for obj in address_objects_USED_INTERNAL | dict2items %}
+              {% if obj.key == object.name %}'defined': 'custom',{% endif %}
+            {% endfor %}
+            {% for obj in built_in_hosts | dict2items %}
+              {% if obj.key == object.name %}'defined': 'built-in',{% endif %}
+            {% endfor %}
+          },
+        {% endfor %}
+      ]
+
+- name: D02c. Parse firewall config for unused address objects
+  set_fact:
+    purge_addresses: |
+      [
+        {% for address in defined_addresses %}
+          {% if address.defined is not defined %}
+            '{{ address.name }}',
+          {% endif %}
+        {% endfor %}
+      ]

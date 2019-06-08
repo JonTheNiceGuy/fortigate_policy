@@ -1,0 +1,103 @@
+---
+- name: "C03a. Create list of used services from Rules Services"
+  set_fact:
+    service_objects_USED_INTERNAL: |
+      {
+        {% for uo in service_objects_USED_INTERNAL | dict2items %}
+          '{{ uo.key }}': {{ uo.value }},
+        {% endfor %}
+        {% for layer1 in item.value.services %}
+          {% if service_objects[layer1] is defined %}
+            {% if service_objects[layer1].type | default('') != 'built_in' %}
+              '{{ layer1 }}': {{ service_objects[layer1] }},
+            {% endif %}
+          {% elif service_groups[layer1] is defined %}
+            {% for layer2 in service_groups[layer1] %}
+              {% if service_objects[layer2] is defined %}
+                {% if service_objects[layer2].type | default('') != 'built_in' %}
+                  '{{ layer2 }}': {{ service_objects[layer2] }},
+                {% endif %}
+              {% elif service_groups[layer2] is defined %}
+                {% for layer3 in service_groups[layer2] %}
+                  {% if service_objects[layer3] is defined %}
+                    {% if service_objects[layer3].type | default('') != 'built_in' %}
+                      '{{ layer3 }}': {{ service_objects[layer3] }},
+                    {% endif %}
+                  {% elif service_groups[layer3] is defined %}
+                    {% for layer4 in service_groups[layer3] %}
+                      {% if service_objects[layer4] is defined %}
+                        {% if service_objects[layer4].type | default('') != 'built_in' %}
+                          '{{ layer4 }}': {{ service_objects[layer4] }},
+                        {% endif %}
+                      {% elif service_groups[layer4] is defined %}
+                        {% for layer5 in service_groups[layer4] %}
+                          {% if service_objects[layer5] is defined %}
+                            {% if service_objects[layer5].type | default('') != 'built_in' %}
+                              '{{ layer5 }}': {{ service_objects[layer5] }},
+                            {% endif %}
+                          {% elif service_groups[layer5] is defined %}
+                            {% for layer6 in service_groups[layer5] %}
+                              {% if service_objects[layer6] is defined %}
+                                {% if service_objects[layer6].type | default('') != 'built_in' %}
+                                  '{{ layer6 }}': {{ service_objects[layer6] }},
+                                {% endif %}
+                              {% endif %}
+                            {% endfor %}
+                          {% endif %}
+                        {% endfor %}
+                      {% endif %}
+                    {% endfor %}
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        {% endfor %}
+      }
+  loop: "{{ rulebase | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: item.value.services is defined
+
+- name: "C03b. Create list of used services from Rules Services"
+  set_fact:
+    service_groups_USED_INTERNAL: |
+      {
+        {% for ug in service_groups_USED_INTERNAL | dict2items %}
+          '{{ ug.key }}': {{ ug.value }},
+        {% endfor %}
+        {% for layer1 in item.value.services %}
+          {% if service_groups[layer1] is defined and service_groups_USED_INTERNAL[layer1] is not defined %}
+            '{{ layer1 }}': {{ service_groups[layer1] }},
+            {% for layer2 in service_groups[layer1] %}
+              {% if service_groups[layer2] is defined and service_groups_USED_INTERNAL[layer2] is not defined %}
+                '{{ layer2 }}': {{ service_groups[layer2] }},
+                {% for layer3 in service_groups[layer2] %}
+                  {% if service_groups[layer3] is defined and address_groups_USED_INTERNAL[layer3] is not defined %}
+                    '{{ layer3 }}': {{ service_groups[layer3] }},
+                    {% for layer4 in service_groups[layer3] %}
+                      {% if service_groups[layer4] is defined and address_groups_USED_INTERNAL[layer4] is not defined %}
+                        '{{ layer4 }}': {{ service_groups[layer4] }},
+                        {% for layer5 in service_groups[layer4] %}
+                          {% if service_groups[layer5] is defined and address_groups_USED_INTERNAL[layer5] is not defined %}
+                            '{{ layer5 }}': {{ service_groups[layer5] }},
+                            {% for layer6 in service_groups[layer5] %}
+                              {% if service_groups[layer6] is defined and address_groups_USED_INTERNAL[layer6] is not defined %}
+                                '{{ layer6 }}': {{ service_groups[layer6] }},
+                              {% endif %}
+                            {% endfor %}
+                          {% endif %}
+                        {% endfor %}
+                      {% endif %}
+                    {% endfor %}
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        {% endfor %}
+      }
+  loop: "{{ rulebase | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: item.value.services is defined

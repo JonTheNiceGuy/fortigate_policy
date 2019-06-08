@@ -1,0 +1,92 @@
+---
+- name: "B04a. Ensure there are no naming conflicts between address objects and address groups [ansible version <=2.7]"
+  assert:
+    msg: "The address_groups variable does not define '{{ item.key }}'"
+    that:
+    - address_groups[item.key] is not defined
+  loop: "{{ address_objects | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when:
+  - ansible_version is not defined or ansible_version.major < 2 or (ansible_version.major == 2 and ansible_version.minor <= 7)
+
+- name: "B04a. Ensure there are no naming conflicts between address objects and address groups [ansible version >=2.8]"
+  assert:
+    quiet: yes
+    msg: "The address_groups variable does not define '{{ item.key }}'"
+    that:
+    - address_groups[item.key] is not defined
+  loop: "{{ address_objects | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when:
+  - (ansible_version.major == 2 and ansible_version.minor > 7) or ansible_version.major >= 3
+
+- name: "B04b. Ensure there are no naming conflicts between address groups and address objects [ansible version <=2.7]"
+  assert:
+    msg: "The address_objects variable does not define '{{ item.key }}'"
+    that:
+    - address_objects[item.key] is not defined
+  loop: "{{ address_groups | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when:
+  - ansible_version is not defined or ansible_version.major < 2 or (ansible_version.major == 2 and ansible_version.minor <= 7)
+
+- name: "B04b. Ensure there are no naming conflicts between address groups and address objects [ansible version >=2.8]"
+  assert:
+    quiet: yes
+    msg: "The address_objects variable does not define '{{ item.key }}'"
+    that:
+    - address_objects[item.key] is not defined
+  loop: "{{ address_groups | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when:
+  - (ansible_version.major == 2 and ansible_version.minor > 7) or ansible_version.major >= 3
+
+- name: "B04c. Ensure there are no naming conflicts between service objects and service groups [ansible version <=2.7]"
+  assert:
+    msg: "The service_groups variable does not define '{{ item.key }}'"
+    that:
+    - service_groups[item.key] is not defined
+  loop: "{{ service_objects | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when:
+  - ansible_version is not defined or ansible_version.major < 2 or (ansible_version.major == 2 and ansible_version.minor <= 7)
+
+- name: "B04c. Ensure there are no naming conflicts between service objects and service groups [ansible version >=2.8]"
+  assert:
+    quiet: yes
+    msg: "The service_groups variable does not define '{{ item.key }}'"
+    that:
+    - service_groups[item.key] is not defined
+  loop: "{{ service_objects | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when:
+  - (ansible_version.major == 2 and ansible_version.minor > 7) or ansible_version.major >= 3
+
+- name: "B04d. Ensure there are no naming conflicts between service groups and service objects [ansible version <=2.7]"
+  assert:
+    msg: "The service_objects variable does not define '{{ item.key }}'"
+    that:
+    - service_objects[item.key] is not defined
+  loop: "{{ service_groups | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when:
+  - ansible_version is not defined or ansible_version.major < 2 or (ansible_version.major == 2 and ansible_version.minor <= 7)
+
+- name: "B04d. Ensure there are no naming conflicts between service groups and service objects [ansible version >=2.8]"
+  assert:
+    quiet: yes
+    msg: "The service_objects variable does not define '{{ item.key }}'"
+    that:
+    - service_objects[item.key] is not defined
+  loop: "{{ service_groups | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when:
+  - (ansible_version.major == 2 and ansible_version.minor > 7) or ansible_version.major >= 3

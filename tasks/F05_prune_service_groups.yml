@@ -1,0 +1,124 @@
+---
+- name: F05a. Get Service Group Data from the firewall
+  fortiosconfig:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    action: "get"
+    config: "firewall.service group"
+  register: fw_service_group
+
+- name: F05b. Parse firewall config for locally defined objects
+  set_fact:
+    defined_address_groups: |
+      {
+        {% for object in fw_service_group.meta.results %}
+          '{{ object.name }}': {
+            {% if (service_groups_USED_INTERNAL | default({}) )[object.name] is defined or (built_in_service_groups | default({}) )[object.name] is defined %}
+              'defined': True
+            {% endif %}
+          },
+        {% endfor %}
+      }
+
+- name: F05c. Remove Service Groups (Try 1)
+  fortios_firewall_service_group:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    firewall_service_group:
+      state: "absent"
+      name: "{{ item.key }}"
+  failed_when: false
+  loop: "{{ defined_address_groups | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: item.value.defined | default('') == ''
+  register: delgrp2
+
+- name: F05d. Remove Service Groups (Try 2)
+  fortios_firewall_service_group:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    firewall_service_group:
+      state: "absent"
+      name: "{{ item.item.key }}"
+  failed_when: false
+  loop: "{{ delgrp2.results }}"
+  loop_control:
+    label: "{{ item._ansible_item_label | default(item.item.key | default('Key is missing')) }}"
+  when: item.changed | default(False) == False and item.skipped | default(False) == False
+  register: delgrp3
+
+- name: F05e. Remove Service Groups (Try 3)
+  fortios_firewall_service_group:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    firewall_service_group:
+      state: "absent"
+      name: "{{ item.item.item.key }}"
+  failed_when: false
+  loop: "{{ delgrp3.results }}"
+  loop_control:
+    label: "{{ item._ansible_item_label | default(item.item.key | default(item.item.item.key | default('Key is missing'))) }}"
+  when: item.changed | default(False) == False and item.skipped | default(False) == False
+  register: delgrp4
+
+- name: F05f. Remove Service Groups (Try 4)
+  fortios_firewall_service_group:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    firewall_service_group:
+      state: "absent"
+      name: "{{ item.item.item.item.key }}"
+  failed_when: false
+  loop: "{{ delgrp4.results }}"
+  loop_control:
+    label: "{{ item._ansible_item_label | default(item.item.key | default(item.item.item.key | default(item.item.item.item.key | default('Key is missing')))) }}"
+  when: item.changed | default(False) == False and item.skipped | default(False) == False
+  register: delgrp5
+
+- name: F05g. Remove Service Groups (Try 5)
+  fortios_firewall_service_group:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    firewall_service_group:
+      state: "absent"
+      name: "{{ item.item.item.item.item.key }}"
+  failed_when: false
+  loop: "{{ delgrp5.results }}"
+  loop_control:
+    label: "{{ item._ansible_item_label | default(item.item.key | default(item.item.item.key | default(item.item.item.item.key | default(item.item.item.item.item.key | default('Key is missing'))))) }}"
+  when: item.changed | default(False) == False and item.skipped | default(False) == False
+  register: delgrp6
+
+- name: F05h. Remove Service Groups (Final Try)
+  fortios_firewall_service_group:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    firewall_service_group:
+      state: "absent"
+      name: "{{ item.item.item.item.item.item.key }}"
+  loop: "{{ delgrp6.results }}"
+  loop_control:
+    label: "{{ item._ansible_item_label | default(item.item.key | default(item.item.item.key | default(item.item.item.item.key | default(item.item.item.item.item.key | default(item.item.item.item.item.item.key | default('Key is missing')))))) }}"
+  when: item.changed | default(False) == False and item.skipped | default(False) == False
