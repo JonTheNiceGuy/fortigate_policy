@@ -421,7 +421,7 @@
 
 - name: "B03q. Assert that rules have a valid logstart value [ansible version <=2.7]"
   assert:
-    msg: "Assertion failed: item.value.log ('{{ item.value.log | default('') | string }}') has the value 'all', 'utm' or 'disable'"
+    msg: "Assertion failed: item.value.logstart ('{{ item.value.logstart | default('') | string }}') has the value 'enable' or 'disable'"
     that:
     - item.value.logstart | default('disable')  == 'enable' or
       item.value.logstart | default('disable')  == 'disable'
@@ -434,7 +434,7 @@
 - name: "B03q. Assert that rules have a valid logstart value [ansible version >=2.8]"
   assert:
     quiet: yes
-    msg: "Assertion failed: item.value.log ('{{ item.value.log | default('') | string }}') has the value 'all', 'utm' or 'disable'"
+    msg: "Assertion failed: item.value.logstart ('{{ item.value.logstart | default('') | string }}') has the value 'enable' or 'disable'"
     that:
     - item.value.logstart | default('disable')  == 'enable' or
       item.value.logstart | default('disable')  == 'disable'
