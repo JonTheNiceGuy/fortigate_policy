@@ -200,6 +200,9 @@ IPS and SSL Inspection profiles are defined as follows:
 
 All these variables are set from either the group vars, or by passing "extra" values (see the example playbook below)
 
+* `run_actions_async` - default 'false': At the cost of massive CPU spike,
+perform creation actions for objects (not groups) as a parallell activity.
+
 * `validate_all` - Default `True`: Ensures all the following flags match
 certain linting and validation checks
   * `validate_addresses`: Checks just Address objects and groups

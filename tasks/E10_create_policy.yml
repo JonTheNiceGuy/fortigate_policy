@@ -1,4 +1,16 @@
 ---
+- name: E10a. Set Default Logging [No-Async]
+  fortios_log_setting:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    log_setting:
+      fwpolicy-implicit-log: "{{ implicit4_log | default(implicit_log | default('enable')) }}"
+      fwpolicy6-implicit-log: "{{ implicit6_log | default(implicit_log | default('enable')) }}"
+  when: run_actions_async | default(false) | bool == false
+
 - name: E10a. Set Default Logging (Start) [Async]
   fortios_log_setting:
     host: "{{ ansible_host }}"
@@ -25,6 +37,55 @@
   when: 
   - run_actions_async | default(false) | bool
   - item.ansible_job_id is defined
+
+- name: E10b. Create policy items [No-Async]
+  fortios_firewall_policy:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    firewall_policy: |
+      {
+        'state': 'present',
+        'policyid': "{{ item.key }}",
+        'name': "{{ item.value.name | default('Policy_' + item.key | string) }}",
+        'action': "{{ item.value.action | default('accept') }}",
+        'srcintf': [{ 'name': '{{ item.value.source_interface | default('any') }}' }],
+        'dstintf': [{ 'name': '{{ item.value.destination_interface | default('any') }}' }],
+        {% if item.value.sources is defined %}
+          'srcaddr': [{% for source in item.value.sources | default(['all']) %}{'name': '{{ source }}'},{% endfor %}],
+        {% else %}
+          'internet-service-src': "enable",
+          'internet-service-src-id': [{% for source in item.value.src_internet_service %}{'id': '{{ internet_svc.src[source].id }}'},{% endfor %}],
+        {% endif %}
+        {% if item.value.destinations is defined %}
+          'dstaddr': [{% for destination in item.value.destinations | default(['all']) %}{'name': '{{ destination }}'},{% endfor %}],
+        {% else %}
+          'internet-service': "enable",
+          'internet-service-id': [{% for destination in item.value.dst_internet_service %}{'id': '{{ internet_svc.dst[destination].id }}'},{% endfor %}],
+        {% endif %}
+        'service': [{% for service in item.value.services | default(['ALL']) %}{'name': '{{ service }}'},{% endfor %}],
+        'schedule': "{{ item.value.schedule | default('always') }}",
+        'nat': "{% if item.value.nat | default(false) | bool %}enable{% else %}disable{% endif %}",
+        'logtraffic': "{{ item.value.log | default('all') }}",
+        'logtraffic-start': "{{ item.value.logstart | default('disable') }}",
+        {% if item.value.ips_enable | default(true) | bool
+          and item.value.ips_sensor | default(ips_sensor | default('')) != ''
+          and item.value.ssl_ssh_profile | default(ssl_ssh_profile | default('')) != '' %}
+          'utm-status': "enable",
+          'ssl-ssh-profile': "{{ item.value.ssl_ssh_profile | default(ssl_ssh_profile) }}",
+          'ips-sensor': "{{ item.value.ips_sensor | default(ips_sensor) }}",
+        {% else %}
+          'utm-status': "disable",
+        {% endif %}
+        'status': "{% if item.value.disabled | default(false) | bool %}disable{% else %}enable{% endif %}",
+        'uuid': "{{ item.value.uuid | default(omit) }}"
+      }
+  loop: "{{ rulebase | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}{% if item.value.name is defined and item.value.name != '' %} ({{ item.value.name }}){% endif %}"
+  when: run_actions_async | default(false) | bool == false
 
 - name: E10b. Create policy items (Start) [Async]
   fortios_firewall_policy:

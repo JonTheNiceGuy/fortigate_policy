@@ -1,5 +1,5 @@
 ---
-- name: E02a. Create a dynamic address object (Start)
+- name: E02a. Create a dynamic address object [No-Async]
   fortios_firewall_address:
     host: "{{ ansible_host }}"
     username: "{{ admin_username | default(ansible_username | default('admin')) }}"
@@ -18,12 +18,34 @@
     label: "{{ item.key }}"
   when:
   - item.value.dynamic is defined
+  - run_actions_async | default(false) | bool == false
+
+- name: E02a. Create a dynamic address object (Start) [Async]
+  fortios_firewall_address:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    firewall_address:
+      state: "present"
+      name: "{{ item.key }}"
+      comment: "{{ item.value.comment | default(omit) }}"
+      filter: "{{ item.value.dynamic | default(omit) }}"
+      sdn: "{% if item.value.dynamic is defined %}{{ item.value.sdn | default(sdn | default('azure')) }}{% else %}{{ omit }}{% endif %}"
+      type: dynamic
+  loop: "{{ address_objects_USED_INTERNAL | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when:
+  - item.value.dynamic is defined
+  - run_actions_async | default(false) | bool
   async: 1000
   poll: 0
   changed_when: False
   register: sleeper
 
-- name: E02a. Create a dynamic address object (Finish)
+- name: E02a. Create a dynamic address object (Finish) [Async]
   async_status:
     jid: "{{ item.ansible_job_id }}"
   register: sleeper_status
@@ -31,11 +53,13 @@
   retries: 500
   delay: 4
   loop: "{{ sleeper.results|flatten(levels=1) }}"
-  when: item.ansible_job_id is defined
+  when: 
+  - run_actions_async | default(false) | bool
+  - item.ansible_job_id is defined
   loop_control:
     label: "{{ item._ansible_item_label | default(item.item.key | default('Key is missing')) }}"
 
-- name: E02b. Create an IP based address object (Start)
+- name: E02b. Create an IP based address object [No-Async]
   fortios_firewall_address:
     host: "{{ ansible_host }}"
     username: "{{ admin_username | default(ansible_username | default('admin')) }}"
@@ -53,12 +77,33 @@
     label: "{{ item.key }}"
   when:
   - item.value.ip is defined
+  - run_actions_async | default(false) | bool == false
+
+- name: E02b. Create an IP based address object (Start) [Async]
+  fortios_firewall_address:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    firewall_address:
+      state: "present"
+      name: "{{ item.key }}"
+      comment: "{{ item.value.comment | default(omit) }}"
+      subnet: "{% if item.value.ip is defined and item.value.ip | ipaddr('address') %}{{ item.value.ip | ipaddr('address') }} 255.255.255.255{% elif item.value.ip is defined and item.value.ip | ipaddr('network') %}{{ item.value.ip | ipaddr('network') }}/{{ item.value.ip | ipaddr('prefix') }}{% else %}{{ omit }}{% endif %}"
+      type: ipmask
+  loop: "{{ address_objects_USED_INTERNAL | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when:
+  - item.value.ip is defined
+  - run_actions_async | default(false) | bool
   async: 1000
   poll: 0
   changed_when: False
   register: sleeper
 
-- name: E02b. Create an IP based address object (Finish)
+- name: E02b. Create an IP based address object (Finish) [Async]
   async_status:
     jid: "{{ item.ansible_job_id }}"
   register: sleeper_status
@@ -66,11 +111,13 @@
   retries: 500
   delay: 4
   loop: "{{ sleeper.results|flatten(levels=1) }}"
-  when: item.ansible_job_id is defined
+  when: 
+  - run_actions_async | default(false) | bool
+  - item.ansible_job_id is defined
   loop_control:
     label: "{{ item._ansible_item_label | default(item.item.key | default('Key is missing')) }}"
 
-- name: E02c. Create a FQDN address object (Start)
+- name: E02c. Create a FQDN address object [No-Async]
   fortios_firewall_address:
     host: "{{ ansible_host }}"
     username: "{{ admin_username | default(ansible_username | default('admin')) }}"
@@ -88,12 +135,33 @@
     label: "{{ item.key }}"
   when:
   - item.value.fqdn is defined and '*' not in item.value.fqdn
+  - run_actions_async | default(false) | bool
+
+- name: E02c. Create a FQDN address object (Start) [Async]
+  fortios_firewall_address:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    firewall_address:
+      state: "present"
+      name: "{{ item.key }}"
+      comment: "{{ item.value.comment | default(omit) }}"
+      fqdn: "{% if '*' not in item.value.fqdn | default('') %}{{ item.value.fqdn | default(omit) }}{% else %}{{ omit }}{% endif %}"
+      type: fqdn
+  loop: "{{ address_objects_USED_INTERNAL | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when:
+  - item.value.fqdn is defined and '*' not in item.value.fqdn
+  - run_actions_async | default(false) | bool
   async: 1000
   poll: 0
   changed_when: False
   register: sleeper
 
-- name: E02c. Create a FQDN address object (Finish)
+- name: E02c. Create a FQDN address object (Finish) [Async]
   async_status:
     jid: "{{ item.ansible_job_id }}"
   register: sleeper_status
@@ -101,11 +169,13 @@
   retries: 500
   delay: 4
   loop: "{{ sleeper.results|flatten(levels=1) }}"
-  when: item.ansible_job_id is defined
+  when:
+  - run_actions_async | default(false) | bool
+  - item.ansible_job_id is defined
   loop_control:
     label: "{{ item._ansible_item_label | default(item.item.key | default('Key is missing')) }}"
 
-- name: E02d. Create a GEO address object (Start)
+- name: E02d. Create a GEO address object [No-Async]
   fortios_firewall_address:
     host: "{{ ansible_host }}"
     username: "{{ admin_username | default(ansible_username | default('admin')) }}"
@@ -123,12 +193,33 @@
     label: "{{ item.key }}"
   when:
   - item.value.geo is defined
+  - run_actions_async | default(false) | bool == false
+
+- name: E02d. Create a GEO address object (Start) [Async]
+  fortios_firewall_address:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    firewall_address:
+      state: "present"
+      name: "{{ item.key }}"
+      comment: "{{ item.value.comment | default(omit) }}"
+      country: "{{ item.value.geo | default(omit) }}"
+      type: geography
+  loop: "{{ address_objects_USED_INTERNAL | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when:
+  - item.value.geo is defined
+  - run_actions_async | default(false) | bool
   async: 1000
   poll: 0
   changed_when: False
   register: sleeper
 
-- name: E02d. Create a GEO address object (Finish)
+- name: E02d. Create a GEO address object (Finish) [Async]
   async_status:
     jid: "{{ item.ansible_job_id }}"
   register: sleeper_status
@@ -136,11 +227,13 @@
   retries: 500
   delay: 4
   loop: "{{ sleeper.results|flatten(levels=1) }}"
-  when: item.ansible_job_id is defined
+  when:
+  - run_actions_async | default(false) | bool
+  - item.ansible_job_id is defined
   loop_control:
     label: "{{ item._ansible_item_label | default(item.item.key | default('Key is missing')) }}"
 
-- name: E02e. Create a VIP object (Start)
+- name: E02e. Create a VIP object [No-Async]
   fortios_firewall_vip:
     host: "{{ ansible_host }}"
     username: "{{ admin_username | default(ansible_username | default('admin')) }}"
@@ -164,12 +257,39 @@
     label: "{{ item.key }}"
   when:
   - item.value.real_ip is defined
+  - run_actions_async | default(false) | bool == false
+
+- name: E02e. Create a VIP object (Start) [Async]
+  fortios_firewall_vip:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    firewall_vip:
+      state: "present"
+      name: "{{ item.key }}"
+      comment: "{{ item.value.comment | default(omit) }}"
+      mappedip:
+      - range: "{{ item.value.real_ip }}"
+      extintf: "{{ item.value.device | default('any') }}"
+      extip: "{{ item.value.vip_ip | default(omit) }}"
+      portforward: "{% if item.value.real_port is defined %}enable{% else %}disable{% endif %}"
+      protocol: "{% if item.value.real_port is defined %}{{ item.value.protocol | default('tcp') }}{% else %}{{ omit }}{% endif %}"
+      mappedport: "{{ item.value.real_port | default(omit) }}"
+      extport: "{% if item.value.real_port is defined %}{{ item.value.vip_port | default(item.value.real_port | default(omit)) }}{% else %}{{ omit }}{% endif %}"
+  loop: "{{ address_objects_USED_INTERNAL | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when:
+  - item.value.real_ip is defined
+  - run_actions_async | default(false) | bool
   async: 1000
   poll: 0
   changed_when: False
   register: sleeper
 
-- name: E02e. Create a VIP object (Finish)
+- name: E02e. Create a VIP object (Finish) [Async]
   async_status:
     jid: "{{ item.ansible_job_id }}"
   register: sleeper_status
@@ -177,6 +297,8 @@
   retries: 500
   delay: 4
   loop: "{{ sleeper.results|flatten(levels=1) }}"
-  when: item.ansible_job_id is defined
+  when:
+  - run_actions_async | default(false) | bool
+  - item.ansible_job_id is defined
   loop_control:
     label: "{{ item._ansible_item_label | default(item.item.key | default('Key is missing')) }}"
