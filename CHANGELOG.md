@@ -1,3 +1,7 @@
+# 1.1.1 2019-07-01
+* Added rulegroup level nat definition, improved variable type detection 
+for lists in source, destination and services.
+
 # 1.1.0 2019-07-01
 * Added IPS inspection
 * Fix typo in assert statements around logstart

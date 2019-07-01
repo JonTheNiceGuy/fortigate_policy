@@ -952,6 +952,9 @@ rulebase: |
               or item.value | type_debug == "AnsibleMapping"
             ) %}
             "{{ var.key | regex_replace(regex_rulebase_match, '\2') }}{{ item.key | regex_replace(regex_rulebase_match, '\2') }}": {
+                {% if var.value.nat is defined and rule.value.nat is not defined %}
+                  "nat": {{ var.value.nat }},
+                {% endif %}
                 {% if var.value.ips_enable is defined and rule.value.ips_enable is not defined %}
                   "ips_enable": {{ var.value.ips_enable }},
                 {% endif %}
@@ -962,7 +965,7 @@ rulebase: |
                   "ips_sensor": "{{ var.value.ips_sensor }}",
                 {% endif %}
                 {% for rule in item.value | dict2items %}
-                {% if rule.key in ['sources', 'destinations', 'services', 'src_internet_service', 'dst_internet_service'] and (rule.value | type_debug != 'list' and rule.value | type_debug != 'AnsibleSequence') %}
+                {% if rule.key in ['sources', 'destinations', 'services', 'src_internet_service', 'dst_internet_service'] and rule.value | type_debug not in ['list', 'AnsibleSequence'] %}
                   "{{ rule.key }}": ["{{ rule.value }}"],
                 {% elif rule.value | type_debug in ['string', 'AnsibleUnicode'] %}
                   "{{ rule.key }}": "{{ rule.value }}",
