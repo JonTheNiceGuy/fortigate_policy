@@ -443,3 +443,54 @@
     label: "{{ item.key }}"
   when:
   - (ansible_version.major == 2 and ansible_version.minor > 7) or ansible_version.major >= 3
+
+- name: "B03r. Assert that rules have a valid SSL/SSH Profile policy [ansible version <=2.7]"
+  assert:
+    msg: "Assertion failed: item.value.ssl_ssh_profile ('{{ item.value.ssl_ssh_profile | default('') | string }}') has an ssl_ssh_inspect_profiles value that exists"
+    that:
+    - ssl_ssh_inspect_profiles[item.value.ssl_ssh_profile] is defined
+  loop: "{{ rulebase | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when:
+  - item.value.ssl_ssh_profile is defined
+  - ansible_version is not defined or ansible_version.major < 2 or (ansible_version.major == 2 and ansible_version.minor <= 7)
+
+- name: "B03r. Assert that rules have a valid SSL/SSH Profile policy [ansible version >=2.8]"
+  assert:
+    quiet: yes
+    msg: "Assertion failed: item.value.ssl_ssh_profile ('{{ item.value.ssl_ssh_profile | default('') | string }}') has an ssl_ssh_inspect_profiles value that exists"
+    that:
+    - ssl_ssh_inspect_profiles[item.value.ssl_ssh_profile] is defined
+  loop: "{{ rulebase | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when:
+  - item.value.ssl_ssh_profile is defined
+  - (ansible_version.major == 2 and ansible_version.minor > 7) or ansible_version.major >= 3
+
+- name: "B03s. Assert that rules have a valid IPS policy [ansible version <=2.7]"
+  assert:
+    msg: "Assertion failed: item.value.ips_sensor ('{{ item.value.ips_sensor | default('') | string }}') has an ips_profiles value that exists"
+    that:
+    - ips_profiles[item.value.ips_sensor] is defined
+  loop: "{{ rulebase | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when:
+  - item.value.ips_sensor is defined
+  - ansible_version is not defined or ansible_version.major < 2 or (ansible_version.major == 2 and ansible_version.minor <= 7)
+
+- name: "B03s. Assert that rules have a valid IPS policy [ansible version >=2.8]"
+  assert:
+    quiet: yes
+    msg: "Assertion failed: item.value.ips_sensor ('{{ item.value.ips_sensor | default('') | string }}') has an ips_profiles value that exists"
+    that:
+    - ips_profiles[item.value.ips_sensor] is defined
+  loop: "{{ rulebase | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when:
+  - item.value.ips_sensor is defined
+  - (ansible_version.major == 2 and ansible_version.minor > 7) or ansible_version.major >= 3
+  

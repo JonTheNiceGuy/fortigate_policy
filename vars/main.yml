@@ -951,8 +951,26 @@ rulebase: |
               item.value | type_debug == "dict" 
               or item.value | type_debug == "AnsibleMapping"
             ) %}
-            "{{ var.key | regex_replace(regex_rulebase_match, '\2') }}{{ item.key | regex_replace(regex_rulebase_match, '\2') }}":
-            {{ item.value }},
+            "{{ var.key | regex_replace(regex_rulebase_match, '\2') }}{{ item.key | regex_replace(regex_rulebase_match, '\2') }}": {
+                {% if var.value.ips_enable is defined and rule.value.ips_enable is not defined %}
+                  "ips_enable": {{ var.value.ips_enable }},
+                {% endif %}
+                {% if var.value.ssl_ssh_profile is defined and rule.value.ssl_ssh_profile is not defined %}
+                  "ssl_ssh_profile": "{{ var.value.ssl_ssh_profile }}",
+                {% endif %}
+                {% if var.value.ips_sensor is defined and rule.value.ips_sensor is not defined %}
+                  "ips_sensor": "{{ var.value.ips_sensor }}",
+                {% endif %}
+                {% for rule in item.value | dict2items %}
+                {% if rule.key in ['sources', 'destinations', 'services', 'src_internet_service', 'dst_internet_service'] and (rule.value | type_debug != 'list' and rule.value | type_debug != 'AnsibleSequence') %}
+                  "{{ rule.key }}": ["{{ rule.value }}"],
+                {% elif rule.value | type_debug in ['string', 'AnsibleUnicode'] %}
+                  "{{ rule.key }}": "{{ rule.value }}",
+                {% else %}
+                  "{{ rule.key }}": {{ rule.value }},
+                {% endif %}
+              {% endfor %}
+            },
           {% endif %}
         {% endfor %}
       {% endif %}

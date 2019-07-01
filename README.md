@@ -98,14 +98,13 @@ Policies can cross multiple files, and are gathered into 100's of rules, followi
       rule00:
         # This next line is optional. Without it, it will set the value to "Policy_XXYY" where XX is the policyid prefix, and YY is the suffix
         name: Drop broadcast traffic
-        # These sources and destinations need to be specified, either in *_address_objects, *_address_groups or in built_in_hosts
-        sources:
-        - broadcast_addresses
-        destinations:
-        - all
-        # These services need to be specified in *_service_objects, *_service_groups, built_in_services or built_in_service_groups
-        services:
-        - ALL
+        # These sources and destinations need to be specified, either in *_address_objects, *_address_groups or in built_in_hosts.
+        #   They can either be individual strings (like the following examples), or lists (like in the next rulegroup)
+        sources: broadcast_addresses
+        destinations: all
+        # These services need to be specified in *_service_objects, *_service_groups, built_in_services or built_in_service_groups.
+        #   They can either be individual strings (like the following examples), or lists (like in the next rulegroup)        
+        services: ALL
         # actions are "allow" (default) and "deny"
         action: deny
         # Log is "all" (default) or "utm" or "none". To also enable logging from the start, set logstart: enable
@@ -120,18 +119,82 @@ Policies can cross multiple files, and are gathered into 100's of rules, followi
       rule01:
         sources:
         - test_net_1
-        destinations:
         - test_net_2
+        destinations: test_net_3
         # Force hide-nat behind the firewall interface
         nat: true
         services:
         - HTTP
+        - HTTPS
       rule02:
         # Internet Services rely on a FortiCare subscription, and don't have "services".
         src_internet_service:
         - Google_Google_Bot
         dst_internet_service:
         - Amazon_Web
+    
+    ---
+    # The next few sections are purely about defining IPS policies. If you are not doing IPS, these are not relevant to you :)
+    rulegroup30:
+      # This rule will have the policy id of 3001 and will perform IPS/SSL inspection against items that match this firewall
+      #   policy.
+      rule01:
+        sources: somesource
+        destinations: somedestination
+        services: HTTPS
+        ssl_ssh_profile: inspection_profile_group_a
+        ips_sensor: ips_profile_group_a
+
+IPS and SSL Inspection profiles are defined as follows:
+
+    ---
+    ips_profiles:
+      monitor_only:
+        entries:
+        - severity: [info, low, medium, high, critical]
+          status: enable
+          action: pass
+    ssl_ssh_inspect_profiles:
+      corporate_inspection:
+        # Note, this currently must be loaded on the device itself
+        ca: corporate_ca_certificate
+        
+    ---
+    # Create a file which defines the "default" IPS and SSL profiles for all rules
+    # Note this would enable IPS inspection on all subsequent rules!
+    #
+    # Default SSL/SSH Inspection Profile for all rules
+    ssl_ssh_profile: default_inspection_profile
+    # Default IPS Sensor Profile for all rules
+    ips_sensor: default_ips_profile
+    
+    ---
+    rulegroup40:
+      # Default Disable IPS rules across this rulegroup
+      ips_enable: false
+      # By default, use this SSL/SSH Inspection Profile for this rulegroup
+      ssl_ssh_profile: inspection_profile_group_b
+      # By default, use this IPS Sensor Profile for this rulegroup
+      ips_sensor: ips_profile_group_b
+      rule01:
+        # This rule uses the default SSL and IPS profiles for this rule group
+        #   and overrides the default IPS disable setting for this group..
+        sources: newsource1
+        destinations: newdestination1
+        services: SSH
+        ips_enable: true
+      rule02: 
+        # This rule uses the default IPS Sensor profile, but a separate SSL inspection profile
+        sources: newsource2
+        destinations: newdestination2
+        services: SSH
+        ips_enable: true
+        ssl_ssh_profile: inspection_profile_group_c
+      rule03:
+        # This rule has NO IPS because it's disabled at the group level
+        sources: noipssource
+        destination: noipsdestination
+        services: HTTPS
 
 ### Flags
 
@@ -155,6 +218,8 @@ used in the policy.
   * `create_services`: Creates all service object and groups that are
 used in the policy.
   * `create_policy`: Implements the policy as defined in the git repo.
+  * `create_security_profiles`: Implement the Security Profiles as defined
+in the git repo.
 
 * `reorder_policy` - Default `True`: Re-order the Firewall Policy to match the rule numbers
 
@@ -213,4 +278,4 @@ MIT
 Author Information
 ------------------
 
-[Jon Spriggs](mailto:jon@sprig.gs) is a Technical Consultant and Network Security Professional.
+[Jon Spriggs](mailto:jon.spriggs@uk.fujitsu.com) is a Technical Consultant for Fujitsu, in the Enterprise & Cyber Security Business Unit.

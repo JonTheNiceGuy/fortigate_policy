@@ -1,0 +1,60 @@
+---
+- name: E06a. Create SSL/SSH Inspect Profile
+  fortios_firewall_ssl_ssh_profile:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    firewall_ssl_ssh_profile:
+      state: "present"
+      name: "{{ item.key }}"
+      caname: "{{ item.value.ca | default('Fortinet_CA_SSL') }}"
+      comment: "{{ item.value.comment | default('') }}"
+      ftps:
+        ports: "{{ item.value.ftps_port | default(990) }}"
+      https:
+        ports: "{{ item.value.https_port | default(443) }}"
+      imaps:
+        ports: "{{ item.value.imaps_port | default(993) }}"
+      pop3s:
+        ports: "{{ item.value.pop3s_port | default(995) }}"
+      smtps: 
+        ports: "{{ item.value.smtps_port | default(495) }}"
+      ssh: 
+        ports: "{{ item.value.ftps_port | default(22) }}"
+        status: "{% if item.value.inspect_ssh | default(true) | bool %}deep-inspection{% else %}disable{% endif %}"
+        inspect-all: "{% if item.value.inspect_all | default(false) | bool %}deep-inspection{% else %}disable{% endif %}"
+      ssl:
+        inspect-all: "{% if item.value.inspect_all | default(false) | bool %}deep-inspection{% else %}disable{% endif %}"
+        untrusted-cert: "{% if item.value.block_untrusted | default(false) | bool %}block{% else %}allow{% endif %}"
+  loop: "{{ ssl_ssh_inspect_profiles | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: ssl_ssh_inspect_profiles is defined
+
+- name: E06b. Create IPS Sensor
+  fortios_ips_sensor:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    ips_sensor:
+      state: "present"
+      name: "{{ item.key }}"
+      comment: "{{ item.value.comment }}"
+      entries: |
+        [
+          {% for entry in item.value.entries %}
+            {
+              'severity': "{% for severity in entry.severity %}{{ severity }} {% endfor %}",
+              'action': "{{ entry.action }}",
+              'status': "{{ entry.status }}"
+            },
+          {% endfor %}
+        ]
+  loop: "{{ ips_profiles | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: ips_profiles is defined 

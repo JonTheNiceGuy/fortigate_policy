@@ -1,5 +1,5 @@
 ---
-- name: E06a. Set Default Logging (Start)
+- name: E10a. Set Default Logging (Start) [Async]
   fortios_log_setting:
     host: "{{ ansible_host }}"
     username: "{{ admin_username | default(ansible_username | default('admin')) }}"
@@ -13,17 +13,20 @@
   poll: 0
   changed_when: False
   register: sleeper
+  when: run_actions_async | default(false) | bool
 
-- name: E06a. Set Default Logging (Finish)
+- name: E10a. Set Default Logging (Finish) [Async]
   async_status:
     jid: "{{ sleeper.ansible_job_id }}"
   register: sleeper_status
   until: sleeper_status.finished
   retries: 500
   delay: 4
-  when: sleeper.ansible_job_id is defined
+  when: 
+  - run_actions_async | default(false) | bool
+  - item.ansible_job_id is defined
 
-- name: E06b. Create policy items (Start)
+- name: E10b. Create policy items (Start) [Async]
   fortios_firewall_policy:
     host: "{{ ansible_host }}"
     username: "{{ admin_username | default(ansible_username | default('admin')) }}"
@@ -55,6 +58,13 @@
         'nat': "{% if item.value.nat | default(false) | bool %}enable{% else %}disable{% endif %}",
         'logtraffic': "{{ item.value.log | default('all') }}",
         'logtraffic-start': "{{ item.value.logstart | default('disable') }}",
+        {% if item.value.ips_enable | default(true) | bool
+          and item.value.ips_sensor | default(ips_sensor | default('')) != ''
+          and item.value.ssl_ssh_profile | default(ssl_ssh_profile | default('')) != '' %}
+          'utm-status': "enable",
+          'ssl-ssh-profile': "{{ item.value.ssl_ssh_profile | default(ssl_ssh_profile) }}",
+          'ips-sensor': "{{ item.value.ips_sensor | default(ips_sensor) }}",
+        {% endif %}
         'status': "{% if item.value.disabled | default(false) | bool %}disable{% else %}enable{% endif %}",
         'uuid': "{{ item.value.uuid | default(omit) }}"
       }
@@ -65,8 +75,9 @@
   poll: 0
   changed_when: False
   register: sleeper
+  when: run_actions_async | default(false) | bool
 
-- name: E06b. Create policy items (Finish)
+- name: E10b. Create policy items (Finish) [Async]
   async_status:
     jid: "{{ item.ansible_job_id }}"
   register: sleeper_status
@@ -74,7 +85,9 @@
   retries: 500
   delay: 4
   loop: "{{ sleeper.results|flatten(levels=1) }}"
-  when: item.ansible_job_id is defined
+  when: 
+  - run_actions_async | default(false) | bool
+  - item.ansible_job_id is defined
   loop_control:
     label: "{{ item._ansible_item_label | default(item.item.key | default('Key is missing')) }}"
 
