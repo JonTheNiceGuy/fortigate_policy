@@ -28,7 +28,7 @@
       ssl:
         inspect-all: "{% if item.value.inspect_all | default(false) | bool %}deep-inspection{% else %}disable{% endif %}"
         untrusted-cert: "{% if item.value.block_untrusted | default(false) | bool %}block{% else %}allow{% endif %}"
-  loop: "{{ ssl_ssh_inspect_profiles | dict2items }}"
+  loop: "{{ ssl_ssh_inspect_profiles | default({}) | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
   when: ssl_ssh_inspect_profiles is defined
@@ -54,7 +54,7 @@
             },
           {% endfor %}
         ]
-  loop: "{{ ips_profiles | dict2items }}"
+  loop: "{{ ips_profiles | default({}) | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
   when: ips_profiles is defined 
