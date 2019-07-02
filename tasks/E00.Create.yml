@@ -27,6 +27,9 @@
 - name: E06. Create Security Profiles
   include_tasks: E06_create_security_profiles.yml
   when: create_security_profiles | default(create_all | default(true))
+- name: E07. Create NAT pool
+  include_tasks: E07_create_ip_pools.yml
+  when: create_nat_pools | default(create_all | default(true))
 - name: E10. Create policy
   include_tasks: E10_create_policy.yml
   when: create_policy | default(create_all | default(true))

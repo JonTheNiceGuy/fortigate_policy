@@ -1,0 +1,19 @@
+---
+- name: E07a. Create an IP Pool
+  fortios_firewall_ippool:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    firewall_ippool:
+      state: present
+      name: "{{ item.key }}"
+      arp-reply: enable
+      comments: "{{ item.value.comment | default('') }}"
+      startip: "{{ item.value.start_ip | default(item.value.ip) }}"
+      endip: "{{ item.value.end_ip | default(item.value.ip) }}"
+      type: "{{ item.value.type | default('one-to-one') }}"
+  loop: "{{ nat_pools | default({}) | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"

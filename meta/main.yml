@@ -1,7 +1,7 @@
 galaxy_info:
   author: Jon Spriggs
   description: This role takes a rulebase layout, lints the resulting objects, then validates that the objects are used correctly in the policy. Finally, it installs the policy on a FortiNet FortiGate Firewall, and removes all non-implemented objects.
-  version: 1.1.0
+  version: 1.1.3
 
   license: MIT
 

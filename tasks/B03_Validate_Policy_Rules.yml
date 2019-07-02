@@ -494,3 +494,27 @@
   - item.value.ips_sensor is defined
   - (ansible_version.major == 2 and ansible_version.minor > 7) or ansible_version.major >= 3
   
+- name: "B03t. Assert that rules have a valid NAT Pool [ansible version <=2.7]"
+  assert:
+    msg: "Assertion failed: item.value.natpool ('{{ item.value.natpool | default('') | string }}') has a nat_pools value that exists"
+    that:
+    - nat_pools[item.value.natpool] is defined
+  loop: "{{ rulebase | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when:
+  - item.value.natpool is defined
+  - ansible_version is not defined or ansible_version.major < 2 or (ansible_version.major == 2 and ansible_version.minor <= 7)
+
+- name: "B03t. Assert that rules have a valid NAT Pool [ansible version >=2.8]"
+  assert:
+    quiet: yes
+    msg: "Assertion failed: item.value.natpool ('{{ item.value.natpool | default('') | string }}') has a nat_pools value that exists"
+    that:
+    - nat_pools[item.value.natpool] is defined
+  loop: "{{ rulebase | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when:
+  - item.value.natpool is defined
+  - (ansible_version.major == 2 and ansible_version.minor > 7) or ansible_version.major >= 3

@@ -67,7 +67,13 @@
         {% endif %}
         'service': [{% for service in item.value.services | default(['ALL']) %}{'name': '{{ service }}'},{% endfor %}],
         'schedule': "{{ item.value.schedule | default('always') }}",
-        'nat': "{% if item.value.nat | default(false) | bool %}enable{% else %}disable{% endif %}",
+        'nat': "{% if item.value.nat | default(false) | bool or item.value.natpool | default('') != '' %}enable{% else %}disable{% endif %}",
+        {% if item.value.natpool | default('') != '' %}
+          'ippool': 'enable',
+          'poolname': [{'name': '{{ item.value.natpool }}'}],
+        {% else %}
+          'ippool': 'disable',
+        {% endif %}
         'logtraffic': "{{ item.value.log | default('all') }}",
         'logtraffic-start': "{{ item.value.logstart | default('disable') }}",
         {% if item.value.ips_enable | default(true) | bool
@@ -116,7 +122,13 @@
         {% endif %}
         'service': [{% for service in item.value.services | default(['ALL']) %}{'name': '{{ service }}'},{% endfor %}],
         'schedule': "{{ item.value.schedule | default('always') }}",
-        'nat': "{% if item.value.nat | default(false) | bool %}enable{% else %}disable{% endif %}",
+        'nat': "{% if item.value.nat | default(false) | bool or item.value.natpool | default('') != '' %}enable{% else %}disable{% endif %}",
+        {% if item.value.natpool | default('') != '' %}
+          'ippool': 'enable',
+          'poolname': '{{ item.value.natpool }}',
+        {% else %}
+          'ippool': 'disable',
+        {% endif %}
         'logtraffic': "{{ item.value.log | default('all') }}",
         'logtraffic-start': "{{ item.value.logstart | default('disable') }}",
         {% if item.value.ips_enable | default(true) | bool
