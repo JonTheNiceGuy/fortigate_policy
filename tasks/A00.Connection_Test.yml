@@ -4,10 +4,16 @@
     no_proxy_match: |
       {
         {% for np in (lookup('env', 'no_proxy') | replace(',', '') ).split() %}
-          {% if np | ipaddr | type_debug != 'NoneType' %}
-            {% if ansible_host | ipaddr(np) | type_debug != 'NoneType' %}
-              "match": "True"
+          {% if np | regex_search('\d+\.\d+\.\d+\.\d+') | type_debug != 'NoneType' %}
+            {% if np | ipaddr | type_debug != 'NoneType' and ansible_host | ipaddr(np) | type_debug != 'NoneType' %}
+              "match": "True",
+              "np": "{{ np }}",
+              "ah": "{{ ansible_host }}",
             {% endif %}
+          {% elif ansible_host | lower == np | lower %}
+            "match": "True",
+            "np": "{{ np }}",
+            "ah": "{{ ansible_host }}",
           {% endif %}
         {% endfor %}
       }
