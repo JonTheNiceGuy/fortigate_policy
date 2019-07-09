@@ -71,7 +71,7 @@
   loop: "{{ ssl_ssh_inspect_profiles | default({}) | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
-  when: not (item.value.externally_managed | default(false) or parsed_ssl_ssh_profiles[item.key] is defined)
+  when: item.value.externally_managed | default(false) == false or parsed_ssl_ssh_profiles[item.key] is not defined
 
 - name: E06f. Create IPS Sensor
   fortios_ips_sensor:
@@ -97,4 +97,4 @@
   loop: "{{ ips_profiles | default({}) | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
-  when: not (item.value.externally_managed | default(false) or parsed_ips_profiles[item.key] is defined)
+  when: item.value.externally_managed | default(false) == false or parsed_ips_profiles[item.key] is not defined

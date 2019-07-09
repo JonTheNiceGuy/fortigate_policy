@@ -1,3 +1,6 @@
+# 1.1.6 2019-07-09
+* Fixed typos
+
 # 1.1.5 2019-07-09
 * Allow externally managed IPS and SSL Inspection profiles
 
