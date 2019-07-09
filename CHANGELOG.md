@@ -1,3 +1,9 @@
+# 1.1.5 2019-07-09
+* Allow externally managed IPS and SSL Inspection profiles
+
+# 1.1.4 2019-07-05
+* Identified issue where no_proxy contains a hostname
+
 # 1.1.3 2019-07-02
 * Add Source NAT that isn't a Hide NAT (Closes #6)
 

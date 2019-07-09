@@ -1,5 +1,45 @@
 ---
-- name: E06a. Create SSL/SSH Inspect Profile
+- name: E06a. Get SSL/SSH Inspect Profiles
+  fortiosconfig:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    action: get
+    config: firewall ssl-ssh-profile
+  register: created_ssl_ssh_profiles
+
+- name: E06b. Get IPS Profiles
+  fortiosconfig:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    action: get
+    config: ips custom
+  register: created_ips_profiles
+
+- name: E06c. Parse SSL/SSH Inspect Profiles
+  set_fact:
+    parsed_ssl_ssh_profiles: |
+      [
+        {% for profile in created_ssl_ssh_profiles.meta.results %}
+          "{{ profile.name | default('Undefined') }}",
+        {% endfor %}
+      ]
+
+- name: E06d. Parse IPS Profiles
+  set_fact:
+    parsed_ips_profiles: |
+      [
+        {% for profile in created_ips_profiles.meta.results %}
+          "{{ profile.name | default('Undefined') }}",
+        {% endfor %}
+      ]
+
+- name: E06e. Create SSL/SSH Inspect Profile
   fortios_firewall_ssl_ssh_profile:
     host: "{{ ansible_host }}"
     username: "{{ admin_username | default(ansible_username | default('admin')) }}"
@@ -19,9 +59,9 @@
         ports: "{{ item.value.imaps_port | default(993) }}"
       pop3s:
         ports: "{{ item.value.pop3s_port | default(995) }}"
-      smtps: 
+      smtps:
         ports: "{{ item.value.smtps_port | default(495) }}"
-      ssh: 
+      ssh:
         ports: "{{ item.value.ftps_port | default(22) }}"
         status: "{% if item.value.inspect_ssh | default(true) | bool %}deep-inspection{% else %}disable{% endif %}"
         inspect-all: "{% if item.value.inspect_all | default(false) | bool %}deep-inspection{% else %}disable{% endif %}"
@@ -31,9 +71,9 @@
   loop: "{{ ssl_ssh_inspect_profiles | default({}) | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
-  when: ssl_ssh_inspect_profiles is defined
+  when: not (item.value.externally_managed | default(false) or parsed_ssl_ssh_profiles[item.key] is defined)
 
-- name: E06b. Create IPS Sensor
+- name: E06f. Create IPS Sensor
   fortios_ips_sensor:
     host: "{{ ansible_host }}"
     username: "{{ admin_username | default(ansible_username | default('admin')) }}"
@@ -43,12 +83,12 @@
     ips_sensor:
       state: "present"
       name: "{{ item.key }}"
-      comment: "{{ item.value.comment }}"
+      comment: "{{ item.value.comment | default('') }}"
       entries: |
         [
-          {% for entry in item.value.entries %}
+          {% for entry in item.value.entries | default([]) %}
             {
-              'severity': "{% for severity in entry.severity %}{{ severity }} {% endfor %}",
+              'severity': "{% for severity in entry.severity | default([]) %}{{ severity }} {% endfor %}",
               'action': "{{ entry.action }}",
               'status': "{{ entry.status }}"
             },
@@ -57,4 +97,4 @@
   loop: "{{ ips_profiles | default({}) | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
-  when: ips_profiles is defined 
+  when: not (item.value.externally_managed | default(false) or parsed_ips_profiles[item.key] is defined)
