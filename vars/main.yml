@@ -980,6 +980,36 @@ rulebase: |
     {% endfor %}
   }
 
+wildcard_fqdn_objects_COMBINED_INTERNAL: |
+  {
+    {% for var in vars | dict2items %}
+      {% if var.key | regex_search(regex_wildcard_fqdn_objects_match) | type_debug != 'NoneType'
+        and var.value | type_debug in ['dict', 'AnsibleMapping'] %}
+        {% for item in var.value | dict2items %}
+          "{{ item.key }}": "{{ item.value }}",
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+  }
+
+wildcard_fqdn_groups_COMBINED_INTERNAL: |
+  {
+    {% for var in vars | dict2items %}
+      {% if var.key | regex_search(regex_address_groups_match) | type_debug != 'NoneType'
+        and var.value | type_debug in ["dict", "AnsibleMapping"] %}
+        {% for item in var.value | dict2items %}
+          {% if item.value | type_debug in ["string", "str", "AnsibleUnicode"] %}
+            "{{ item.key }}": ["{{ item.value }}"],
+          {% elif item.value | type_debug == 'list' %}
+            "{{ item.key }}": {{ item.value }},
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+  }
+
+wildcard_fqdn_ALL_ITEMS: "{{ wildcard_fqdn_objects_COMBINED_INTERNAL | combine(built_in_wildcard_fqdns | default({})) | combine(wildcard_fqdn_groups_COMBINED_INTERNAL | default({})) }}"
+
 address_objects_COMBINED_INTERNAL: |
   {
     {% for item in manual_hosts | default({}) | dict2items %}{# For historical purposes #}
@@ -1066,10 +1096,8 @@ address_objects: |
   {
     {% for item in built_in_hosts | default({}) | dict2items %}
       '{{ item.key }}':
-      {% if address_objects_COMBINED_INTERNAL is defined 
-        and address_objects_COMBINED_INTERNAL | type_debug == 'dict' 
-        and address_objects_COMBINED_INTERNAL[item.key] is defined %}
-        {{ address_objects_COMBINED_INTERNAL[item.key] | 
+      {% if (address_objects_COMBINED_INTERNAL | default({}))[item.key] is defined %}
+        {{ address_objects_COMBINED_INTERNAL[item.key] | default({}) | 
           combine({'type': 'manual', 'replaced-built-in': item.value}) }}
       {% else %}
         {{ item.value | combine({'type': 'built_in'}) }}
@@ -1077,7 +1105,7 @@ address_objects: |
     {% endfor %}
     {% for item in address_objects_COMBINED_INTERNAL | default({}) | dict2items %}
       {% if built_in_hosts[item.key] is not defined %}
-        '{{ item.key }}': {{ item.value | combine({'type': 'manual'}) }},
+        '{{ item.key }}': {{ item.value | default({}) | combine({'type': 'manual'}) }},
       {% endif %}
     {% endfor %}
   }
@@ -1086,9 +1114,7 @@ service_objects: |
   {
     {% for item in built_in_services | default({}) | dict2items %}
       '{{ item.key }}':
-      {% if service_objects_COMBINED_INTERNAL is defined
-        and service_objects_COMBINED_INTERNAL | type_debug == 'dict'
-        and service_objects_COMBINED_INTERNAL[item.key] is defined %}
+      {% if (service_objects_COMBINED_INTERNAL | default({}))[item.key] is defined %}
         {{ service_objects_COMBINED_INTERNAL[item.key] | 
           combine({'type': 'manual', 'replaced-built-in': item.value}) }}
       {% else %}
@@ -1107,6 +1133,15 @@ address_objects_USED_INTERNAL: |
     {% for ao in address_objects | dict2items %}
       {% if ao.value.force | default(False) | bool %}
         '{{ ao.key }}': {{ ao.value }},
+      {% endif %}
+    {% endfor %}
+    {% for ip in ssl_ssh_inspect_profiles | default({}) | dict2items %}
+      {% if ip.value.exempt | default(false) | type_debug == 'list' %}
+        {% for ex in ip.value.exempt %}
+          {% if address_objects[ex] is defined %}
+            '{{ ex }}': {{ address_objects[ex] }},
+          {% endif %}
+        {% endfor %}
       {% endif %}
     {% endfor %}
   }

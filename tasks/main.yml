@@ -1,4 +1,8 @@
 ---
+- name: 000 Debug
+  include_tasks: 000.Debug.yml
+  when: debug_role_vars | default(false)
+
 - name: A00 Check Online Connections
   include_tasks: A00.Connection_Test.yml
   when:

@@ -68,6 +68,17 @@
       ssl:
         inspect-all: "{% if item.value.inspect_all | default(false) | bool %}deep-inspection{% else %}disable{% endif %}"
         untrusted-cert: "{% if item.value.block_untrusted | default(false) | bool %}block{% else %}allow{% endif %}"
+      ssl-exempt: |
+        [
+          {% for var in item.value.exempt | default({}) %}
+            {
+              {% if wildcard_fqdn_ALL_ITEMS[var] is defined %}
+                'type': 'wildcard-fqdn', 'wildcard-fqdn': '{{ var }}',
+              {% else %}
+                'type': 'address', 'address': '{{ var }}',
+              {% endif %}
+            },
+          {% endfor %} ]"
   loop: "{{ ssl_ssh_inspect_profiles | default({}) | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
