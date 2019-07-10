@@ -1,3 +1,6 @@
+# 1.1.7 2019-07-09
+* Fixed typo in FQDN object creation
+
 # 1.1.6 2019-07-09
 * Fixed typos
 

@@ -135,7 +135,7 @@
     label: "{{ item.key }}"
   when:
   - item.value.fqdn is defined and '*' not in item.value.fqdn
-  - run_actions_async | default(false) | bool
+  - run_actions_async | default(false) | bool == false
 
 - name: E02c. Create a FQDN address object (Start) [Async]
   fortios_firewall_address:
