@@ -936,6 +936,8 @@ regex_address_objects_match: '(_[Aa][Dd][Dd][Rr][Ee][Ss][Ss]_[Oo][Bb][Jj][Ee][Cc
 regex_address_groups_match: '(_[Aa][Dd][Dd][Rr][Ee][Ss][Ss]_[Gg][Rr][Oo][Uu][Pp][Ss]*)$'
 regex_service_objects_match: '(_[Ss][Ee][Rr][Vv][Ii][Cc][Ee]_[Oo][Bb][Jj][Ee][Cc][Tt][Ss]*)$'
 regex_service_groups_match: '(_[Ss][Ee][Rr][Vv][Ii][Cc][Ee]_[Gg][Rr][Oo][Uu][Pp][Ss]*)$'
+regex_wildcard_fqdn_objects_match: '(_[Ww][Ii][Ll][Dd][Cc][Aa][Rr][Dd]_[Ff][Qq][Dd][Nn]_[Oo][Bb][Jj][Ee][Cc][Tt][Ss]*)$'
+regex_wildcard_fqdn_groups_match: '(_[Ww][Ii][Ll][Dd][Cc][Aa][Rr][Dd]_[Ff][Qq][Dd][Nn]_[Gg][Rr][Oo][Uu][Pp][Ss]*)$'
 
 rulebase: |
   {
@@ -995,7 +997,7 @@ wildcard_fqdn_objects_COMBINED_INTERNAL: |
 wildcard_fqdn_groups_COMBINED_INTERNAL: |
   {
     {% for var in vars | dict2items %}
-      {% if var.key | regex_search(regex_address_groups_match) | type_debug != 'NoneType'
+      {% if var.key | regex_search(regex_wildcard_fqdn_groups_match) | type_debug != 'NoneType'
         and var.value | type_debug in ["dict", "AnsibleMapping"] %}
         {% for item in var.value | dict2items %}
           {% if item.value | type_debug in ["string", "str", "AnsibleUnicode"] %}

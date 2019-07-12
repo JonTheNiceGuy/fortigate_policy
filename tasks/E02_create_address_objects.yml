@@ -302,3 +302,55 @@
   - item.ansible_job_id is defined
   loop_control:
     label: "{{ item._ansible_item_label | default(item.item.key | default('Key is missing')) }}"
+
+- name: E02f. Create a Wildcard FQDN object [No-Async]
+  fortios_firewall_wildcard_fqdn_custom:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    firewall_wildcard_fqdn_custom:
+      state: "present"
+      name: "{{ item.key }}"
+      wildcard-fqdn: "{{ item.value }}"
+  loop: "{{ wildcard_fqdn_objects_COMBINED_INTERNAL | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when:
+  - run_actions_async | default(false) | bool == false
+
+- name: E02f. Create a Wildcard FQDN object (Start) [Async]
+  fortios_firewall_wildcard_fqdn_custom:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    firewall_wildcard_fqdn_custom:
+      state: "present"
+      name: "{{ item.key }}"
+      wildcard-fqdn: "{{ item.value }}"
+  loop: "{{ wildcard_fqdn_objects_COMBINED_INTERNAL | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when:
+  - run_actions_async | default(false) | bool
+  async: 1000
+  poll: 0
+  changed_when: False
+  register: sleeper
+
+- name: E02f. Create a Wildcard FQDN object (Finish) [Async]
+  async_status:
+    jid: "{{ item.ansible_job_id }}"
+  register: sleeper_status
+  until: sleeper_status.finished
+  retries: 500
+  delay: 4
+  loop: "{{ sleeper.results|flatten(levels=1) }}"
+  when:
+  - run_actions_async | default(false) | bool
+  - item.ansible_job_id is defined
+  loop_control:
+    label: "{{ item._ansible_item_label | default(item.item.key | default('Key is missing')) }}"

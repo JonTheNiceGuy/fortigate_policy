@@ -1,5 +1,48 @@
 ---
-- name: E06a. Get SSL/SSH Inspect Profiles
+- name: E06a. Get SSL Certificates
+  fortiosconfig:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    action: get
+    config: vpn.certificate local
+  register: created_certificates
+  
+- name: E06b. Parse SSL/SSH Inspect Profiles
+  set_fact:
+    parsed_certificates: |
+      [
+        {% for certs in created_certificates.meta.results %}
+          "{{ certs.name | default('Undefined') }}",
+        {% endfor %}
+      ]
+
+- name: "E06c. Check SSL Inspection Certificate exists [ansible version <=2.7]"
+  assert:
+    msg: "Assertion failed: item.value.ca ('{{ item.value.ca | default('Fortinet_CA_SSL') | string }}') exists in parsed_certificates ('{{ parsed_certificates }}')"
+    that:
+    - item.value.ca | default('Fortinet_CA_SSL') in parsed_certificates
+  loop: "{{ ssl_ssh_inspect_profiles | default({}) | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when:
+  - ansible_version is not defined or ansible_version.major < 2 or (ansible_version.major == 2 and ansible_version.minor <= 7)
+
+- name: "E06c. Check SSL Inspection Certificate exists [ansible version >=2.8]"
+  assert:
+    quiet: yes
+    msg: "Assertion failed: item.value.ca ('{{ item.value.ca | default('Fortinet_CA_SSL') | string }}') exists in parsed_certificates ('{{ parsed_certificates }}')"
+    that:
+    - item.value.ca | default('Fortinet_CA_SSL') in parsed_certificates
+  loop: "{{ ssl_ssh_inspect_profiles | default({}) | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when:
+  - (ansible_version.major == 2 and ansible_version.minor > 7) or ansible_version.major >= 3
+
+- name: E06d. Get SSL/SSH Inspect Profiles
   fortiosconfig:
     host: "{{ ansible_host }}"
     username: "{{ admin_username | default(ansible_username | default('admin')) }}"
@@ -10,7 +53,7 @@
     config: firewall ssl-ssh-profile
   register: created_ssl_ssh_profiles
 
-- name: E06b. Get IPS Profiles
+- name: E06e. Get IPS Profiles
   fortiosconfig:
     host: "{{ ansible_host }}"
     username: "{{ admin_username | default(ansible_username | default('admin')) }}"
@@ -21,7 +64,7 @@
     config: ips custom
   register: created_ips_profiles
 
-- name: E06c. Parse SSL/SSH Inspect Profiles
+- name: E06f. Parse SSL/SSH Inspect Profiles
   set_fact:
     parsed_ssl_ssh_profiles: |
       [
@@ -30,7 +73,7 @@
         {% endfor %}
       ]
 
-- name: E06d. Parse IPS Profiles
+- name: E06g. Parse IPS Profiles
   set_fact:
     parsed_ips_profiles: |
       [
@@ -39,7 +82,7 @@
         {% endfor %}
       ]
 
-- name: E06e. Create SSL/SSH Inspect Profile
+- name: E06h. Create SSL/SSH Inspect Profile
   fortios_firewall_ssl_ssh_profile:
     host: "{{ ansible_host }}"
     username: "{{ admin_username | default(ansible_username | default('admin')) }}"
@@ -78,13 +121,14 @@
                 'type': 'address', 'address': '{{ var }}',
               {% endif %}
             },
-          {% endfor %} ]"
+          {% endfor %}
+        ]
   loop: "{{ ssl_ssh_inspect_profiles | default({}) | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
-  when: item.value.externally_managed | default(false) == false or parsed_ssl_ssh_profiles[item.key] is not defined
+  when: item.value.externally_managed | default(false) == false or item.key not in parsed_ssl_ssh_profiles
 
-- name: E06f. Create IPS Sensor
+- name: E06i. Create IPS Sensor
   fortios_ips_sensor:
     host: "{{ ansible_host }}"
     username: "{{ admin_username | default(ansible_username | default('admin')) }}"
@@ -108,4 +152,4 @@
   loop: "{{ ips_profiles | default({}) | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
-  when: item.value.externally_managed | default(false) == false or parsed_ips_profiles[item.key] is not defined
+  when: item.value.externally_managed | default(false) == false or item.key not in parsed_ips_profiles
