@@ -1,3 +1,6 @@
+# 1.2.0 2019-07-12
+* Allow SSL-Exception lists in SSL Inspection Profiles
+
 # 1.1.7 2019-07-09
 * Fixed typo in FQDN object creation
 
