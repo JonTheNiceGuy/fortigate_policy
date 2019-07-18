@@ -1,3 +1,9 @@
+# 1.2.1 2019-07-18
+* Move to using `log_from_start` instead of `logstart` in rules
+* Setup a new `log_from_start` value as a default value across the rulebase
+* Add rulegroup selecter for `log_from_start`, `log`, `status` in addition to 
+`nat`, `ips_enable`, `ssl_ssh_profile` and `ips_sensor`.
+
 # 1.2.0 2019-07-12
 * Allow SSL-Exception lists in SSL Inspection Profiles
 

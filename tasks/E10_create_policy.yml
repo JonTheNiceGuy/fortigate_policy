@@ -75,7 +75,7 @@
           'ippool': 'disable',
         {% endif %}
         'logtraffic': "{{ item.value.log | default('all') }}",
-        'logtraffic-start': "{{ item.value.logstart | default('disable') }}",
+        'logtraffic-start': "{% if item.value.log_from_start | default(log_from_start | default(true)) | bool %}enable{% else %}disable{% endif %}",
         {% if item.value.ips_enable | default(true) | bool
           and item.value.ips_sensor | default(ips_sensor | default('')) != ''
           and item.value.ssl_ssh_profile | default(ssl_ssh_profile | default('')) != '' %}
@@ -130,7 +130,7 @@
           'ippool': 'disable',
         {% endif %}
         'logtraffic': "{{ item.value.log | default('all') }}",
-        'logtraffic-start': "{{ item.value.logstart | default('disable') }}",
+        'logtraffic-start': "{% if item.value.log_from_start | default(log_from_start | default(true)) | bool %}enable{% else %}disable{% endif %}",
         {% if item.value.ips_enable | default(true) | bool
           and item.value.ips_sensor | default(ips_sensor | default('')) != ''
           and item.value.ssl_ssh_profile | default(ssl_ssh_profile | default('')) != '' %}
