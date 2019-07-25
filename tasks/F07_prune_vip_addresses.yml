@@ -1,5 +1,5 @@
 ---
-- name: F07a. Get Address Data from the firewall
+- name: F07a. Get VIP Address Data from the firewall
   fortiosconfig:
     host: "{{ ansible_host }}"
     username: "{{ admin_username | default(ansible_username | default('admin')) }}"
@@ -10,7 +10,7 @@
     config: "firewall vip"
   register: fw_address_object
 
-- name: F07b. Parse firewall config for locally defined objects
+- name: F07b. Parse firewall config for locally defined VIP objects
   set_fact:
     defined_addresses: |
       {
@@ -23,7 +23,7 @@
         {%- endfor -%}
       }
 
-- name: F07c. Remove Address Objects
+- name: F07c. Remove VIP Address Objects
   fortios_firewall_vip:
     host: "{{ ansible_host }}"
     username: "{{ admin_username | default(ansible_username | default('admin')) }}"

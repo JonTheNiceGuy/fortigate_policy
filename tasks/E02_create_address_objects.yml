@@ -240,18 +240,32 @@
     password: "{{ admin_password | default(ansible_password | default('')) }}"
     vdom: "{{ ansible_vdom | default('root') }}"
     https: "{{ ansible_https | default(true) }}"
-    firewall_vip:
-      state: "present"
-      name: "{{ item.key }}"
-      comment: "{{ item.value.comment | default(omit) }}"
-      mappedip:
-      - range: "{{ item.value.real_ip }}"
-      extintf: "{{ item.value.device | default('any') }}"
-      extip: "{{ item.value.vip_ip | default(omit) }}"
-      portforward: "{% if item.value.real_port is defined %}enable{% else %}disable{% endif %}"
-      protocol: "{% if item.value.real_port is defined %}{{ item.value.protocol | default('tcp') }}{% else %}{{ omit }}{% endif %}"
-      mappedport: "{{ item.value.real_port | default(omit) }}"
-      extport: "{% if item.value.real_port is defined %}{{ item.value.vip_port | default(item.value.real_port | default(omit)) }}{% else %}{{ omit }}{% endif %}"
+    firewall_vip: |
+      {
+        "state": "present",
+        "name": "{{ item.key }}",
+        {% if item.value.comment is defined %}"comment": "{{ item.value.comment }}",{% endif %}
+        "mappedip": [{"range": "{{ item.value.real_ip }}"}],
+        "extintf": "{{ item.value.device | default('any') }}",
+        {% if item.value.vip_ip is defined %}"extip": "{{ item.value.vip_ip | default(omit) }}",{% endif %}
+        "portforward": "{% if item.value.real_port is defined %}enable{% else %}disable{% endif %}",
+        {% if item.value.real_port is defined %}
+          "protocol": "{{ item.value.protocol | default('tcp') }}",
+          "mappedport": "{{ item.value.real_port }}",
+          "extport": "{{ item.value.vip_port | default(item.value.real_port) }}",
+        {% endif %}
+        {% if item.value.source is defined %}
+          "src-filter": [
+            {% if item.value.source | type_debug not in ['str', 'unicode', 'string', 'AnsibleUnicode'] %}
+                {% for source in item.value.source %}
+                  { "range": "{{ source }}" },
+                {% endfor %}
+            {% else %}
+              {"range": "{{ item.value.source }}"}
+            {% endif %}
+          ]
+        {% endif %}
+      }
   loop: "{{ address_objects_USED_INTERNAL | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
@@ -266,18 +280,32 @@
     password: "{{ admin_password | default(ansible_password | default('')) }}"
     vdom: "{{ ansible_vdom | default('root') }}"
     https: "{{ ansible_https | default(true) }}"
-    firewall_vip:
-      state: "present"
-      name: "{{ item.key }}"
-      comment: "{{ item.value.comment | default(omit) }}"
-      mappedip:
-      - range: "{{ item.value.real_ip }}"
-      extintf: "{{ item.value.device | default('any') }}"
-      extip: "{{ item.value.vip_ip | default(omit) }}"
-      portforward: "{% if item.value.real_port is defined %}enable{% else %}disable{% endif %}"
-      protocol: "{% if item.value.real_port is defined %}{{ item.value.protocol | default('tcp') }}{% else %}{{ omit }}{% endif %}"
-      mappedport: "{{ item.value.real_port | default(omit) }}"
-      extport: "{% if item.value.real_port is defined %}{{ item.value.vip_port | default(item.value.real_port | default(omit)) }}{% else %}{{ omit }}{% endif %}"
+    firewall_vip: |
+      {
+        "state": "present",
+        "name": "{{ item.key }}",
+        {% if item.value.comment is defined %}"comment": "{{ item.value.comment }}",{% endif %}
+        "mappedip": [{"range": "{{ item.value.real_ip }}"}],
+        "extintf": "{{ item.value.device | default('any') }}",
+        {% if item.value.vip_ip is defined %}"extip": "{{ item.value.vip_ip | default(omit) }}",{% endif %}
+        "portforward": "{% if item.value.real_port is defined %}enable{% else %}disable{% endif %}",
+        {% if item.value.real_port is defined %}
+          "protocol": "{{ item.value.protocol | default('tcp') }}",
+          "mappedport": "{{ item.value.real_port }}",
+          "extport": "{{ item.value.vip_port | default(item.value.real_port) }}",
+        {% endif %}
+        {% if item.value.source is defined %}
+          "src-filter": [
+            {% if item.value.source | type_debug not in ['string', 'AnsibleUnicode'] %}
+                {% for source in item.value.source %}
+                  { "range": "{{ source }}" },
+                {% endfor %}
+            {% else %}
+              {"range": "{{ item.value.source }}"}
+            {% endif %}
+          ]
+        {% endif %}
+      }
   loop: "{{ address_objects_USED_INTERNAL | dict2items }}"
   loop_control:
     label: "{{ item.key }}"

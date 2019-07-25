@@ -1,5 +1,5 @@
 ---
-- name: A00a. Check if there's a match
+- name: A00a. Check for a "No Proxy" match against the host
   set_fact:
     no_proxy_match: |
       {
@@ -28,11 +28,7 @@
   failed_when: False
   changed_when: False
   environment: "{ {% if no_proxy_match.match | default(False) %}'no_proxy': '{{ ansible_host }}'{% endif %} }"
-
-- name: A00c. Debug
-  debug:
-    msg: "{ {% if no_proxy_match.match | default(False) %}'no_proxy': '{{ ansible_host }}'{% endif %} }"
-  when: no_proxy_match.match | default(False)
+  # environment variable only required for URI module. Other "requests" based modules do not have this issue.
 
 - name: A00c. Report failures
   fail:
@@ -41,3 +37,21 @@
      {{ uri_data }}
   when:
   - uri_data is defined and uri_data.status < 0
+
+- name: A00d. Perform login test
+  fortiosconfig:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    action: "get"
+    config: "system global"
+  register: system_status
+  failed_when: False
+  changed_when: False
+
+- name: A00e. Check that login was successful
+  fail:
+    msg: Unable to login
+  when: system_status.rc | default(0) > 0

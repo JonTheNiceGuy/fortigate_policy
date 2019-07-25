@@ -1,3 +1,8 @@
+# 1.2.2 2019-07-25
+* Add src-filter to VIP objects in E02.
+* Improved titles and comments in A00 and F07.
+* Include a login test as well as a response test in A00.
+
 # 1.2.1 2019-07-18
 * Move to using `log_from_start` instead of `logstart` in rules
 * Setup a new `log_from_start` value as a default value across the rulebase
