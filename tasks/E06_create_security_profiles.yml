@@ -145,6 +145,7 @@
             {
               'severity': "{% for severity in entry.severity | default([]) %}{{ severity }} {% endfor %}",
               'action': "{{ entry.action }}",
+              'log-packet': "{% if entry.log_packet | default(false) %}enable{% else %}disable{% endif %}",
               'status': "{{ entry.status }}"
             },
           {% endfor %}

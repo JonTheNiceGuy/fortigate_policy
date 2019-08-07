@@ -1,3 +1,6 @@
+# 1.2.3 2019-08-07
+* Add log-packet to IPS Sensor roles
+
 # 1.2.2 2019-07-25
 * Add src-filter to VIP objects in E02.
 * Improved titles and comments in A00 and F07.
