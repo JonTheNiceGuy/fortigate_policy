@@ -938,6 +938,8 @@ regex_service_objects_match: '(_[Ss][Ee][Rr][Vv][Ii][Cc][Ee]_[Oo][Bb][Jj][Ee][Cc
 regex_service_groups_match: '(_[Ss][Ee][Rr][Vv][Ii][Cc][Ee]_[Gg][Rr][Oo][Uu][Pp][Ss]*)$'
 regex_wildcard_fqdn_objects_match: '(_[Ww][Ii][Ll][Dd][Cc][Aa][Rr][Dd]_[Ff][Qq][Dd][Nn]_[Oo][Bb][Jj][Ee][Cc][Tt][Ss]*)$'
 regex_wildcard_fqdn_groups_match: '(_[Ww][Ii][Ll][Dd][Cc][Aa][Rr][Dd]_[Ff][Qq][Dd][Nn]_[Gg][Rr][Oo][Uu][Pp][Ss]*)$'
+regex_ips_sensors_match: '(_[Ii][Pp][Ss]_[Ss][Ee][Nn][Ss][Oo][Rr][Ss]*)$'
+regex_ssl_ssh_profiles_match: '(_[Ii][Nn][Ss][Pp][Ee][Cc][Tt]_[Pp][Rr][Oo][Ff]][Ii][Ll][Ee][Ss]*)$'
 
 rulebase: |
   {
@@ -1155,3 +1157,38 @@ service_objects_USED_INTERNAL: |
   }
 address_groups_USED_INTERNAL: {}
 service_groups_USED_INTERNAL: {}
+
+ips_sensors_COMBINED_INTERNAL: |
+  {
+    {% for item in ips_profiles | default({}) | dict2items %}{# For historical purposes #}
+      '{{ item.key }}': {{ item.value }},
+    {% endfor %}
+    {% for var in vars | dict2items %}
+      {% if var.key | regex_search(regex_ips_sensors_match) | type_debug != "NoneType"
+        and (
+          var.value | type_debug == "dict"
+          or var.value | type_debug == "AnsibleMapping"
+        ) %}
+        {% for item in var.value | dict2items %}
+          "{{ item.key }}": {{ item.value }},
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+  }
+ssl_ssh_inspect_profiles_COMBINED_INTERNAL: |
+  {
+    {% for item in ssl_ssh_inspect_profiles | default({}) | dict2items %}{# For historical purposes #}
+      '{{ item.key }}': {{ item.value }},
+    {% endfor %}
+    {% for var in vars | dict2items %}
+      {% if var.key | regex_search(regex_ssl_ssh_profiles_match) | type_debug != "NoneType"
+        and (
+          var.value | type_debug == "dict"
+          or var.value | type_debug == "AnsibleMapping"
+        ) %}
+        {% for item in var.value | dict2items %}
+          "{{ item.key }}": {{ item.value }},
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+  }

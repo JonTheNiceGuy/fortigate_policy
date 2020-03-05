@@ -10,7 +10,7 @@
     config: vpn.certificate local
   register: created_certificates
   
-- name: E06b. Parse SSL/SSH Inspect Profiles
+- name: E06b. Parse SSL Certificates
   set_fact:
     parsed_certificates: |
       [
@@ -19,24 +19,24 @@
         {% endfor %}
       ]
 
-- name: "E06c. Check SSL Inspection Certificate exists [ansible version <=2.7]"
+- name: "E06c. Check SSL Certificate exists [ansible version <=2.7]"
   assert:
     msg: "Assertion failed: item.value.ca ('{{ item.value.ca | default('Fortinet_CA_SSL') | string }}') exists in parsed_certificates ('{{ parsed_certificates }}')"
     that:
     - item.value.ca | default('Fortinet_CA_SSL') in parsed_certificates
-  loop: "{{ ssl_ssh_inspect_profiles | default({}) | dict2items }}"
+  loop: "{{ ssl_ssh_inspect_profiles_COMBINED_INTERNAL | default({}) | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
   when:
   - ansible_version is not defined or ansible_version.major < 2 or (ansible_version.major == 2 and ansible_version.minor <= 7)
 
-- name: "E06c. Check SSL Inspection Certificate exists [ansible version >=2.8]"
+- name: "E06c. Check SSL Certificate exists [ansible version >=2.8]"
   assert:
     quiet: yes
     msg: "Assertion failed: item.value.ca ('{{ item.value.ca | default('Fortinet_CA_SSL') | string }}') exists in parsed_certificates ('{{ parsed_certificates }}')"
     that:
     - item.value.ca | default('Fortinet_CA_SSL') in parsed_certificates
-  loop: "{{ ssl_ssh_inspect_profiles | default({}) | dict2items }}"
+  loop: "{{ ssl_ssh_inspect_profiles_COMBINED_INTERNAL | default({}) | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
   when:
@@ -82,7 +82,27 @@
         {% endfor %}
       ]
 
-- name: E06h. Create SSL/SSH Inspect Profile
+- name: E06h. Get IPS Signatures for parsing
+  fortiosconfig:
+    host: "{{ ansible_host }}"
+    username: "{{ admin_username | default(ansible_username | default('admin')) }}"
+    password: "{{ admin_password | default(ansible_password | default('')) }}"
+    vdom: "{{ ansible_vdom | default('root') }}"
+    https: "{{ ansible_https | default(true) }}"
+    action: get
+    config: ips rule
+  register: temp_rule_data
+
+- name: E06i. Map IPS Signature Names to IDs
+  set_fact:
+    ips_names: |-
+      {
+        {%- for item in temp_rule_data.meta.results -%}
+          "{{ item.name }}": {{ item['rule-id'] }},
+        {%- endfor -%}
+      }
+
+- name: E06j. Create SSL/SSH Inspect Profile
   fortios_firewall_ssl_ssh_profile:
     host: "{{ ansible_host }}"
     username: "{{ admin_username | default(ansible_username | default('admin')) }}"
@@ -123,12 +143,49 @@
             },
           {% endfor %}
         ]
-  loop: "{{ ssl_ssh_inspect_profiles | default({}) | dict2items }}"
+  loop: "{{ ssl_ssh_inspect_profiles_COMBINED_INTERNAL | default({}) | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
   when: item.value.externally_managed | default(false) == false or item.key not in parsed_ssl_ssh_profiles
 
-- name: E06i. Create IPS Sensor
+- name: E06k. Rebuild IPS Sensor details
+  set_fact:
+    ips_sensors: |
+      [
+        {% for sensor in ips_sensors | default([]) %}
+          {{ sensor }},
+        {% endfor %}
+        {
+          "key": "{{ item.key }}",
+          "value": {
+            {# Load any templated values #}
+            {% set template = {} %}
+            {% if item.value.template_ips_policy is defined and ips_sensors_COMBINED_INTERNAL[item.value.template_ips_policy] %}
+              {% set template = ips_sensors_COMBINED_INTERNAL[item.value.template_ips_policy] %}
+            {% endif %}
+            {# Handle data #}
+            "externally_managed": {{ item.value.externally_managed | default(false) }},
+            {% if item.value.comment is defined or template.comment is defined %}
+              "comment": "{{ item.value.comment | default(template.comment | default('')) }}",
+            {% endif %}
+            {% if item.value.entries is defined or template.entries is defined %}
+              "entries": [
+                {% for entry in template.entries | default([]) %}
+                  {{ entry }},
+                {% endfor %}
+                {% for entry in item.value.entries | default([]) %}
+                  {{ entry }},
+                {% endfor %}
+              ]
+            {% endif %}
+          }
+        }
+      ]
+  loop: "{{ ips_sensors_COMBINED_INTERNAL | default({}) | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+
+- name: E06l. Create IPS Sensor
   fortios_ips_sensor:
     host: "{{ ansible_host }}"
     username: "{{ admin_username | default(ansible_username | default('admin')) }}"
@@ -143,14 +200,60 @@
         [
           {% for entry in item.value.entries | default([]) %}
             {
-              'severity': "{% for severity in entry.severity | default([]) %}{{ severity }} {% endfor %}",
-              'action': "{{ entry.action }}",
-              'log-packet': "{% if entry.log_packet | default(false) %}enable{% else %}disable{% endif %}",
-              'status': "{{ entry.status }}"
+              {% if entry.severity is defined %}
+                "severity": "{% for severity in entry.severity | default([]) %}{{ severity }} {% endfor %}",
+              {% endif %}
+              {% if entry.signature is defined %}
+                "rule": [{ "id": {{ ips_names[entry.signature] }} }],
+                {% if entry.exempt is defined and entry.exempt[0] is defined and ((entry.exempt[0].src is defined and entry.exempt[0].src | ipaddr) or (entry.exempt[0].dst is defined and entry.exempt[0].dst | ipaddr)) %}
+                  "exempt-ip": [
+                    {% for exempt in entry.exempt %}
+                      {% if (exempt.src is defined and exempt.src | ipaddr) or (exempt.dst is defined and exempt.dst | ipaddr) %}
+                        {% set Tsrc = exempt.src | default('0.0.0.0/0') | ipv4('host/prefix') %}
+                        {% set Tdst = exempt.dst | default('0.0.0.0/0') | ipv4('host/prefix')  %}
+                        {% set src = Tsrc | ipaddr('network') + " " +  Tsrc | ipaddr('netmask') %}
+                        {% set dst = Tdst | ipaddr('network') + " " +  Tdst | ipaddr('netmask') %}
+                        {"src-ip": "{{ src }}", "dst-ip": "{{ dst }}"},
+                      {% endif %}
+                    {% endfor %}
+                  ]
+                {% endif %}
+              {% endif %}
+              {% if entry.os is defined %}
+                "os": "{{ entry.os }}",
+              {% endif %}
+              {% if entry.action is not defined or entry.action | lower == 'default' %}
+                "status": "default",
+                "action": "default",
+                "log": "enable",
+              {% elif entry.action | lower == 'pass' %}
+                "status": "enable",
+                "action": "pass",
+                "log": "disable",
+              {% elif entry.action | lower == 'monitor' %}
+                "status": "enable",
+                "action": "pass",
+                "log": "enable",
+              {% elif entry.action | lower == 'block' %}
+                "status": "enable",
+                "action": "block",
+                "log": "enable",
+              {% elif entry.action | lower == 'reset' or entry.action | lower == 'reject' %}
+                "status": "enable",
+                "action": "reset",
+                "log": "enable",
+              {% elif entry.action | lower == 'quarantine' %}
+                "status": "enable", 
+                "action": "block", 
+                "log": "enable", 
+                "quarantine": "{{ entry.quarantine_entity | default('attacker') }}",
+                "quarantine-expiry": "{{ entry.quarantine_duration | default('5m') }}",
+              {% endif %}
+              "log-packet": "{% if entry.log_packet | default(false) %}enable{% else %}disable{% endif %}"              
             },
           {% endfor %}
         ]
-  loop: "{{ ips_profiles | default({}) | dict2items }}"
+  loop: "{{ ips_sensors }}"
   loop_control:
     label: "{{ item.key }}"
   when: item.value.externally_managed | default(false) == false or item.key not in parsed_ips_profiles

@@ -1,3 +1,16 @@
+# 1.3.0 2020-03-05
+POSSIBLE BREAKING CHANGE: IPS "pass" and "monitor" were crossed. Please check!
+* Better handling of IPS rules *HOWEVER* minor change to handling of IPS
+Profiles means that "pass" and "monitor" were handled the wrong way around. If
+you have used these actions, you will need to verify that you have the right
+settings. 
+
+Pass = "action: pass log: disable"
+Monitor = "action: pass log: enable"
+* Add quarantine to the IPS rules
+* Add testing for IPS Signature Names to add to the IPS Sensor/Profile
+* Add IPS IP Exemptions for Signatures.
+
 # 1.2.3 2019-08-07
 * Add log-packet to IPS Sensor roles
 

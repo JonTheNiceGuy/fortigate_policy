@@ -23,6 +23,9 @@
 
 - name: C00 Transform Data
   include_tasks: C00.Transform.yml
+  when: create_addresses | default(create_all | default(True)) or 
+          create_services | default(create_all | default(True)) or
+          create_policy | default(create_all | default(True))
 
 - name: D00 Display Data
   include_tasks: D00.Display.yml
