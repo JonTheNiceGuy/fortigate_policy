@@ -957,7 +957,7 @@ rulebase: |
             ) %}
             "{{ var.key | regex_replace(regex_rulebase_match, '\2') }}{{ item.key | regex_replace(regex_rulebase_match, '\2') }}": {
               {# This block is used for rulegroup level options #}
-              {% for key in ['log_from_start', 'log', 'status', 'nat', 'ips_enable', 'ssl_ssh_profile', 'ips_sensor'] %}
+              {% for key in ['log_from_start', 'log', 'status', 'nat', 'natpool', 'schedule', 'ips_enable', 'ssl_ssh_profile', 'ips_sensor'] %}
                 {% if var.value[key] is defined and rule.value[key] is not defined %}
                   {% if var.value[key] | type_debug in ['string', 'AnsibleUnicode'] %}
                     "{{ key }}": "{{ var.value[key] }}",
@@ -993,7 +993,6 @@ wildcard_fqdn_objects_COMBINED_INTERNAL: |
       {% endif %}
     {% endfor %}
   }
-
 wildcard_fqdn_groups_COMBINED_INTERNAL: |
   {
     {% for var in vars | dict2items %}
@@ -1009,9 +1008,7 @@ wildcard_fqdn_groups_COMBINED_INTERNAL: |
       {% endif %}
     {% endfor %}
   }
-
 wildcard_fqdn_ALL_ITEMS: "{{ wildcard_fqdn_objects_COMBINED_INTERNAL | combine(built_in_wildcard_fqdns | default({})) | combine(wildcard_fqdn_groups_COMBINED_INTERNAL | default({})) }}"
-
 address_objects_COMBINED_INTERNAL: |
   {
     {% for item in manual_hosts | default({}) | dict2items %}{# For historical purposes #}
@@ -1093,7 +1090,6 @@ service_groups_COMBINED_INTERNAL: |
   }
 service_groups: "{{ built_in_service_groups | default({}) | combine(service_groups_COMBINED_INTERNAL) }}"
 address_groups: "{{ built_in_address_groups | default({}) | combine(address_groups_COMBINED_INTERNAL) }}"
-
 address_objects: |
   {
     {% for item in built_in_hosts | default({}) | dict2items %}
@@ -1111,7 +1107,6 @@ address_objects: |
       {% endif %}
     {% endfor %}
   }
-
 service_objects: |
   {
     {% for item in built_in_services | default({}) | dict2items %}
@@ -1129,7 +1124,6 @@ service_objects: |
       {% endif %}
     {% endfor %}
   }
-
 address_objects_USED_INTERNAL: |
   {
     {% for ao in address_objects | dict2items %}
@@ -1157,7 +1151,6 @@ service_objects_USED_INTERNAL: |
   }
 address_groups_USED_INTERNAL: {}
 service_groups_USED_INTERNAL: {}
-
 ips_sensors_COMBINED_INTERNAL: |
   {
     {% for item in ips_profiles | default({}) | dict2items %}{# For historical purposes #}

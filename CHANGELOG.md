@@ -11,6 +11,7 @@ Monitor = "action: pass log: enable"
 * Add testing for IPS Signature Names to add to the IPS Sensor/Profile
 * Add IPS IP Exemptions for Signatures.
 * Add Documentation Directory (currently just a "simple firewall and policy")
+* Added extra rulegroup passable options.
 
 # 1.2.3 2019-08-07
 * Add log-packet to IPS Sensor roles
