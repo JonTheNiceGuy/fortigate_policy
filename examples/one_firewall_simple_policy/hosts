@@ -1,0 +1,1 @@
+my_firewall ansible_host=192.0.2.1 ansible_user=admin ansible_password=SuperSecret

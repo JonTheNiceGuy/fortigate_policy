@@ -1,0 +1,1 @@
+This is an implicit group that "all" host objects (except localhost) get added to!

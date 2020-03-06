@@ -10,6 +10,7 @@ Monitor = "action: pass log: enable"
 * Add quarantine to the IPS rules
 * Add testing for IPS Signature Names to add to the IPS Sensor/Profile
 * Add IPS IP Exemptions for Signatures.
+* Add Documentation Directory (currently just a "simple firewall and policy")
 
 # 1.2.3 2019-08-07
 * Add log-packet to IPS Sensor roles

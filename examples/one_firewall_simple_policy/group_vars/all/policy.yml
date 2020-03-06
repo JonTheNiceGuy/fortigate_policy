@@ -1,0 +1,48 @@
+rulegroup10:
+  comment: "Common Admin Rules"
+  ssl_ssh_profile: default_ssl_ssh_inspect_profile
+  ips_sensor: default_ips_monitor_profile
+
+  rule01: # RuleID 1001
+    sources:
+    - ad
+    - rds
+    - admin
+    destination_interface: port2
+    destinations: ad
+    services: active_directory
+  
+  rule02: # RuleID 1002
+    source_interface: port3
+    sources: admin
+    destination_interface: port2
+    destinations: rds
+    services: MSRDP # Inbuilt
+
+rulegroup20:
+  comment: "Web Rules"
+  ssl_ssh_profile: default_ssl_ssh_inspect_profile
+  ips_sensor: web_ips_monitor_profile
+
+  rule01: # RuleID 2001
+    sources: all # Inbuilt
+    destination_interface: port4
+    destinations: web
+    services: web
+
+rulegroup99:
+  comment: "Egress Rules"
+  ssl_ssh_profile: default_ssl_ssh_inspect_profile
+  ips_sensor: default_ips_monitor_profile
+
+  rule01: # RuleID 9901
+    sources:
+    - ad
+    - rds
+    - admin
+    - web
+    destinations: all
+    services:
+    - web
+    - DNS
+    - PING

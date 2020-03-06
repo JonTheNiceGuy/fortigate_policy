@@ -1,0 +1,82 @@
+---
+all_ssl_ssh_inspect_profiles:
+  default_ssl_ssh_inspect_profile:
+    comment: CA cert used to inspect traffic
+    ca: "{{ inspect_ca | default('Fortinet_CA_SSL') }}"
+    inspect_all: true
+    inspect_ssh: false
+
+all_ips_sensors:
+  default_ips_monitor_profile:
+    comment: Default IPS Monitor Only Profile
+    entries:
+    - severity:
+      - info
+      - low
+      - medium
+      action: monitor
+    - severity:
+      - high
+      - critical
+      log_packet: true
+      action: monitor
+  web_ips_monitor_profile:
+    template_ips_policy: default_ips_monitor_profile
+    comment: Enhanced Web IPS Monitor Profile
+    entries:
+    - signature: ACal.Calendar.Cookie.Based.Authentication.Bypass
+      log_packet: true
+      action: monitor
+
+all_address_objects:
+  ad01:
+    ip: 192.168.10.100
+  ad02:
+    ip: 192.168.20.100
+  rds01:
+    ip: 192.168.10.10
+  rds02:
+    ip: 192.168.20.10
+  admin:
+    ip: 10.10.0.0/24
+  web01:
+    ip: 192.168.1.20
+  web02:
+    ip: 192.168.2.20
+
+all_address_groups:
+  ad:
+  - ad01
+  - ad02
+  rds:
+  - rds01
+  - rds02
+  web:
+  - web01
+  - web02
+
+all_service_objects:
+  LDAPS:
+    udp: 636
+    tcp: 636
+  LDAP_GC:
+    tcp: 3268
+  LDAP_GCTLS:
+    tcp: 3269
+
+all_service_groups:
+  active_directory:
+  - LDAP # Inbuilt
+  - LDAPS
+  - LDAP_UDP # Inbuilt
+  - LDAP_GC
+  - LDAP_GCTLS
+  - KERBEROS # Inbuilt
+  - DNS # Inbuilt
+  - NTP # Inbuilt
+  - SMB # Inbuilt
+  - SAMBA # Inbuilt
+  - DCE-RPC # Inbuilt
+  web:
+  - HTTP # Inbuilt
+  - HTTPS # Inbuilt
