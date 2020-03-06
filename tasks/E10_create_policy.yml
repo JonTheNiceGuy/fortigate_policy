@@ -125,7 +125,7 @@
         'nat': "{% if item.value.nat | default(false) | bool or item.value.natpool | default('') != '' %}enable{% else %}disable{% endif %}",
         {% if item.value.natpool | default('') != '' %}
           'ippool': 'enable',
-          'poolname': '{{ item.value.natpool }}',
+          'poolname': [{'name': '{{ item.value.natpool }}'}],
         {% else %}
           'ippool': 'disable',
         {% endif %}
@@ -137,6 +137,8 @@
           'utm-status': "enable",
           'ssl-ssh-profile': "{{ item.value.ssl_ssh_profile | default(ssl_ssh_profile) }}",
           'ips-sensor': "{{ item.value.ips_sensor | default(ips_sensor) }}",
+        {% else %}
+          'utm-status': "disable",
         {% endif %}
         'status': "{% if item.value.disabled | default(false) | bool %}disable{% else %}enable{% endif %}",
         'uuid': "{{ item.value.uuid | default(omit) }}"
@@ -163,4 +165,3 @@
   - item.ansible_job_id is defined
   loop_control:
     label: "{{ item._ansible_item_label | default(item.item.key | default('Key is missing')) }}"
-
