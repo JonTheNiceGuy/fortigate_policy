@@ -1,3 +1,7 @@
+# 1.3.2 2020-03-11
+* Updated built-in address objects with updates from 6.2.3
+* Apparently wildcard fqdns are now sometimes address objects. Huzzah
+
 # 1.3.1 2020-03-11
 Noted that when running the testing with new IPS options broke option B03r.
 This change fixes that.
