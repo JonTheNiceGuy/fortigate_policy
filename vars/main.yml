@@ -299,13 +299,10 @@ built_in_hosts:
     fqdn: "swscan.apple.com"
   update.microsoft.com:
     fqdn: "update.microsoft.com"
-
-##########################
-# Wildcard FQDNs
-##########################
-built_in_wildcard_fqdns:
-  "wildcard.dropbox.com": "*.dropbox.com" # Spotted in 6.2.3
-  "wildcard.google.com": "*.google.com" # Spotted in 6.2.3
+  "wildcard.dropbox.com": 
+    fqdn: "*.dropbox.com" # Spotted in 6.2.3
+  "wildcard.google.com": 
+    fqdn: "*.google.com" # Spotted in 6.2.3
 
 ##########################
 # Internet Services
