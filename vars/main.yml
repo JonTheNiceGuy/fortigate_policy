@@ -273,14 +273,24 @@ built_in_geographies:
 # Built-in Hosts
 ##########################
 built_in_hosts:
-  all:
-    ip: "0.0.0.0/0"
+  FABRIC_DEVICE:
+    ip: "0.0.0.0/0" # Spotted in 6.2.3
   FIREWALL_AUTH_PORTAL_ADDRESS: 
     ip: "0.0.0.0/0"
   SSLVPN_TUNNEL_ADDR1:
     range: "10.212.134.200-10.212.134.210"
+  all:
+    ip: "0.0.0.0/0"
+  "gmail.com":
+    fqdn: "gmail.com" # Spotted in 6.2.3
+  "login.microsoft.com":
+    fqdn: "login.microsoft.com" # Spotted in 6.2.3
+  "login.microsoftonline.com":
+    fqdn: "login.microsoftonline.com" # Spotted in 6.2.3
+  "login.windows.net":
+    fqdn: "login.windows.net" # Spotted in 6.2.3
   autoupdate.opera.com:
-    fqdn: "autoupdate.opera.com"
+    fqdn: "autoupdate.opera.com" # Lost in 6.2.3
   "google-play":
     fqdn: "play.google.com"
   none: 
@@ -289,6 +299,13 @@ built_in_hosts:
     fqdn: "swscan.apple.com"
   update.microsoft.com:
     fqdn: "update.microsoft.com"
+
+##########################
+# Wildcard FQDNs
+##########################
+built_in_wildcard_fqdns:
+  "wildcard.dropbox.com": "*.dropbox.com" # Spotted in 6.2.3
+  "wildcard.google.com": "*.google.com" # Spotted in 6.2.3
 
 ##########################
 # Internet Services
@@ -776,7 +793,17 @@ built_in_services:
   WINS: {tcp: "1512", udp: "1512"}
   X-WINDOWS: {tcp: "6000-6063"}
 
-built_in_address_groups: {}
+built_in_address_groups: {
+  "G Suite": [
+    "gmail.com",
+    "wildcard.google.com"
+  ],
+  "Microsoft Office 365": [
+    "login.microsoft.com",
+    "login.microsoftonline.com",
+    "login.windows.net"
+  ]
+}
 
 built_in_service_groups: {
   "Email Access": [
