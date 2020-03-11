@@ -939,7 +939,7 @@ regex_service_groups_match: '(_[Ss][Ee][Rr][Vv][Ii][Cc][Ee]_[Gg][Rr][Oo][Uu][Pp]
 regex_wildcard_fqdn_objects_match: '(_[Ww][Ii][Ll][Dd][Cc][Aa][Rr][Dd]_[Ff][Qq][Dd][Nn]_[Oo][Bb][Jj][Ee][Cc][Tt][Ss]*)$'
 regex_wildcard_fqdn_groups_match: '(_[Ww][Ii][Ll][Dd][Cc][Aa][Rr][Dd]_[Ff][Qq][Dd][Nn]_[Gg][Rr][Oo][Uu][Pp][Ss]*)$'
 regex_ips_sensors_match: '(_[Ii][Pp][Ss]_[Ss][Ee][Nn][Ss][Oo][Rr][Ss]*)$'
-regex_ssl_ssh_profiles_match: '(_[Ii][Nn][Ss][Pp][Ee][Cc][Tt]_[Pp][Rr][Oo][Ff]][Ii][Ll][Ee][Ss]*)$'
+regex_ssl_ssh_profiles_match: '(_[Ss][Ss][Ll]_[Ss][Ss][Hh]_[Ii][Nn][Ss][Pp][Ee][Cc][Tt]_[Pp][Rr][Oo][Ff][Ii][Ll][Ee][Ss]*)$'
 
 rulebase: |
   {
