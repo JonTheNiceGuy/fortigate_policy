@@ -1,3 +1,7 @@
+# 1.3.1 2020-03-11
+Noted that when running the testing with new IPS options broke option B03r.
+This change fixes that.
+
 # 1.3.0 2020-03-05
 POSSIBLE BREAKING CHANGE: IPS "pass" and "monitor" were crossed. Please check!
 * Better handling of IPS rules *HOWEVER* minor change to handling of IPS
