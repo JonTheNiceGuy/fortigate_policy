@@ -448,7 +448,7 @@
   assert:
     msg: "Assertion failed: item.value.ssl_ssh_profile ('{{ item.value.ssl_ssh_profile | default('') | string }}') has an ssl_ssh_inspect_profiles value that exists"
     that:
-    - ssl_ssh_inspect_profiles[item.value.ssl_ssh_profile] is defined
+    - ssl_ssh_inspect_profiles_COMBINED_INTERNAL[item.value.ssl_ssh_profile] is defined
   loop: "{{ rulebase | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
@@ -461,7 +461,7 @@
     quiet: yes
     msg: "Assertion failed: item.value.ssl_ssh_profile ('{{ item.value.ssl_ssh_profile | default('') | string }}') has an ssl_ssh_inspect_profiles value that exists"
     that:
-    - ssl_ssh_inspect_profiles[item.value.ssl_ssh_profile] is defined
+    - ssl_ssh_inspect_profiles_COMBINED_INTERNAL[item.value.ssl_ssh_profile] is defined
   loop: "{{ rulebase | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
@@ -473,7 +473,7 @@
   assert:
     msg: "Assertion failed: item.value.ips_sensor ('{{ item.value.ips_sensor | default('') | string }}') has an ips_profiles value that exists"
     that:
-    - ips_profiles[item.value.ips_sensor] is defined
+    - ips_sensors_COMBINED_INTERNAL[item.value.ips_sensor] is defined
   loop: "{{ rulebase | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
@@ -486,7 +486,7 @@
     quiet: yes
     msg: "Assertion failed: item.value.ips_sensor ('{{ item.value.ips_sensor | default('') | string }}') has an ips_profiles value that exists"
     that:
-    - ips_profiles[item.value.ips_sensor] is defined
+    - ips_sensors_COMBINED_INTERNAL[item.value.ips_sensor] is defined
   loop: "{{ rulebase | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
