@@ -8,6 +8,7 @@ rulegroup10:
     - ad
     - rds
     - admin
+    - telnet
     destination_interface: port2
     destinations: ad
     services: active_directory
