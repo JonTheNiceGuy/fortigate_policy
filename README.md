@@ -1,3 +1,5 @@
+**Archived as no activity for >1 year.**
+
 FortiGate Policy
 ================
 
@@ -281,4 +283,4 @@ MIT
 Author Information
 ------------------
 
-[Jon Spriggs](mailto:jon.spriggs@uk.fujitsu.com) is a Technical Consultant for Fujitsu, in the Enterprise & Cyber Security Business Unit.
+[Jon Spriggs](mailto:jon@sprig.gs) is a Technical Consultant for Fujitsu, in the Enterprise & Cyber Security Business Unit.
